@@ -1,0 +1,123 @@
+\begin{thebibliography}{18}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Browne(2008)]{browne2008automated}
+Cameron Browne.
+\newblock \emph{Automatic generation and evaluation of recombination games}.
+\newblock PhD thesis, Queensland University of Technology, 2008.
+
+\bibitem[Cook and Colton(2014)]{cook2014angelina}
+Michael Cook and Simon Colton.
+\newblock Ludus ex machina: Building a 3d game designer that competes alongside
+  humans.
+\newblock In \emph{Proceedings of the 5th International Conference on
+  Computational Creativity}, 2014.
+
+\bibitem[Ebner et~al.(2013)Ebner, Levine, Lucas, Schaul, Thompson, and
+  Togelius]{ebner2013towards}
+Marc Ebner, John Levine, Simon~M Lucas, Tom Schaul, Tommy Thompson, and Julian
+  Togelius.
+\newblock Towards a video game description language.
+\newblock \emph{Dagstuhl Follow-Ups}, 6, 2013.
+
+\bibitem[Font et~al.(2013)Font, Mahlmann, Manrique, and
+  Togelius]{font2013towards}
+Jos{\'e}~Mar{\'\i}a Font, Tobias Mahlmann, Daniel Manrique, and Julian
+  Togelius.
+\newblock Towards the automatic generation of card games through grammar-guided
+  genetic programming.
+\newblock In \emph{FDG}, pages 360--363, 2013.
+
+\bibitem[Genesereth et~al.(2005)Genesereth, Love, and
+  Pell]{genesereth2005general}
+Michael Genesereth, Nathaniel Love, and Barney Pell.
+\newblock General game playing: Overview of the aaai competition.
+\newblock \emph{AI magazine}, 26\penalty0 (2):\penalty0 62, 2005.
+
+\bibitem[Hendrikx et~al.(2013)Hendrikx, Meijer, Van Der~Velden, and
+  Iosup]{hendrikx2013procedural}
+Mark Hendrikx, Sebastiaan Meijer, Joeri Van Der~Velden, and Alexandru Iosup.
+\newblock Procedural content generation for games: A survey.
+\newblock \emph{ACM Transactions on Multimedia Computing, Communications, and
+  Applications (TOMCCAP)}, 9\penalty0 (1):\penalty0 1, 2013.
+
+\bibitem[Levine et~al.(2013)Levine, Congdon, Ebner, Kendall, Lucas,
+  Miikkulainen, Schaul, and Thompson]{levine2013general}
+John Levine, Clare~Bates Congdon, Marc Ebner, Graham Kendall, Simon~M Lucas,
+  Risto Miikkulainen, Tom Schaul, and Tommy Thompson.
+\newblock General video game playing.
+\newblock \emph{Dagstuhl Follow-Ups}, 6, 2013.
+
+\bibitem[Liapis et~al.(2014)Liapis, Yannakakis, and
+  Togelius]{liapis2014creativity}
+Antonios Liapis, Georgios~N. Yannakakis, and Julian Togelius.
+\newblock Computational game creativity.
+\newblock In \emph{Proceedings of the 5th International Conference on
+  Computational Creativity}, 2014.
+
+\bibitem[Mojang(2011)]{game:minecraft}
+Mojang.
+\newblock Minecraft, November 2011.
+\newblock URL \url{http://www.minecraft.net/}.
+
+\bibitem[Nelson and Mateas(2007)]{nelson2007automated}
+Mark~J. Nelson and Michael Mateas.
+\newblock Towards automated game design.
+\newblock In \emph{AI*IA 2007: Artificial Intelligence and Human-Oriented
+  Computing}, pages 626--637. Springer, 2007.
+\newblock {L}ecture Notes in Computer Science 4733.
+
+\bibitem[Nelson et~al.(2014)Nelson, Togelius, Browne, and Cook]{pcgbook:ch6}
+Mark~J. Nelson, Julian Togelius, Cameron Browne, and Michael Cook.
+\newblock Chapter 6: Rules and mechanics.
+\newblock In \emph{Procedural Content Generation in Games: A Textbook and an
+  Overview of Current Research}. Springer, 2014.
+\newblock URL \url{http://www.pcgbook.com}.
+\newblock (To appear.).
+
+\bibitem[Schaul(2013)]{schaul2013video}
+Tom Schaul.
+\newblock A video game description language for model-based or interactive
+  learning.
+\newblock In \emph{Computational Intelligence in Games (CIG), 2013 IEEE
+  Conference on}, pages 1--8. IEEE, 2013.
+
+\bibitem[Smith and Mateas(2010)]{smith2010variations}
+Adam~M Smith and Michael Mateas.
+\newblock Variations forever: Flexibly generating rulesets from a sculptable
+  design space of mini-games.
+\newblock In \emph{Proceedings of the 2010 IEEE Symposium on Computational
+  Intelligence and Games}, pages 273--280, 2010.
+
+\bibitem[Software(2012)]{game:borderlands}
+Gearbox Software.
+\newblock Borderlands 2, September 2012.
+\newblock URL \url{http://www.borderlands2.com/}.
+
+\bibitem[Togelius and Schmidhuber(2008)]{togelius2008experiment}
+Julian Togelius and J{\"u}rgen Schmidhuber.
+\newblock An experiment in automatic game design.
+\newblock In \emph{Proceedings of the 2008 IEEE Symposium on Computational
+  Intelligence and Games}, pages 111--118, 2008.
+
+\bibitem[Togelius et~al.(2014)Togelius, Nelson, and
+  Liapis]{togelius2014characteristics}
+Julian Togelius, Mark~J. Nelson, and Antonios Liapis.
+\newblock Characteristics of generatable games.
+\newblock In \emph{Proceedings of the 5th Workshop on Procedural Content
+  Generation in Games}, 2014.
+
+\bibitem[Toy and Wichman(1980)]{game:rogue}
+Michael Toy and Glenn Wichman.
+\newblock Rogue, 1980.
+
+\bibitem[Yu(2009)]{game:spelunky}
+Derek Yu.
+\newblock Spelunky, September 2009.
+\newblock URL \url{http://www.spelunkyworld.com/}.
+
+\end{thebibliography}
