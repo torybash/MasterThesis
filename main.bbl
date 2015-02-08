@@ -1,9 +1,13 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{20}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{Activision, Inc.}(1983)]{game:crackpots}
+{Activision, Inc.}
+\newblock Crackpots, 1983.
 
 \bibitem[Browne(2008)]{browne2008automated}
 Cameron Browne.
@@ -32,6 +36,11 @@ Jos{\'e}~Mar{\'\i}a Font, Tobias Mahlmann, Daniel Manrique, and Julian
   genetic programming.
 \newblock In \emph{FDG}, pages 360--363, 2013.
 
+\bibitem[{Gearbox Software}(2012)]{game:borderlands}
+{Gearbox Software}.
+\newblock Borderlands 2, September 2012.
+\newblock URL \url{http://www.borderlands2.com/}.
+
 \bibitem[Genesereth et~al.(2005)Genesereth, Love, and
   Pell]{genesereth2005general}
 Michael Genesereth, Nathaniel Love, and Barney Pell.
@@ -58,6 +67,10 @@ Antonios Liapis, Georgios~N. Yannakakis, and Julian Togelius.
 \newblock Computational game creativity.
 \newblock In \emph{Proceedings of the 5th International Conference on
   Computational Creativity}, 2014.
+
+\bibitem[{Mattel Electronics}(1981)]{game:astrosmash}
+{Mattel Electronics}.
+\newblock Astrosmash, 1981.
 
 \bibitem[Mojang(2011)]{game:minecraft}
 Mojang.
@@ -92,11 +105,6 @@ Adam~M Smith and Michael Mateas.
   design space of mini-games.
 \newblock In \emph{Proceedings of the 2010 IEEE Symposium on Computational
   Intelligence and Games}, pages 273--280, 2010.
-
-\bibitem[Software(2012)]{game:borderlands}
-Gearbox Software.
-\newblock Borderlands 2, September 2012.
-\newblock URL \url{http://www.borderlands2.com/}.
 
 \bibitem[Togelius and Schmidhuber(2008)]{togelius2008experiment}
 Julian Togelius and J{\"u}rgen Schmidhuber.

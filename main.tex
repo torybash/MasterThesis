@@ -24,19 +24,66 @@
 \usepackage{xfrac}
 %\usepackage{sidecap}
 \usepackage{caption}
-\usepackage{subcaption}
+%\usepackage{subcaption}
 \usepackage{enumitem}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{siunitx}
+\usepackage{datatool}
+\usepackage{booktabs}
+%\usepackage{xcolor}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
 \usepackage[]{algorithm2e}
 \usepackage[authoryear]{natbib}
+
+\usepackage{subfig}
+\usepackage{float}
+
+\usepackage{wasysym} %Pretty arrows
+
+
+%LISTINGS (showing code)
+\lstset{ %
+language=Java,                % choose the language of the code
+frame=single, % adds a frame around the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=b,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+\lstnewenvironment{vgdldesc}[1][] 
+ {\lstset{frame=shadowbox,escapechar=`,linewidth=8cm, #1}}
+ {}
+
+%Load data
+\DTLloaddb{examplesdata}{examplesdata.csv}
+\DTLloaddb{mutateddata}{mutateddata.csv}
+\DTLloaddb{generateddata}{generateddata.csv}
 
 % Macros
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 \newcommand{\degree}{\ensuremath{^\circ}}
 \newcommand{\code}[1]{\texttt{#1}}
 \renewcommand{\arraystretch}{1.5}
+
+%Striped tables 
+\definecolor{light-gray}{gray}{0.9}
+\let\stripedtabular\tabular
+\let\endstripedtabular\endtabular
+\renewenvironment{stripedtabular}{\rowcolors{0}{black!20}{black!5}\tabular}{\endtabular}
 
 %mdframed settings
 \mdfdefinestyle{mystyle}{%
@@ -52,9 +99,6 @@ roundcorner=5pt
 \newenvironment{example}[1]
   {\begin{exa}[frametitle=#1]}
   {\end{exa}}
-
-%listing settings
-\lstset{frame=tbrl, aboveskip=1mm, belowskip=1mm, showstringspaces=false, columns=flexible, basicstyle={\scriptsize\ttfamily}, breaklines=true, tabsize=3}
 
 
 %marks
@@ -110,21 +154,26 @@ roundcorner=5pt
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 \chapter{Introduction}
-
+Several published games use PCG as a main part of its game play, to maintain a challenge for the player and present a new experience on re-playing the games.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
-\chapter{Background}
-The idea of generating complete games through algorithms is not itself new. The problem in full generality is quite large, so usually a subset of the general problem is tackled. Videogames may be comprised of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citet{cook2014angelina,liapis2014creativity,nelson2007automated}.
+\chapter{Existing research and framework}
+In this chapter we describe the existing research on the topic of game- and level-generation, which is of relevance to the subject.
+Additionally the framework used for game- and level-generation, and testing is described thoroughly.
 
-In this paper we look specifically at generating game rules; and more specifically the rules of arcade-style games based on graphical movement and local interaction between game elements, represented in the game description language VGDL. The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citet{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citet{togelius2008experiment,browne2008automated,font2013towards}. In either case, rule generation can be seen as a particular kind of procedural content generation~\citet{pcgbook:ch6}.
+%The idea of generating complete games through algorithms is not itself new. The problem in full generality is quite large, so usually a subset of the general problem is tackled. Videogames may be comprised of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citet{cook2014angelina,liapis2014creativity,nelson2007automated}.
 
-It is clear that generating a set of rules that makes for an interesting and fun game is a hard task. The arguably most successful attempt so far, Browne's Ludi system, managed to produce a new board game of sufficient quality to be sold as a boxed product~\citet{browne2008automated}. However, it succeeded partly due to restricting its generation domain to only the rules of a rather tightly constrained space of board games. A key stumbling block for search-based approaches to game generation is the fitness/evaluation function. This function takes a complete game as input and outputs an estimate of its quality. Ludi uses a mixture of several measures based on automatic playthrough of games, including balance, drawishness and outcome uncertainy. These measures are well-chosen for two-player board games, but might not transfer that well to video games or single-player games, which have in a separate analysis been deemed to be good targets for game generation~\citet{togelius2014characteristics}. Other researchers have attempted evaluation functions based on the learnability of the game by an algorithm~\citet{togelius2008experiment} or an earlier and more primitive version of the characteristic that is explored in this paper, performance profile of a set of algorithms~\citet{font2013towards}.
+%In this paper we look specifically at generating game rules; and more specifically the rules of arcade-style games based on graphical movement and local interaction between game elements, represented in the game description language VGDL. The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citet{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citet{togelius2008experiment,browne2008automated,font2013towards}. In either case, rule generation can be seen as a particular kind of procedural content generation~\citet{pcgbook:ch6}.
+
+%It is clear that generating a set of rules that makes for an interesting and fun game is a hard task. The arguably most successful attempt so far, Browne's Ludi system, managed to produce a new board game of sufficient quality to be sold as a boxed product~\citet{browne2008automated}. However, it succeeded partly due to restricting its generation domain to only the rules of a rather tightly constrained space of board games. A key stumbling block for search-based approaches to game generation is the fitness/evaluation function. This function takes a complete game as input and outputs an estimate of its quality. Ludi uses a mixture of several measures based on automatic playthrough of games, including balance, drawishness and outcome uncertainy. These measures are well-chosen for two-player board games, but might not transfer that well to video games or single-player games, which have in a separate analysis been deemed to be good targets for game generation~\citet{togelius2014characteristics}. Other researchers have attempted evaluation functions based on the learnability of the game by an algorithm~\citet{togelius2008experiment} or an earlier and more primitive version of the characteristic that is explored in this paper, performance profile of a set of algorithms~\citet{font2013towards}.
 
 
 \section{Content generation}
 Procedural content generation is a topic that is being increasingly researched and implemented in games of various types and genres (source). PCG can help game designers in creating game elements like levels/maps, environments, weapons or AI's.
+
+
 
 \citet{hendrikx2013procedural} suggests a six-layered taxonomy to describe PCG at different stages of games, while performing a survey of different ways in which PCG have been implemented.
 
@@ -161,12 +210,42 @@ PCG also has some problems for generating content for levels:
 
 
 \section{Game generation}
-Generating complete games is a topic that has not been researched very much. Additionally very little success has been achieved, with the only the exception being the game generation project Ludi.
+Generating complete games through algorithms is a problem that is being increasingly researched, but work has been done on the topic for last decade. Because the problem is in general quite large, a subset of the problem is usually handled: Only generating certain types of games-, or using different (restricted) frameworks. 
+Video games may consist of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citet{cook2014angelina,liapis2014creativity,nelson2007automated}.
+
+In this project we look specifically at generating the game-play and -setting of games, i.e. defining a set of game-rules and -objects, and specifying the levels in which the game-play takes place.
+The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citet{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citet{togelius2008experiment,browne2008automated,font2013towards}. 
+In either case, rule generation can be seen as a particular kind of procedural content generation~\citet{pcgbook:ch6}.
+
+%The idea of generating complete games through algorithms is not itself new. The problem in full generality is quite large, so usually a subset of the general problem is tackled. Videogames may be comprised of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citet{cook2014angelina,liapis2014creativity,nelson2007automated}.
+
+%In this paper we look specifically at generating game rules; and more specifically the rules of arcade-style games based on graphical movement and local interaction between game elements, represented in the game description language VGDL. The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citet{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citet{togelius2008experiment,browne2008automated,font2013towards}. In either case, rule generation can be seen as a particular kind of procedural content generation~\citet{pcgbook:ch6}.
+
+It is clear that generating a set of rules that makes for an interesting and fun game is a hard task. 
+The arguably most successful attempt so far, Browne's Ludi system, managed to produce a new board game of sufficient quality to be sold as a boxed product~\citet{browne2008automated}. 
+However, it succeeded partly due to restricting its generation domain to only the rules of a rather tightly constrained space of board games. 
+A key stumbling block for search-based approaches to game generation is the fitness/evaluation function. 
+This function takes a complete game as input and outputs an estimate of its quality. Ludi uses a mixture of several measures based on automatic playthrough of games, including balance, drawishness and outcome uncertainy.
+These measures are well-chosen for two-player board games, but might not transfer that well to video games or single-player games, which have in a separate analysis been deemed to be good targets for game generation~\citet{togelius2014characteristics}. 
+Other researchers have attempted evaluation functions based on the learnability of the game by an algorithm~\citet{togelius2008experiment} or an earlier and more primitive version of the characteristic that is explored in this paper, performance profile of a set of algorithms~\citet{font2013towards}.
 
 A typical approach for generating complete games is searching in a space of possible games. This basically requires two things: That the ratio of enjoyable games in the set is not too low - otherwise those games might never be found. To increase this ratio a game description language (GDL) is often used (searching through all possible Java or C programs would lead to an enormous amount invalid games).
 Also, to search through a set of games it is necessary to be able to calculate a fitness value for each game, valuing how enjoyable the game is.
 
-\subsection{Game description languages}
+
+
+\subsection{Using AIs to analyze games}
+A large amount of games contain puzzle-elements, but only a few has puzzles as the main game-play.
+
+
+\subsection{Something to note: Levels}
+The problem of generating complete games is heavily linked to the problem of generating levels since most games are deeply tied to the geometry and object-placement defined in levels.
+
+
+
+
+
+\section{Framework: Game description languages}
 Regardless of which approach to game generation is chosen, one needs a way to represent the games that are being created.\footnote{See \citet{pcgbook:ch6} for a discussion of game-rule representation choices.} For a sufficiently general description of games, it stands to reason that the games are represented in a reasonably generic language, where every syntactically valid game description can be loaded into a specialised game engine and executed. 
 
 \subsubsection*{Stanford GDL}
@@ -176,13 +255,14 @@ There have been several attempts to design such GDLs. One of the more well-known
 Another attempt at an VGDL is called PuzzleScript, created by game designer Stephen Lavelle. The language (as its name suggest) is focused on turn-based puzzle games, but the engine allows for simple forms of animation and movement. The language is relatively high level compared to Stanford GDL, but does not support that large set of video games.
 
 
-\subsubsection*{VGDL}
+\subsection{VGDL}
+\label{ssec_vgdl}
 The various game generation attempts discussed above feature their own GDLs of different levels of sophistication; however, there has not until recently been a GDL for suitably for a larger space of video game types- and genres.
 The Video Game Description Language (VGDL) is a GDL designed to express 2D arcade-style video games of the type common on hardware such as the Atari 2600 and Commodore 64. It can express a large variety of games in which the player controls a single moving avatar (player character) and where the rules primarily define what happens when objects interact with each other in a two-dimensional space. VGDL was designed by a set of researchers~\citet{levine2013general,ebner2013towards} (and implemented by Schaul ~\citet{schaul2013video}) in order to support both general video game playing and video game generation.
 In contrast to other GDLs, the language has an internal set of classes, properties and types that each object can defined by, which the authors suggest the user to extend.
 
 Objects have physical properties (i.e. position, direction) which can be altered either by the properties defined, or by interactions defined between specific objects. 
-The games take place on a specified level constructed from game-tiles, however objects are able to move slowly between game-tiles.
+Playing the games also required a specified level which defines a set of game-tiles deciding the initial locations of sprites. When running games sprite can move in between game-tiles (if the \textbf{speed} is a fraction).
 
 A VGDL description has four parts: 
 
@@ -190,15 +270,17 @@ A VGDL description has four parts:
 \item [SpriteSet] Defines which sprites can appear in the game. Each sprite must be designated by a class, in which a set of predefined actions exists. Also a set of parameters can be fed to each sprite, configuring for instance the speed or how often the sprite takes an action, and the parameters used for the different sprite-classes -- for instance, for the  class \textbf{Flicker} (a simple extension to the base sprite, the sprite is destroyed after a speecifed amount of time) the lifetime can be adjusted.
 Sprites can additionally be designed in a tree structure, where multiple sprites have the same parent sprite, making more possibility for the interactions and terminations described below. 
 \item [InteractionSet] Each line defines what happens when a set of two sprites collide with each other (located on the same game-tile). Each interaction is represented by a class defining the action to take (i.e. push back, or kill sprite), and a set of parameters specific to each interaction-class, as well as the score achieved for letting the interaction happen.
-\item [TerminationSet]
-\item [LevelMapping]
+\item [TerminationSet] Defines how the game can end. Each line in this set has a win parameter, which is set to true or false; winning or losing the game.
+Each termination-function is represented by a class defining under which conditions the game should end, which can for instance when there exists 0 of a certain sprite (when all of the sprites are killed).
+\item [LevelMapping] The job of the \texttt{LevelMapping} is to translate from a character (\texttt{char}) in a level-file (explained below), to sprites from the \texttt{SpriteSet}. 
+A single mapping can be shared by several sprites, causing the sprites to be created on the same game-tile.
 \end{description}
-%the SpriteSet, which defines the ontology of the game -- which sprites exist and what can they do; the LevelMapping, which maps from level description to game state; the InteractionSet, which defines what happens when sprites overlap, and the TerminationSet which defines how the game can be won or last.
+
 
 
 \begin{figure}[!ht]
 \centering
-\begin{lstlisting}
+\begin{vgdldesc}[linewidth=14cm]
 BasicGame
 	SpriteSet
 		city  > Immovable color=GREEN img=city
@@ -223,22 +305,41 @@ BasicGame
 	TerminationSet
 		SpriteCounter stype=city   win=False
 		SpriteCounter stype=incoming win=True
-\end{lstlisting}
+\end{vgdldesc}
 \caption{Example of VGDL description - a simple implementation of the game Missile Command}
 \label{fig:vgdl}
 \end{figure}
 
+Additionally each game can only be played using level files. 
+A level file is written using the \texttt{LevelMapping} characters, where each character defines a tile of the game, and spaces defines empty tiles.
 
+\begin{figure}[!ht]
+\centering
+\begin{vgdldesc}[linewidth=14cm]
+w    m  m   m  m  m m mw
+w                      w
+w                      w
+w                      w
+w                      w
+w                      w
+w           A          w
+w                      w
+w                      w
+w                      w
+w   c c c c c c c c    w
+wwwwwwwwwwwwwwwwwwwwwwww
+\end{vgdldesc}
+\caption{Example of VGDL level description - a level for the implementation of the game Missile Command}
+\label{fig:vgdl}
+\end{figure}
 
-\subsection{The GVG-AI Framework}
 
 The GVG-AI framework is a testbed for testing general gameplaying controllers against games specified using VGDL. Controllers are called once at the beginning of each game for setup, and then once per clock tick to select an action. Controllers do not have access to the VGDL descriptions of the games. They receive only the game's current state, passed as a parameter when the controller is asked for a move. However these states can be forward-simulated to future states. Thus the game rules are not directly available, but a simulatable model of the game can be used.
 
+\subsubsection*{GVG-AI example games}
 The framework additionally contains 20 hand-designed games, which mostly consist of interpretations of classic video games. Figure \ref{fig:vgdl} shows the VGDL description of the game \emph{Missile Command}.
 Most of the games are inspired by classic arcade- and Atari games (e.g. Boulderdash, Frogger, Missile Command and Pacman), while some are original creations by the General Video-Game AI Competition's organizers. 
 The games can in general be described (except for \emph{Sokoban}) as action arcade games, in that the player controls a single avatar which must be moved quickly around in a 2D-setting to win, or to get a high score (the player is able to increment a score  counter in all of the games).
-
-
 
 Below is a short summary of each of games, describing the winning conditions, and how the player can increase his/her score:
 \begin{description}
@@ -268,48 +369,20 @@ Below is a short summary of each of games, describing the winning conditions, an
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
-\subsection{Game genres describable in VGDL}
+\subsection{Restrictions of VGDL}
+\label{ssec_gamegenres}
 The VGDL implementation of the GVG-AI competetion is essentially (without great extension) only able to describe certain action-arcade games, and puzzle games.
 For instance, the lack of possibility to traverse different levels make \textbf{Adventure} games impossible to make, and the restriction of only being able move a single character with the keyboard (the avatar) makes great restriction in creating \textbf{Strategy} games.
 
 In this project we will focus on the two main type of games describable in VGDL: Action-arcade games and turn-based puzzle games. We make the simple distinction that arcade games contain elements (sprites) that move by themselves, whereas interactions only occur as a result of the avatar moving in puzzle games.
 This puts the game \emph{Portals} in the arcade genre, even though it contains puzzle elements.
 
-To increase the size of the set of designed games, and to allow for more precise analysis we created a series of fourteen new game descriptions in VGDL. However the most important reason for creating new descriptions, was to introduce a series of \emph{puzzle games} to be analyzed.
-All of these games are interpretations of classic (pre-1990) games, and the levels 
-Below is short description of each of these games:
-
-\begin{description}
-\item [Bait] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
-\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
-\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
-\item [The Citadel] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
-\item [Bombuzal] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
-\item [Chip's Challenge] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
-\item [Bolo Adventures] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
-\item [(Real) Sokoban] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
-\item [Brainman] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
-\item [Modality] Player must avoid flames from hell gates until he finds the exit of a maze.
-\item [Painter] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
-\item [Zen Puzzle] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
-\end{description}
-
-
-Four new arcade/action games were introduced as well, to increase the number of games of designed games in analyses. 
-\begin{description}
-\item [Crackpots] VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
-\item [Solar Fox] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
-\item [Astroblast] Player needs to get to endpoint to win.
-\item [Centipede] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
-\end{description}
-
-%------------------------------------------------------------------------------------------------------------------------------%
 
 
 
-%------------------------------------------------------------------------------------------------------------------------------%
-\section{Puzzle games}
-A large amount of games contain puzzle-elements, but only a few has puzzles as the main game-play.
+
+
+
 
 
 
@@ -331,15 +404,140 @@ We assume that the games metioned are of high quality (i.e. highly enjoyable for
 We reason this because they are clones of existing games.
 
 
+
+
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 
-\chapter{Methodology}
-This section describes the experimental- setup, and methodology used in achieving the research objectives.
+\chapter{Extending VGDL}
 
-\section{Arcade-/action games}
-\label{sec:actiongames}
+We created a series of extensions to VGDL during the project.
+
+
+
+\section{Writing new VGDL games}
+
+To increase the size of the set of designed games, and to allow for more precise analysis we created a series of fourteen new game descriptions in VGDL. 
+
+Another important reason for creating new descriptions, was to introduce a series of \emph{puzzle games} to be analysed, since, as mentioned in Section \ref{ssec_vgdl} the example games from the GVG-AI competetion has a severe lack of that game-genre. 
+
+
+\subsection{Describing existing games in VGDL}
+The main goal when developing a game - which also applies in this case - is to ensure that it is enjoyable to human-players. 
+Therefore the games implemented are all interpretations of published existing games (and not original creations).
+As described in \textbf{Section \ref{ssec_gamegenres}} VGDL can only describe relatively simple games of certain type/genre, and so only a limited number of games can be translated without severely changing the game-play.
+The games are in general "exact" copies of the original ones - containing all the game-play features and interactions but lacking elements like audio, graphics and controls. However many lack certain (non-essential) game-play features like bonus point sprites, infrequently appearing enemies or features which only appear in some levels of the games.
+
+\subsubsection*{Action-arcade games}
+A set of four Atari -arcade and -2600 games were found to be suitable for interpretation, which we then wrote the description for in VGDL. 
+
+Below is short description of each of the games that were translated, and used in later tests:
+
+\begin{description}
+\item [Crackpots] \citeyearpar{game:crackpots} VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
+\item [Solar Fox] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
+\item [Astrosmash]  \citeyearpar{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
+The game ends if the laser cannon is hit a few times  by the incoming objects.
+\item [Centipede] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
+\end{description}
+
+
+\begin{figure}[!ht]
+${\vcenter{\hbox{\includegraphics[height=6cm]{origcentipede.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
+\vcenter{\includegraphics[height=6cm]{vgdlcentipede.png}}
+$
+    	\caption{Interpretation of the classic arcade game \textit{Centipede} \citeyearpar{game:crackpots}}
+\label{fig:centipedeTranslation}
+\end{figure}
+
+
+\subsubsection*{Puzzle games}
+A set of puzzle games featuring a single avatar was also found to be suitable for conversion to VGDL. 
+Several of these games can be described as \textit{Sokoban}-clones, but each containing unique game elements.
+Below is a description of each of ten puzzle games created.
+
+\begin{description}
+\item [Bait] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
+\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
+\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
+\item [The Citadel] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
+\item [Bombuzal] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
+\item [Chip's Challenge] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
+\item [Bolo Adventures] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
+\item [(Real) Sokoban] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
+\item [Brainman] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
+\item [Modality] Player must avoid flames from hell gates until he finds the exit of a maze.
+\item [Painter] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
+\item [Zen Puzzle] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
+\end{description}
+
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\section{Creating new VGDL controllers}
+To be able to probe VGDL games in more detail, we created a series of new AI controllers for various purposes.
+In total five new controllers was generated: Three to play the action-arcade style games, and two only focused on turn-based puzzle games.
+
+\subsection{Action-arcade controllers}
+
+\subsubsection*{One-step}
+
+\subsubsection*{Deep-search}
+
+\subsubsection*{Explorer}
+
+The Explorer was proven to be of a decent quality by getting a 2nd / 7th place in the GVG-AI competition.
+
+\subsection{Puzzle controllers}
+
+\subsubsection*{Breadth first}
+
+\subsubsection*{Best first}
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\section{FastVGDL}
+Since the GVG-AI framework has some functions and properties which are not interesting for some parts of this work, we created an implementation of a lighter version of VGDL, solely focused on analysing puzzle games in more detail.
+The implementation is basically a clone of the GVG-AI framework, but with several time- and memory consuming features removed, which in part was possible due to the puzzle games being relatively more simple (for instance, only movement from one tile to another is possible in FastVGDL, whereas sprites can move and collide in-between tiles in the GVG-AI framework).
+
+SMALL TEST SHOWING TIME AND MEMORY DIFFERENCE PL0X!!!
+
+ 
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\chapter{Automatic generation of VGDL descriptions}
+This section describes the experimental- setup, and methodology used generating VGDL descriptions.
+
+\section{Generating descriptions}
+%\label{sec:actiongames}
+%This section explains the different AI controllers used in testing games in the VGDL language, and the two different approaches to generating game descriptions: Mutating existing games-, and randomly generating descriptions.
+%
+%
+%\subsection{Controllers}
+%\label{method:controllers}
+%list of the controllers, short description of the two new (random-onestep and dontdie)
+%names: "one step look-ahead"->"OneStep-heuristic" - "random on step"->"OneStep-score"
+%
+%Seven general videogame controllers were used to test the games. The controllers use different approaches, with a varying degree of intelligence. Three of the controllers are included in the GVG-AI framework, while the remaining were implemented for this work. Except for \emph{OneStep-Heuristic}, the controllers only evaluate a given state according to its score and win/loss status.
+%
+%\begin{description}
+%	\item [MCTS] GVG-AI sample controller. ``Vanilla'' MCTS using UCT.
+%	\item [GA] GVG-AI sample controller. Uses a genetic algorithm to evolve a sequence of actions.
+%	\item [OneStep-Heuristic] GVG-AI sample controller. Heuristically evaluates the states reachable through one-step lookahead. The heuristic takes into account the locations of NPCs and certain other objects.
+%    \item [OneStep-Score] Similar to \emph{OneStep-heuristic}, but only uses the score and win/loss status to evalue states.
+%    \item [Random] Chooses a random action from those available in the current state.
+%	\item [DoNothing] Returns a nil action. Literally does nothing.
+%	\item [Explorer] Design specifically to play the arcade-style games of the GVG-AI framework. Unlike the other controllers which utilise open-loop searches, it stores information about visited tiles and prefers visiting unvisited locations. Also addresses a common element of the VGDL example games, randomness. The controller gains an advantage by simulating the results of actions repeatedly, before deciding the best move.
+%
+%\end{description}
+
 
 \subsection{Example games: Arcade-/action}
 Two of the 20 games from the GVG-AI framework were deemed too monotonous after initial tests. 
@@ -387,16 +585,160 @@ The number of sprites, interaction- and termination-rules were randomly chosen, 
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
+\section{Results of playing}
+The seven controllers mentioned in section \ref{method:controllers} were used to play through a set of example-, mutated and randomly generated games. Because of CPU budget limitations, each game was played for a maximum of 800 clock ticks, and each controller was restricted to use 50 ms on each tick. In the following sections, we show results of these tests, analyse the average of all play-throughs for each controller, and compare the results with each other.
+
+To more accurately compare the score for the different controllers across the range of different games, we normalise each score using a max-min normalisation. 
+Normalised averages and win rate averages are shown in Figures \ref{graph:maxminmean} and \ref{graph:winrate}, respectively. In Figure \ref{graph:maxminmean}, it is possible to see that the difference between the highest and lowest scores is greater in the example and mutated games than in the generated games. On the other hand, the average win rate of generated games surpasses both examples and mutated games, as shown in Figure \ref{graph:winrate}.
+
+In addition to the score and win-rate, the average entropy of actions chosen for the player avatar is shown in the tables below.
+
+\subsection{Designed games}
+
+\begin{figure}[!ht]
+\centering
+\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
+\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{winrate} & \emph{act-entropy} &\\\midrule
+  \DTLforeach{examplesdata}{
+  \agent=Agent:,
+  \mean=Mean:,
+  \std=Std. deviation:,
+  \mmave=MaxMinN-Mean:,
+  \wrate=Winrate:,
+  \entropy=Actions entropy:}
+  {\DTLiffirstrow{}{\tabularnewline}%
+  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
+  \\ \bottomrule
+\end{stripedtabular}
+\caption{Results from the 20 example games}
+\label{table:examples}
+\end{figure}
+
+Averages and win-rates from the 18 human-designed example games are shown in Figure~\ref{table:examples}.
+The distributions of normalised scores show that more intelligent controllers tend to have more success. 
+It is worth noticing that the \emph{score mean} and \emph{normalised score mean} have slightly different orderings.
+Notice also that distributions are slightly different when analysing the results of individual games. For instance, in \emph{Aliens}, Random has a higher average than Onestep.
+
+
+\subsection{Generated games}
+Figure~\ref{table:generated} shows results for the 65 randomly generated games, with problematic games removed according to the same criteria as in the previous section.
+
+%First of all, \emph{score means} are much higher than in the previous games, with the minimum average being 383.96, 8.5 times bigger than the higher mean in the mutated games (i.e. 45.22, by the Explorer).
+First of all, \emph{score std. deviations} are much higher than in the previous games, with the minimum being 199,406.58, over 1500 times larger than the highest in the set of example games (i.e. 121.55, by Explorer).
+%The ordering of controllers according to the \emph{score mean} has also changed, with Onestep-H on top followed by GA. 
+Clearly, only the \emph{normalised mean} can be on this set to compare scores across the the different game types. 
+The \emph{normalised score means} and \emph{win-rates} both have values that are more closely clustered togther, than in the previous game sets. 
+%The \emph{normalised score means} and \emph{win-rates} have more similar values than the previous games 
+%It is, from higher to lower, Onestep-H $>$ GA $>$ MCTS $>$ DoNothing $>$ Explorer $>$ Onestep-S $>$ Random.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
+\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{win-rate} & \emph{act-entropy} &\\\midrule
+  \DTLforeach{generateddata}{
+  \agent=Agent:,
+  \mean=Mean:,
+  \std=Std. deviation:,
+  \mmave=MaxMinN-Mean:,
+  \wrate=Winrate:,
+  \entropy=Actions entropy:}
+  {\DTLiffirstrow{}{\tabularnewline}%
+  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
+  \\ \bottomrule
+\end{stripedtabular}
+\caption{Results from randomly generated games}\label{table:generated}
+\end{figure}
+
+\subsection{Mutated games}
+When mutating games, two types of games are problematic: Games where the controllers never increase their score (and never win), and games where too many objects are created and each frame end up taking too long ($>50$ms). 
+We exclude both types of games in the following analysis.
+
+Averages from playing the remaining 146 mutated games (of 200 total) are shown in Figure~\ref{table:mutation}. 
+The scores have higher means and standard deviations, indicating outliers in the data. 
+The ordering of the \emph{normalised score mean}, however, shows a similar pattern as for the example games, with Explorer again excelling.
+%It is possible to notice that, in general, Explorer seems to excel against the others. 
+%Onestep-S is second, followed closely by GA and MCTS. 
+%With worse averages, Random, DoNothing and, surprisingly, Onestep-H are, respectively, the worse. 
+%It is also visible that average scores are considerably higher that those obtained in the example games.
+
+\begin{figure}[!ht]
+\centering
+\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
+\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{win-rate} & \emph{act-entropy} &\\\midrule
+  \DTLforeach{mutateddata}{
+  \agent=Agent:,
+  \mean=Mean:,
+  \std=Std. deviation:,
+  \mmave=MaxMinN-Mean:,
+  \wrate=Winrate:,
+  \entropy=Actions entropy:}
+  {\DTLiffirstrow{}{\tabularnewline}%
+  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
+  \\ \bottomrule
+\end{stripedtabular}
+\caption{Results from mutated games} \label{table:mutation}
+\end{figure}
+
+
+\subsection{Outcome}
+The conclusion of the above tests is that the the result distribution of controllers can be used to score a game, with a high probability.
+
+
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\chapter{Evaluation of games (fitness functions)}
+
+
+\section{Action-arcade games: Fitness functions}
+From the above tests we can see that it is interesting to write a fitness function for controllers results, to be able to find out if new generated games are of a high quality.
+
+
+\subsection{Action-arcade games: Generated levels}
+Results of what happens when generating levels for the example games.
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\chapter{Puzzle generation}
+
 \section{Turn-based puzzle games}
 
 \subsubsection*{Definition of games}
 The games described in this section are games where the puzzles are the only game-play. There is no fast movement, or quick reaction time required to win. Additionally, because the games are described using the GVG-AI framework, the games focus around a player avatar which can only move up, down, left or right (also, in the games described below, all movement are from one game-tile to another).
 
 \subsection{Games} 
-Description of the puzzle games used in tests.
+Description of the puzzle games used in tests. 
+
+
+
+\subsection{Puzzle solving AIs} 
+As mentioned in (WHERE ITS MENTIONED), the controllers from the GVG-AI competietion are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
+Two general puzzle solving algorithms were implemented. The overall goal of the controllers were to analyze the game as much as possibl, rather than finding a solution fast, or using as low memory as possible
+They controllers use fact that wall-sprites in the different games always push back the player, and so the controllers do not try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game. 
+Also, the controllers store each path it is had tried. For each path a game state is calculated and stored, by finding the position and type of each (non-wall) sprite in the game. A path is cut off if the calculated game state is the same as has appeared before.
+
+\begin{description}
+\item[Breadth-first search]
+A breadth-first search algorithm was implemented by using a queue and letting each node expand to the adjacent tiles, using the "tricks" described above. 
+Additionally the controller was given a low- and high-memory option: In the high memor
+
+\item[Best-first search]
+\end{description}
+
 
 \subsection{Level generation} 
 A setup for creating levels for a given game were constructed using an evolutionary algorithm. The level generator described in section \ref{sec:actiongames} was used to generate simple levels for games.  In addition two extra options were added: Wall-sprites and ground-sprites. This reduces a lot of troubles since the avatar would otherwise be able to escape the level in a lot of the games. Ground-sprites signify which sprite should appear on empty locations.
+
+The fitness function used in evolving levels was found by letting the two "puzzle solving AIs" play through the level. 
+
+
 
 \subsubsection*{Mutation} 
 
@@ -435,31 +777,9 @@ Put here cool text like what is going on in the wauw
 \end{example}
 This is subsubsection with title ``\Subsectionname''.
 
-%------------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------------%
-
-\chapter{Results}
-
-\section{Action-arcade games: Setup}
-Om det vi lavede i paperet (+ mine egne spil PL0X!)
-
-\subsection{Generated games}
-About how the games were generated.
-
-\subsection{Mutated games}
-About mutated games
-
-\subsection{Outcome}
-The conclusion of the above tests is that the the result distribution of controllers can be used to score a game, with a high probability.
 
 
-\section{Action-arcade games: Fitness functions}
-From the above tests we can see that it is interesting to write a fitness function for controllers results, to be able to find out if new generated games are of a high quality.
 
-
-\subsection{Action-arcade games: Generated levels}
-Results of what happens when generating levels for the example games.
 
 
 
