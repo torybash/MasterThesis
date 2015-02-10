@@ -37,6 +37,10 @@
 \usepackage[]{algorithm2e}
 \usepackage[authoryear]{natbib}
 
+%Tikzpicture (pretty flowcharts etc.)
+\usepackage{tikz}
+\usetikzlibrary{calc,backgrounds,arrows,matrix,positioning}
+
 \usepackage{subfig}
 \usepackage{float}
 
@@ -162,6 +166,81 @@ Procedural content generation is a topic that is being increasingly researched a
 
 \section{Level generation}
 
+\section{Research Objectives}
+The main objectives of this study was to create a generator being able to create simple games and levels, enjoyable for human players.
+The focus of the study was to create fitness functions able to differentiate between games (and levels) of different quality, to be able to create interesting content. Making the generator able to create a large amount of games, and then select the ones with the highest quality.
+
+\subsection{General Evaluation - Arcade-/Action Games}
+The first goal was to use the results of a series of general game-playing (knowledge free) algorithms to value a given game.
+
+\subsection{Breadth First Search - Puzzle Games}
+The second goal was to 
+
+\subsection{Assumptions}
+We assume that the games metioned are of high quality (i.e. highly enjoyable for human players). This is not always clear when playing the games in their form, since they need crucial element to keep a game fun: Audio, graphic effects, control-scheme fiiting to the games.
+We reason this because they are clones of existing games.
+
+
+\section{How to read this thesis}
+In the following chapters the research goals are being fulfilled. 
+The figure below shows the structure of the thesis, explaining how each chapter fits in to the larger picture:
+
+\begin{center}
+\begin{tikzpicture}[
+chapterparts/.style={rectangle, draw=black!80, very thick, text width=2.4cm, font = \scriptsize,inner xsep = 0.1cm,rounded corners},
+chapterheader/.style={rectangle, draw=black!80, fill=black!15, very thick, text centered, text width=2.4cm, font = \footnotesize,inner xsep = 0.1cm,},
+roundnode/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=7mm},
+squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size=5mm},
+nodes = {align = center}
+]
+%Nodes
+
+\node[chapterparts]      (theory)
+									{\quad\\-Research in content generation\\
+									-Research in game generation\\
+									-Framework};
+\node[chapterparts]      (background) [right=of theory, shift = (left:0.5cm)]
+									 {\quad\\-New VGDL games\\
+									-New VGDL controllers \\
+									-New VGDL implementation};
+\node[chapterparts]      (task1) [below=of theory, shift = (left:1.5cm), yshift=-0.5cm]
+									 {\quad\\-New VGDL games\\
+									-New VGDL controllers \\
+									-Discussion};
+\node[chapterparts]      (task2) [right=of task1, shift = (left:0.5cm)]
+									 {\quad\\-New VGDL games\\
+									-New VGDL controllers \\
+									-Discussion};
+\node[chapterparts]      (task3) [right=of task2, shift = (left:0.5cm)]
+									 {\quad\\-New VGDL games\\
+									-New VGDL controllers \\
+									-Discussion};
+\node[chapterparts]      (conclusion) [below=of task2]
+									 {\quad\\-Discussion\\
+									-Conclusion};
+\node[chapterheader]   (theoryh)  [above=of theory, shift = (down:1.2cm)]		
+{2. Theory and framework};
+\node[chapterheader]   (backgroundh)  [above=of background, shift = (down:1.2cm)]		
+{3. Background};
+\node[chapterheader]   (task1h)  [above=of task1, shift = (down:1.2cm)]		
+{4. Generation of VGDL games};
+\node[chapterheader]   (task2h)  [above=of task2, shift = (down:1.2cm)]		
+{5. Evaluation of VGDL games};
+\node[chapterheader]   (task3h)  [above=of task3, shift = (down:1.2cm)]		
+{6. Puzzle analysis};
+\node[chapterheader]   (conclusionh)  [above=of conclusion, shift = (down:1.2cm)]		
+{7. Conclusion};
+
+%Lines
+\draw[->] (theory.east) -- (background.west);
+\draw[->] (background.south) to[bend right=10] (task1h.north);
+\draw[->] (background.south) to[bend left=10] (task3h.north);
+\draw[->] (task1.east) -- (task2.west);
+
+\end{tikzpicture}
+\end{center}
+
+
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -246,6 +325,7 @@ A large amount of games contain puzzle-elements, but only a few has puzzles as t
 
 
 \subsection{Something to note: Levels}
+\label{ssec_notelevels}
 The problem of generating complete games is heavily linked to the problem of generating levels since most games are deeply tied to the geometry and object-placement defined in levels.
 A part of the success of Ludi stem from the fact that levels (boards) were as much in focus, as the game-rules themselves.
 
@@ -393,27 +473,6 @@ This puts the game \emph{Portals} in the arcade genre, even though it contains p
 
 
 
-
-%------------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------------%
-\chapter{Research Objectives}
-The main objectives of this study was to create a generator being able to create simple games and levels, enjoyable for human players.
-The focus of the study was to create fitness functions able to differentiate between games (and levels) of different quality, to be able to create interesting content. Making the generator able to create a large amount of games, and then select the ones with the highest quality.
-
-\section{General Evaluation - Arcade-/Action Games}
-The first goal was to use the results of a series of general game-playing (knowledge free) algorithms to value a given game.
-
-\section{Breadth First Search - Puzzle Games}
-The second goal was to 
-
-\section{Assumptions}
-We assume that the games metioned are of high quality (i.e. highly enjoyable for human players). This is not always clear when playing the games in their form, since they need crucial element to keep a game fun: Audio, graphic effects, control-scheme fiiting to the games.
-We reason this because they are clones of existing games.
-
-
-
-
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -490,6 +549,7 @@ To be able to probe VGDL games in more detail, we created a series of new AI con
 In total five new controllers was generated: Three to play the action-arcade style games, and two only focused on turn-based puzzle games.
 
 \subsection{Action-arcade controllers}
+\label{ssec_actioncontrollers}
 
 \subsubsection*{One-step}
 
@@ -534,7 +594,7 @@ In both approaches several constraints were set upon the generation process to p
 
 \subsection{Mutation of example games}
 \label{method:mutation}
-
+A set of VGDL games were used to mutate new game descriptions, analysed in this section.
 
 \subsubsection*{Designed arcade-action games}
 After our addition of new games to GVG-AI framework (Chapter \ref{ch_extending}) we have access to 34 games, with five levels each. 
@@ -552,26 +612,27 @@ Thirteen interpretions of existing games are left, and used as a baseline for te
 
 
 \subsubsection*{Generating approach}
-A process was built for mutating the different parts of game descriptions, i.e. changing the sprites available of the \texttt{SpriteSet} (and making mapping for sprites in the \texttt{LevelMapping}), the interactions rules (\texttt{InteractionSet}) and the termination rules (\texttt{TerminationSet}).
-The process additionally allowed for changing the amount of sprites and rules, i.e. generating new sprites/rules or removing existing ones .
+A process was built for mutating the different parts of game descriptions, i.e. changing the sprites available of the \texttt{SpriteSet}, the interactions rules (\texttt{InteractionSet}) and the termination rules (\texttt{TerminationSet}).
+The process additionally allowed for changing the amount of rules, i.e. generating new rules or removing existing ones.
 
 Since the sprites and rules of each game description is described by both a class and a series of parameters, several partly subjective decisions was made on defining probabilities of different parameters' values to try reach "realistic" values.
 For instance it was decided that a sprite being mutated or generated only has a 25\% chance of using the \texttt{cooldown} parameter (making sprites have pauses between acting), and that the parameter have a random value between 1 and 10.
 The values and probabilities used were mostly decided by examining the set of designed games descriptions.
 Several constraints were also used to avoid game with non-valid descriptions (which can cause crashes in the GVG-AI framework), for instance by ensuring that avatar-sprites cannot be spawned and sprites cannot transform to an avatar, but an avatar sprite can still transform to another type of avatar sprite.
 
-When testing mutated games the original games' levels were used.
+When testing mutated games the original games' levels were used. Therefore the amount of sprites and the \texttt{LevelMapping} was not changed.
 
 
 
 \subsection{Random game generation}
 \label{method:random}
-A similar process a mentioned above was used to randomly put game descriptions together creating new games completely from scratch, with possibility of deciding the interval of the amount of sprites, interaction- and termination-rules.
+A similar process a mentioned above was used to randomly put game descriptions together creating new games completely from scratch, constructing the textual lines for different parts of a VGDL description: Generating an array of sprites (for the SpriteSet), interaction-rules (InteractionSet), termination-rules (TerminationSet) and level mappings (LevelMapping). 
+When generating descriptions, we used similar constraints to those mentioned in section~\ref{method:mutation}, partly to avoid generating descriptions with invalid elements, and partly to increase the proportion of interesting outcomes. 
+As for the mutated games, some partly subjective decisions were made on defining the possible amount of sprites and rules, the proportion of sprites that has a level mapping, and when generating new sprite definitions.
 
+To simplify the sprite creation process, no parent-child structure was used in the \texttt{SpriteSet}.
+However, the goal of the parent-child structure is only to make rule definitions less verbose, and does not make actual new game features possible.
 
-\subsubsection*{Generating approach}
-A set of 400 random VGDL game descriptions were generated by constructing the textual lines for different parts of a VGDL description: Generating an array of sprites (for the SpriteSet), interaction-rules (InteractionSet), termination-rules (TerminationSet) and level mappings (LevelMapping).
-Before generating descriptions, we used similar constraints to those mentioned in section~\ref{method:mutation}, partly to avoid generating descriptions with invalid elements, and partly to increase the proportion of interesting outcomes. 
 
 %\begin{figure}[ht]
 %	\centering
@@ -580,20 +641,50 @@ Before generating descriptions, we used similar constraints to those mentioned i
 %\end{figure}
 
 
-The number of sprites, interaction- and termination-rules were randomly chosen, limited to 25, 25, and 2, respectively. Furthermore, a simple level description (only containing one of each sprite) was generated for each of the generated game descriptions for test purposes. 
-
-
 \subsubsection*{Level generation}
+As mentioned in Section \ref{ssec_notelevels} the problem of generating a game is more often than not intimately linked to a generation of levels.
+
+A simple level generator were constructed with the simple goal of making the randomly generated games playable.
+The generator designates a level built using a given size, and inserts sprite mappings in different positions
+ which takes all the level mappings from a game description and put a random (but small) amount of each sprite defined, in a random location(s).
+
+
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
-\section{Initial results}
-The seven controllers mentioned in section \ref{method:controllers} were used to play through a set of example-, mutated and randomly generated games. Because of CPU budget limitations, each game was played for a maximum of 800 clock ticks, and each controller was restricted to use 50 ms on each tick. In the following sections, we show results of these tests, analyse the average of all play-throughs for each controller, and compare the results with each other.
+\section{Experimental setup and initial results}
+In this section we present a set of initial results from playing through both designed and generated games using different AI controllers, and discuss different ways to analyse the resulting data.
 
-To more accurately compare the score for the different controllers across the range of different games, we normalise each score using a max-min normalisation. 
+
+\subsubsection*{Controllers}
+Eight general videogame controllers were used to test the games. The controllers use different approaches, with a varying degree of intelligence. Four of the controllers are included in the GVG-AI framework, while the remaining were implemented for this work. Except for \emph{OneStep-Heuristic}, the controllers only evaluate a given state according to its score and win/loss status.
+Each controller was marked with one of four types of intelligence for later tests: Intelligent (complex searches in game space are taken), semi-intelligent (game space search uses simple approach), random and do-nothing.
+
+\begin{description}
+	\item [MCTS] GVG-AI sample controller. ``Vanilla'' MCTS using UCT.
+	\item [GA] GVG-AI sample controller. Uses a genetic algorithm to evolve a sequence of actions.
+	\item [OneStep-Heuristic] GVG-AI sample controller. Heuristically evaluates the states reachable through one-step lookahead. The heuristic takes into account the locations of NPCs and certain other objects.
+	\item [NoStepBackSearch] Explained in Section \ref{ssec_actioncontrollers}. Marked as \textit{semi-intelligent}
+    \item [OneStep-Score] Similar to \emph{OneStep-heuristic}, but only uses the score and win/loss status to evalue states.
+    \item [Random] Chooses a random action from those available in the current state.
+	\item [DoNothing] Returns a nil action. Literally does nothing.
+	\item [Explorer] Design specifically to play the arcade-style games of the GVG-AI framework. Unlike the other controllers which utilise open-loop searches, it stores information about visited tiles and prefers visiting unvisited locations. Also addresses a common element of the VGDL example games, randomness. The controller gains an advantage by simulating the results of actions repeatedly, before deciding the best move.
+\end{description}
+
+
+\subsubsection*{Testing and result analysis}
+The eight controllers were used to play through different set of example-, mutated and randomly generated games. Because of CPU budget limitations, each game was played with a maximum amount clock ticks (values between 200-2000 was used), and each controller was restricted to use 50 ms on each tick. 
+For each playthrough only the default data from the GVG-AI framework was retrieved: The score, the win-lose value, the amount of ticks and a list of actions performed.
+
+A program to analyse the data was built, to calculate averages and std. deviations of each of the values, for each controller, with the possibility of caculating averages across several levels or games.
+
+To more accurately compare the score for the different controllers when playing across a range of different games,  we calculate a normalised score using a max-min normalisation. 
 Normalised averages and win rate averages are shown in Figures \ref{graph:maxminmean} and \ref{graph:winrate}, respectively. In Figure \ref{graph:maxminmean}, it is possible to see that the difference between the highest and lowest scores is greater in the example and mutated games than in the generated games. On the other hand, the average win rate of generated games surpasses both examples and mutated games, as shown in Figure \ref{graph:winrate}.
 
 In addition to the score and win-rate, the average entropy of actions chosen for the player avatar is shown in the tables below.
+
+In the following sections, we show results of these tests, analyse the average of all play-throughs for each controller, and compare the results with each other.
+
 
 \subsection{Designed games}
 
@@ -695,8 +786,11 @@ The conclusion of the above tests is that the the result distribution of control
 
 \chapter{Evaluation of games (fitness functions)}
 
+The initial tests of the previous chapter shows that there is reason to explorer the relationship of AI's perfomance profiles to analyze a given VGDL game.
+This chapter focuses on creating fitness function to analyze different generated games and evolve enjoyable games by evolving game descriptions. 
+The resulting games are then discussed in detail.
 
-\section{Action-arcade games: Fitness functions}
+\section{Fitness function features}
 From the above tests we can see that it is interesting to write a fitness function for controllers results, to be able to find out if new generated games are of a high quality.
 
 
