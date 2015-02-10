@@ -36,6 +36,7 @@
 \usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
 \usepackage[]{algorithm2e}
 \usepackage[authoryear]{natbib}
+\usepackage[toc,page]{appendix}
 
 %Tikzpicture (pretty flowcharts etc.)
 \usepackage{tikz}
@@ -158,6 +159,12 @@ roundcorner=5pt
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 \chapter{Introduction}
+Procedural generation of game content has become a widely used tool for video-game developers.
+Automatically generating content allow game developers to provide more content, with more differentation, from a limited supply of assets, most often by helping to produce levels or items for their games. 
+Rogue \citeyearpar{game:rogue} is one of the earliest examples on proceduraly generating game levels (or dungeons). Several highly popular games has since used procedurally generated levels, some as a main part of their game-play (Civilazation II-V \citeyearpar{game:civilizationseries}, the Diablo-series \citeyearpar{game:diabloseries} 
+
+
+Procedural content generation (PCG) for games has been a main part of commercial video games for decades, 
 Several published games use PCG as a main part of its game play, to maintain a challenge for the player and present a new experience on re-playing the games.
 Procedural content generation is a topic that is being increasingly researched and implemented in games of various types and genres (source). PCG can help game designers in creating game elements like levels/maps, environments, weapons or AI's.
 
@@ -333,17 +340,13 @@ A part of the success of Ludi stem from the fact that levels (boards) were as mu
 
 
 
-\section{Framework: Game description languages}
+\section{Framework: VGDL and the GVG-AI framework}
 Regardless of which approach to game generation is chosen, one needs a way to represent the games that are being created.\footnote{See \citet{pcgbook:ch6} for a discussion of game-rule representation choices.} For a sufficiently general description of games, it stands to reason that the games are represented in a reasonably generic language, where every syntactically valid game description can be loaded into a specialised game engine and executed. 
-
-\subsubsection*{Stanford GDL}
 There have been several attempts to design such GDLs. One of the more well-known is the Stanford GDL, which is used for the General Game Playing Competition~\citet{genesereth2005general}. That language is tailored to describing board games and similar discrete, turn-based games; it is also arguably too verbose and low-level to support search-based game generation. 
-
-\subsubsection*{PuzzleScript}
 Another attempt at an VGDL is called PuzzleScript, created by game designer Stephen Lavelle. The language (as its name suggest) is focused on turn-based puzzle games, but the engine allows for simple forms of animation and movement. The language is relatively high level compared to Stanford GDL, but does not support that large set of video games.
 
 
-\subsection{VGDL}
+\subsection{VGDL game description}
 \label{ssec_vgdl}
 The various game generation attempts discussed above feature their own GDLs of different levels of sophistication; however, there has not until recently been a GDL for suitably for a larger space of video game types- and genres.
 The Video Game Description Language (VGDL) is a GDL designed to express 2D arcade-style video games of the type common on hardware such as the Atari 2600 and Commodore 64. It can express a large variety of games in which the player controls a single moving avatar (player character) and where the rules primarily define what happens when objects interact with each other in a two-dimensional space. VGDL was designed by a set of researchers~\citet{levine2013general,ebner2013towards} (and implemented by Schaul ~\citet{schaul2013video}) in order to support both general video game playing and video game generation.
@@ -422,6 +425,8 @@ wwwwwwwwwwwwwwwwwwwwwwww
 \end{figure}
 
 
+
+\subsection{GVG-AI: AI controllers and testing}
 The GVG-AI framework is a testbed for testing general gameplaying controllers against games specified using VGDL. Controllers are called once at the beginning of each game for setup, and then once per clock tick to select an action. Controllers do not have access to the VGDL descriptions of the games. They receive only the game's current state, passed as a parameter when the controller is asked for a move. However these states can be forward-simulated to future states. Thus the game rules are not directly available, but a simulatable model of the game can be used.
 
 \subsubsection*{GVG-AI example games}
@@ -497,19 +502,17 @@ Therefore the games implemented are all interpretations of published existing ga
 As described in \textbf{Section \ref{ssec_gamegenres}} VGDL can only describe relatively simple games of certain type/genre, and so only a limited number of games can be translated without severely changing the game-play.
 The games are in general "exact" copies of the original ones - containing all the game-play features and interactions but lacking elements like audio, graphics and controls. However many lack certain (non-essential) game-play features like bonus point sprites, infrequently appearing enemies or features which only appear in some levels of the games.
 
+
+\subsection{Results}
+A series of fourteen commercial games was re-created in VGDL to be used in future tests. 
+Figure \ref{fig:centipedeTranslation} shows one of the games translated to VGDL.
+Minor changes to the GVG-AI framework was made for a small number of the games, to be able to correctly copy the games' gameplay features.
+The original game levels were additionally translated into VGDL level description, with five levels being created for each game.
+For some of games the levels could not be completely copied, for instance because the levels were too large in size (\textit{Bolo Adventures}), or because a lack of game features implemented in the clones (\textit{Chip's Challenge}), and the resulting levels are therefore simplifications of the originals..
+
 \subsubsection*{Action-arcade games}
-A set of four Atari -arcade and -2600 games were found to be suitable for interpretation, which we then wrote the description for in VGDL. 
-
-Below is short description of each of the games that were translated, and used in later tests:
-
-\begin{description}
-\item [Crackpots] \citeyearpar{game:crackpots} VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
-\item [Solar Fox] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
-\item [Astrosmash]  \citeyearpar{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
-The game ends if the laser cannon is hit a few times  by the incoming objects.
-\item [Centipede] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
-\end{description}
-
+A set of four Atari -arcade and -2600 games were found to be suitable for interpretation; \textit{Solar Fox}, \textit{Crackpots}, \textit{Centipede} and \textit{Astrosmash}, and a VGDL game description was written for each. 
+A description of each of the games and their interpretations can be seen in Appendix \ref{app_thesisgame}
 
 \begin{figure}[!ht]
 ${\vcenter{\hbox{\includegraphics[height=6cm]{origcentipede.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
@@ -521,39 +524,57 @@ $
 
 
 \subsubsection*{Puzzle games}
-A set of puzzle games featuring a single avatar was also found to be suitable for conversion to VGDL. 
-Several of these games can be described as \textit{Sokoban}-clones, but each containing unique game elements.
-Below is a description of each of ten puzzle games created.
+A set of puzzle games from several different platform, all featuring a single avatar, was found to be suitable to be described in VGDL. 
+Several of these games can be described as \textit{Sokoban}-clones with different spins on the gameplay.
+The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge}, \textit{Modality} and \textit{Painter}.
 
-\begin{description}
-\item [Bait] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
-\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
-\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
-\item [The Citadel] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
-\item [Bombuzal] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
-\item [Chip's Challenge] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
-\item [Bolo Adventures] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
-\item [(Real) Sokoban] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
-\item [Brainman] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
-\item [Modality] Player must avoid flames from hell gates until he finds the exit of a maze.
-\item [Painter] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
-\item [Zen Puzzle] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
-\end{description}
+
 
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \section{Creating new VGDL controllers}
-To be able to probe VGDL games in more detail, we created a series of new AI controllers for various purposes.
+To be able to probe VGDL games in more detail, we created a series of new AI controllers with various approaches to finding a results.
 In total five new controllers was generated: Three to play the action-arcade style games, and two only focused on turn-based puzzle games.
 
 \subsection{Action-arcade controllers}
 \label{ssec_actioncontrollers}
 
+Three controllers of an increasing degree of cleverness was introduced: \textit{One-step} (least clever), \textit{Deep-search} and \textit{Explorer} (most clever). 
+The controllers greatly differ in their strategy in simulating the forward model (accessible when running the GVG-AI framework) using different actions, and different series of actions.
+
 \subsubsection*{One-step}
+The One-step AI only attempt to advance the forward model once, for each allowed action in the game.
+The score and win/lose state of the resulting game states are then considered, and the action with the resuling best state is chosen -- and a random action is chosen when no state is better than others.
+The controllers approach can be seen below:
+
+\begin{algorithm}[H]
+\For{action : PossibleActions}{
+newGameState = gameState.copy().advance(action) \\
+value = newGameState.score \\
+\If{newGameState.gameEnded}{
+value += newGameState.won ? 1000 : -100000
+}
+}
+\Return action leading to highest value
+
+%
+% \While{have time this frame}{
+%  read current\;
+%  \eIf{understand}{
+%   go to next section\;
+%   current section becomes this one\;
+%   }{
+%   go back to the beginning of current section\;
+%  }
+% }
+% \caption{How to write algorithms}
+\end{algorithm}
 
 \subsubsection*{Deep-search}
+This controller starts out in a similar fashion as the One-step, by expanding using all possible actions by copying the initial game-state.
+However the resulting game-states are then continuosly explanded from.
 
 \subsubsection*{Explorer}
 
@@ -878,32 +899,68 @@ This is subsubsection with title ``\Subsectionname''.
 
 
 
-
-
-
-
-% Body
-%\begin{spacing}{1.5}
-%\input{./introduction.tex}
-%\input{./process-description.tex}
-%\input{./structural-overview.tex}
-%\input{./behavioral-overview.tex}
-%\input{./points-of-interest.tex}
-%\end{spacing}
-
-%Bibliography
-%\newpage
-%\addcontentsline{toc}{section}{References}
-%\begin{thebibliography}{9}
-%	\bibitem{hacking_roomba}
-%	  Kurt, T. E.,
-%	  \emph{Hacking Roomba},
-%	  Wiley Publishing.
-%	  2007.
-%\end{thebibliography}
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
 
 \bibliography{bigliography}
 \bibliographystyle{plainnat}
+
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+\begin{appendices}
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+
+
+
+\chapter{GVG-AI example games}
+The contents...
+
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\chapter{Games designed during thesis}
+\label{app_thesisgame}
+
+\section{Action arcade games}
+
+\begin{description}
+\item [Crackpots] \citeyearpar{game:crackpots} VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
+\item [Solar Fox] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
+\item [Astrosmash]  \citeyearpar{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
+The game ends if the laser cannon is hit a few times  by the incoming objects.
+\item [Centipede] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
+\end{description}
+
+\section{Puzzle games}
+
+\begin{description}
+\item [Bait] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
+\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
+\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
+\item [The Citadel] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
+\item [Bombuzal] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
+\item [Chip's Challenge] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
+\item [Bolo Adventures] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
+\item [(Real) Sokoban] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
+\item [Brainman] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
+\item [Modality] Player must avoid flames from hell gates until he finds the exit of a maze.
+\item [Painter] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
+\item [Zen Puzzle] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
+\end{description}
+
+\end{appendices}
+
+
+
+
 
 % Appendices
 \newpage
