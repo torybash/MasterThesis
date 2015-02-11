@@ -75,6 +75,7 @@ escapeinside={\%*}{*)}          % if you want to add a comment within your code
 
 %Load data
 \DTLloaddb{examplesdata}{examplesdata.csv}
+\DTLloaddb{aliensdata}{aliensdata.csv}
 \DTLloaddb{mutateddata}{mutateddata.csv}
 \DTLloaddb{generateddata}{generateddata.csv}
 
@@ -433,38 +434,44 @@ wwwwwwwwwwwwwwwwwwwwwwww
 
 
 \subsection{GVG-AI: AI controllers and testing}
+\label{ssec:aicontrollersandtesting}
 The GVG-AI framework is a testbed for testing general gameplaying controllers against games specified using VGDL. Controllers are called once at the beginning of each game for setup, and then once per clock tick to select an action. Controllers do not have access to the VGDL descriptions of the games. They receive only the game's current state, passed as a parameter when the controller is asked for a move. However these states can be forward-simulated to future states. Thus the game rules are not directly available, but a simulatable model of the game can be used.
+
+\subsubsection*{GVG-AI sample controllers}
+The GVG-AI contains a series of sample AI controllers, which some were used in testing games in the project.
+Below is a short description of each of the sample controllers used:
+
+\begin{description}
+	\item [MCTS] ``Vanilla'' MCTS using UCT.
+	\item [GA] Uses a genetic algorithm to evolve a sequence of actions.
+	\item [OneStep-Heuristic] Heuristically evaluates the states reachable through one-step lookahead. The heuristic takes into account the locations of NPCs and certain other objects.
+    \item [Random] Chooses a random action from those available in the current state.
+\end{description}
 
 \subsubsection*{GVG-AI example games}
 The framework additionally contains 20 hand-designed games, which mostly consist of interpretations of classic video games. Figure \ref{fig:vgdl} shows the VGDL description of the game \emph{Missile Command}.
 Most of the games are inspired by classic arcade- and Atari games (e.g. Boulderdash, Frogger, Missile Command and Pacman), while some are original creations by the General Video-Game AI Competition's organizers. 
-The games can in general be described (except for \emph{Sokoban}) as action arcade games, in that the player controls a single avatar which must be moved quickly around in a 2D-setting to win, or to get a high score (the player is able to increment a score  counter in all of the games).
+The games can be described (except for the game \emph{Sokoban}) as \textit{action-arcade} games, in that the player controls a single avatar which must be moved quickly around in a 2D-setting to win, or to get a high score (the player is able to increment a score  counter in all of the games).
 
-Below is a short summary of each of games, describing the winning conditions, and how the player can increase his/her score:
-\begin{description}
-\item [Aliens] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
-\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
-\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
-\item [Boulderdash] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
-\item [Butterflies] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
-\item [Chase] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
-\item [Digdug] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
-\item [Eggomania] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
-\item [Firecaster] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
-\item [Firestorms] Player must avoid flames from hell gates until he finds the exit of a maze.
-\item [Frogs] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
-\item [Infection] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
-\item [Missile Command] VGDL interpretation of the classic arcade game \emph{Missile Command}. Player has to destroy falling missiles, before they reach their destinations. If the player can save at least one city, he wins.
-\item [Overload] Player must get to the level after collecting coins, but cannot collect too many coins, as he will be too heavy to traverse the exit.
-\item [Pacman] A VGDL interpretation of \emph{Pac-Man}. Goal is to clear a maze full with power pills and pellets, and avoid or destroy ghosts.
-\item [Portals] Objective is to get to a certain point using portals to go from one place to another, while at the same time avoiding lasers.
-\item [Seaquest] VGDL interpretation of \emph{Seaquest}. Avatar is a submarine that rescue divers and avoids sea animals that can kill it. The goal is simply to a high score.
-\item [Survive Zombies] Player has to flee zombies until time runs out, and can collect honey to kill the zombies.
-\item [Whackamole] VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
-\item [Zelda] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
-\item [Camelrace] Player needs to get to endpoint to win.
-\item [Sokoban] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
-\end{description}
+
+\begin{figure}[!ht]
+	\subfloat{%\emph{Zelda}\label{subfig-2:dummy}]{%
+      		\includegraphics[scale=0.18]{zelda.png}
+    	}
+	\hfill
+	\subfloat{%[\emph{Portals}\label{subfig-1:dummy}]{%
+		\includegraphics[scale=0.24]{portals.png}
+	}\\
+	\subfloat{%\emph{Boudlerdash}\label{subfig-2:dummy}]{%
+      		\includegraphics[width=\textwidth]{boulderdash.png}
+    	}
+    	\caption{A visual representation of a few of the VGDL example games. From top-left: \emph{Zelda}, \emph{Portals} and \emph{Boulderdash}}
+	\label{fig:dummy}
+\end{figure}
+
+A short summary of each of the games can be seen in Appendix \ref{app_gvgaigames}
+
+
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
@@ -518,7 +525,7 @@ For some of games the levels could not be completely copied, for instance becaus
 
 \subsubsection*{Action-arcade games}
 A set of four Atari -arcade and -2600 games were found to be suitable for interpretation; \textit{Solar Fox}, \textit{Crackpots}, \textit{Centipede} and \textit{Astrosmash}, and a VGDL game description was written for each. 
-A description of each of the games and their interpretations can be seen in Appendix \ref{app_thesisgame}
+A description of each of the games and their interpretations can be seen in Appendix \ref{app_thesisgames}
 
 \begin{figure}[!ht]
 ${\vcenter{\hbox{\includegraphics[height=6cm]{origcentipede.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
@@ -542,7 +549,7 @@ The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \
 
 \section{Creating new VGDL controllers}
 To be able to probe VGDL games in more detail, we created a series of new AI controllers with various approaches to finding a results.
-In total five new controllers was generated: Three to play the action-arcade style games, and two only focused on turn-based puzzle games.
+In total five new controllers was generated: Three to play the action-arcade style games, and two only focused on puzzle games.
 
 \subsection{Action-arcade controllers}
 \label{ssec_actioncontrollers}
@@ -564,25 +571,40 @@ value += newGameState.won ? 1000 : -100000
 }
 }
 \Return action leading to highest value
-
-%
-% \While{have time this frame}{
-%  read current\;
-%  \eIf{understand}{
-%   go to next section\;
-%   current section becomes this one\;
-%   }{
-%   go back to the beginning of current section\;
-%  }
-% }
-% \caption{How to write algorithms}
 \end{algorithm}
 
 \subsubsection*{Deep-search}
 This controller starts out in a similar fashion as the One-step, by expanding using all possible actions by copying the initial game-state.
-However the resulting game-states are then continuosly explanded from.
+These game-states are then simulated further upon by advancing each game state a single time, with a random action, without copying the state (a rather costly procedure).
+This expansion is continued until the controller runs out of time, and a value for each action is calculated by considering the score and win/lose-value for each state that can be achieved from each of the initial states.
+
+\begin{algorithm}[H]
+queue $\gets$ initial gameState \\
+\While{has time left}{
+	gameState = q.poll() \\
+	\eIf{gameState == initial gameState}{
+		\For{action : PossibleActions}{
+			queue $\gets$ gameState.copy().advance(action)
+		}
+	}{
+		gameState.advance(random action)
+	}
+
+
+}
+
+%\For{action : PossibleActions}{
+%newGameState = gameState.copy().advance(action) \\
+%value = newGameState.score \\
+%\If{newGameState.gameEnded}{
+%value += newGameState.won ? 1000 : -100000
+%}
+%}
+%\Return action leading to highest value
+\end{algorithm}
 
 \subsubsection*{Explorer}
+Design specifically to play the arcade-style games of the GVG-AI framework. Unlike the other controllers which utilise open-loop searches, it stores information about visited tiles and prefers visiting unvisited locations. Also addresses a common element of the VGDL example games, randomness. The controller gains an advantage by simulating the results of actions repeatedly, before deciding the best move.
 
 The Explorer was proven to be of a decent quality by getting a 2nd / 7th place in the GVG-AI competition.
 
@@ -610,11 +632,12 @@ SMALL TEST SHOWING TIME AND MEMORY DIFFERENCE PL0X!!!
 
 \chapter{Automatic generation of VGDL descriptions}
 This chapter describes the experimental- setup, and methodology used in generating VGDL descriptions.
-The chapter is focused on action-arcade games - puzzle games will be discussed and analysed in Chapter \ref{ch_puzzles}.
+The chapter is focused on \textit{action-arcade} games - puzzle games will be discussed and analysed in Chapter \ref{ch_puzzles}.
 
 
 \section{Automatic generation of VGDL descriptions}
 This section explain the setup used in generating new VGDL games (i.e. game descriptions).
+
 We used two different approaches in generating new game description in VGDL: Mutating existing (designed) games, and randomly generating games from scratch.
 In both approaches several constraints were set upon the generation process to prevent crashes, and to increase the chance of a human playable game.
 
@@ -639,7 +662,12 @@ Thirteen interpretions of existing games are left, and used as a baseline for te
 
 
 \subsubsection*{Generating approach}
-A process was built for mutating the different parts of game descriptions, i.e. changing the sprites available of the \texttt{SpriteSet}, the interactions rules (\texttt{InteractionSet}) and the termination rules (\texttt{TerminationSet}).
+It is not immediately apparent which approach to use in mutating the different elements of  each VGDL game description.
+Since sprite- and rules are constructed from a combination of a class and a series of parameters specific to the class, it is necessary to change the parameters if the class is changed, but the parameters of an existing class can freely be mutated.
+
+
+
+A process was built for mutating each of the different parts of game descriptions, i.e. changing the sprites available of the \texttt{SpriteSet}, the interactions rules (\texttt{InteractionSet}) and the termination rules (\texttt{TerminationSet}).
 The process additionally allowed for changing the amount of rules, i.e. generating new rules or removing existing ones.
 
 Since the sprites and rules of each game description is described by both a class and a series of parameters, several partly subjective decisions was made on defining probabilities of different parameters' values to try reach "realistic" values.
@@ -647,13 +675,16 @@ For instance it was decided that a sprite being mutated or generated only has a 
 The values and probabilities used were mostly decided by examining the set of designed games descriptions.
 Several constraints were also used to avoid game with non-valid descriptions (which can cause crashes in the GVG-AI framework), for instance by ensuring that avatar-sprites cannot be spawned and sprites cannot transform to an avatar, but an avatar sprite can still transform to another type of avatar sprite.
 
-When testing mutated games the original games' levels were used. Therefore the amount of sprites and the \texttt{LevelMapping} was not changed.
+In this work we decide to only mutate interaction-rules from the \texttt{InteractionSet} of designed VGDL games, and simply change every part (classes, parameters and references) of a random amount of rules, with each rule having a 25\% change of being changed for each game to mutate.
+In addition to simplifying the mutation process, and having games more with a higher chance of being playable this allows us to use the original designed games' levels for testing.
+
+%When testing mutated games the original games' levels were used. Therefore the amount of sprites and the \texttt{LevelMapping} was not changed.
 
 
 
 \subsection{Random game generation}
 \label{method:random}
-A similar process a mentioned above was used to randomly put game descriptions together creating new games completely from scratch, constructing the textual lines for different parts of a VGDL description: Generating an array of sprites (for the SpriteSet), interaction-rules (InteractionSet), termination-rules (TerminationSet) and level mappings (LevelMapping). 
+A similar process as mentioned above was used to randomly put game descriptions together creating new games completely from scratch, constructing the textual lines for different parts of a VGDL description: Generating an array of sprites (for the SpriteSet), interaction-rules (InteractionSet), termination-rules (TerminationSet) and level mappings (LevelMapping). 
 When generating descriptions, we used similar constraints to those mentioned in section~\ref{method:mutation}, partly to avoid generating descriptions with invalid elements, and partly to increase the proportion of interesting outcomes. 
 As for the mutated games, some partly subjective decisions were made on defining the possible amount of sprites and rules, the proportion of sprites that has a level mapping, and when generating new sprite definitions.
 
@@ -679,7 +710,7 @@ The generator designates a level built using a given size, and inserts sprite ma
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
-\section{Experimental setup and initial results}
+\section{Initial test: Experimental setup}
 In this section we present a set of initial results from playing through both designed and generated games using different AI controllers, and discuss different ways to analyse the resulting data.
 
 
@@ -687,33 +718,37 @@ In this section we present a set of initial results from playing through both de
 Eight general videogame controllers were used to test the games. The controllers use different approaches, with a varying degree of intelligence. Four of the controllers are included in the GVG-AI framework, while the remaining were implemented for this work. Except for \emph{OneStep-Heuristic}, the controllers only evaluate a given state according to its score and win/loss status.
 Each controller was marked with one of four types of intelligence for later tests: Intelligent (complex searches in game space are taken), semi-intelligent (game space search uses simple approach), random and do-nothing.
 
-\begin{description}
-	\item [MCTS] GVG-AI sample controller. ``Vanilla'' MCTS using UCT.
-	\item [GA] GVG-AI sample controller. Uses a genetic algorithm to evolve a sequence of actions.
-	\item [OneStep-Heuristic] GVG-AI sample controller. Heuristically evaluates the states reachable through one-step lookahead. The heuristic takes into account the locations of NPCs and certain other objects.
-	\item [NoStepBackSearch] Explained in Section \ref{ssec_actioncontrollers}. Marked as \textit{semi-intelligent}
-    \item [OneStep-Score] Similar to \emph{OneStep-heuristic}, but only uses the score and win/loss status to evalue states.
-    \item [Random] Chooses a random action from those available in the current state.
-	\item [DoNothing] Returns a nil action. Literally does nothing.
-	\item [Explorer] Design specifically to play the arcade-style games of the GVG-AI framework. Unlike the other controllers which utilise open-loop searches, it stores information about visited tiles and prefers visiting unvisited locations. Also addresses a common element of the VGDL example games, randomness. The controller gains an advantage by simulating the results of actions repeatedly, before deciding the best move.
-\end{description}
+
 
 
 \subsubsection*{Testing and result analysis}
-The eight controllers were used to play through different set of example-, mutated and randomly generated games. Because of CPU budget limitations, each game was played with a maximum amount clock ticks (values between 200-2000 was used), and each controller was restricted to use 50 ms on each tick. 
+The eight controllers were used to play through different set of example-, mutated and randomly generated games. Because of CPU budget limitations, each game was played with a maximum amount clock ticks of 800, and each controller was restricted to use 50 ms on each tick. 
 For each playthrough only the default data from the GVG-AI framework was retrieved: The score, the win-lose value, the amount of ticks and a list of actions performed.
 
-A program to analyse the data was built, to calculate averages and std. deviations of each of the values, for each controller, with the possibility of caculating averages across several levels or games.
+Each game was played through 25 times, all within a single level attached to the game.
 
-To more accurately compare the score for the different controllers when playing across a range of different games,  we calculate a normalised score using a max-min normalisation. 
-Normalised averages and win rate averages are shown in Figures \ref{graph:maxminmean} and \ref{graph:winrate}, respectively. In Figure \ref{graph:maxminmean}, it is possible to see that the difference between the highest and lowest scores is greater in the example and mutated games than in the generated games. On the other hand, the average win rate of generated games surpasses both examples and mutated games, as shown in Figure \ref{graph:winrate}.
+A process to analyse the data was built, to calculate averages and standard deviations of each of the values, for each controller, with the possibility of calculating averages across several levels or games.
 
+To more accurately compare the score for the different controllers when playing across a range of different games,  we calculate an array of different statistics -- minimum- and maximum score, median score etc., and calculate a normalised score using a max-min normalisation. 
 In addition to the score and win-rate, the average entropy of actions chosen for the player avatar is shown in the tables below.
 
-In the following sections, we show results of these tests, analyse the average of all play-throughs for each controller, and compare the results with each other.
 
+
+
+\section{Initial test: Results}
+\label{sec_inittestresults}
+ 
+In this section we show results of the tests explained above, analyse the average of all play-throughs for each controller, and compare the results with each other.
 
 \subsection{Designed games}
+The eight controllers were set to play through each of the human-designed VGDL games, with the constraints mentioned above.
+
+We calculate averages across each games (can be seen in Appendix \ref{app_designedresults}) and across all of the games, seen in Figure \ref{table:examples}.
+
+The distributions of normalised scores show that more intelligent controllers tend to have more success. 
+It is worth noticing that the \emph{score mean} and \emph{normalised score mean} have slightly different orderings.
+Notice also that distributions are slightly different when analysing the results of individual games. For instance, in \emph{Aliens}, Random has a higher average than Onestep.
+
 
 \begin{figure}[!ht]
 \centering
@@ -734,10 +769,7 @@ In the following sections, we show results of these tests, analyse the average o
 \label{table:examples}
 \end{figure}
 
-Averages and win-rates from the 18 human-designed example games are shown in Figure~\ref{table:examples}.
-The distributions of normalised scores show that more intelligent controllers tend to have more success. 
-It is worth noticing that the \emph{score mean} and \emph{normalised score mean} have slightly different orderings.
-Notice also that distributions are slightly different when analysing the results of individual games. For instance, in \emph{Aliens}, Random has a higher average than Onestep.
+
 
 
 \subsection{Generated games}
@@ -801,11 +833,11 @@ The ordering of the \emph{normalised score mean}, however, shows a similar patte
 \end{figure}
 
 
-\subsection{Outcome}
+
+
+
+\section{Discussion of initial test results}
 The conclusion of the above tests is that the the result distribution of controllers can be used to score a game, with a high probability.
-
-
-
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -926,14 +958,39 @@ This is subsubsection with title ``\Subsectionname''.
 
 
 \chapter{GVG-AI example games}
-The contents...
+\label{app_gvgaigames}
+Below is a short summary of each of games, describing the winning conditions, and how the player can increase his/her score:
+\begin{description}
+\item [Aliens] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
+\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
+\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
+\item [Boulderdash] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
+\item [Butterflies] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
+\item [Chase] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
+\item [Digdug] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
+\item [Eggomania] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
+\item [Firecaster] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
+\item [Firestorms] Player must avoid flames from hell gates until he finds the exit of a maze.
+\item [Frogs] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
+\item [Infection] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
+\item [Missile Command] VGDL interpretation of the classic arcade game \emph{Missile Command}. Player has to destroy falling missiles, before they reach their destinations. If the player can save at least one city, he wins.
+\item [Overload] Player must get to the level after collecting coins, but cannot collect too many coins, as he will be too heavy to traverse the exit.
+\item [Pacman] A VGDL interpretation of \emph{Pac-Man}. Goal is to clear a maze full with power pills and pellets, and avoid or destroy ghosts.
+\item [Portals] Objective is to get to a certain point using portals to go from one place to another, while at the same time avoiding lasers.
+\item [Seaquest] VGDL interpretation of \emph{Seaquest}. Avatar is a submarine that rescue divers and avoids sea animals that can kill it. The goal is simply to a high score.
+\item [Survive Zombies] Player has to flee zombies until time runs out, and can collect honey to kill the zombies.
+\item [Whackamole] VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
+\item [Zelda] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
+\item [Camelrace] Player needs to get to endpoint to win.
+\item [Sokoban] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
+\end{description}
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \chapter{Games designed during thesis}
-\label{app_thesisgame}
+\label{app_thesisgames}
 
 \section{Action arcade games}
 
@@ -962,14 +1019,48 @@ The game ends if the laser cannon is hit a few times  by the incoming objects.
 \item [Zen Puzzle] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
 \end{description}
 
+
+
+\chapter{Designed games results}
+\label{app_designedresults}
+
+This chapter shows the individual data for each game, for the test discussed in Section \ref{sec_inittestresults}. 
+
+\subsubsection*{Aliens}
+
+\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
+\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{winrate} & \emph{act-entropy} &\\\midrule
+  \DTLforeach{aliensdata}{
+  \agent=Agent:,
+  \mean=Mean:,
+  \std=Std. deviation:,
+  \mmave=MaxMinN-Mean:,
+  \wrate=Winrate:,
+  \entropy=Actions entropy:}
+  {\DTLiffirstrow{}{\tabularnewline}%
+  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
+  \\ \bottomrule
+\end{stripedtabular}
+
+
+\subsubsection*{Boulderdash}
+
+\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
+\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{winrate} & \emph{act-entropy} &\\\midrule
+  \DTLforeach{aliensdata}{
+  \agent=Agent:,
+  \mean=Mean:,
+  \std=Std. deviation:,
+  \mmave=MaxMinN-Mean:,
+  \wrate=Winrate:,
+  \entropy=Actions entropy:}
+  {\DTLiffirstrow{}{\tabularnewline}%
+  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
+  \\ \bottomrule
+\end{stripedtabular}
+
+
 \end{appendices}
 
-
-
-
-
-% Appendices
-\newpage
-\appendix
 
 \end{document}
