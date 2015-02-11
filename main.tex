@@ -159,19 +159,18 @@ roundcorner=5pt
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 \chapter{Introduction}
-Procedural generation of game content has become a widely used tool for video-game developers.
-Automatically generating content allow game developers to provide more content, with more differentation, from a limited supply of assets, most often by helping to produce levels or items for their games. 
-Rogue \citeyearpar{game:rogue} is one of the earliest examples on proceduraly generating game levels (or dungeons). Several highly popular games has since used procedurally generated levels, some as a main part of their game-play (Civilazation II-V \citeyearpar{game:civilizationseries}, the Diablo-series \citeyearpar{game:diabloseries} 
+Procedural generation of game (PCG) content has become a widely used tool for video-game developers.
+Automatically generating content allow game developers to provide more content, with more differentation, from a limited supply of assets, most often by helping to produce levels, maps or dungeons for their games. 
+Additonally PCG is often used to maintain a challenge for the player by presenting an unpredictable and renewed game experience on re-playing the games in which it is used.
+Rogue \citeyearpar{game:rogue} is one of the earliest examples on proceduraly generating game levels (or dungeons). Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold \citeyearpar{game:sevencities}, Civilazation II(-V) \citeyearpar{game:civilizationii}, Minecraft \citeyearpar{game:minecraft}, Spelunky \citeyearpar{game:spelunky} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus! \citeyearpar{game:rescurefractalus}, Farcry 2 \citeyearpar{game:farcry}.
+PCG has also been used to create a wider array of weapons and items (Borderlands-series \citeyearpar{game:borderlandsseries}, Diablo-series \citeyearpar{game:diabloseries}, Torchlight-series \citeyearpar{game:diabloseries}, Dark Age of Camelot \citeyearpar{game:darkage}), or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz},  .kkrieger \citeyearpar{game:kkrieger}).
 
 
-Procedural content generation (PCG) for games has been a main part of commercial video games for decades, 
-Several published games use PCG as a main part of its game play, to maintain a challenge for the player and present a new experience on re-playing the games.
-Procedural content generation is a topic that is being increasingly researched and implemented in games of various types and genres (source). PCG can help game designers in creating game elements like levels/maps, environments, weapons or AI's.
+\section{Introduction to game generation}
+An interesting next step to take is to not only generate content for games, but generate the games themeselves.
+A way to generate complete games might be to search through a space of games represented in a programming language like C or Java. However, the proportion of programs in such languages that can in any way be considered a game is quite small. Increasing the density of games in the search space can be achieved by searching programs defined in a a game description language (GDL) designed to encode games. % kopieret fra Julian
 
-\section{Game generation}
-
-
-\section{Level generation}
+Even searching a reasonably well defined space of games still supposes that we have a way of automatically telling good games from bad games (or not-quite-so-bad games from really bad games). In other words, we need a fitness function. Part of the fitness function could consist in inspecting the rules as expressed in the GDL, e.g. to make sure that there are winning conditions which could in principle be fulfilled. But there are many bad games that fulfil such criteria. To really understand a game, you need to play it. It seems the fitness function therefore needs to incorporate a capacity to play the games it is evaluating. % kopieret fra Julian
 
 \section{Research Objectives}
 The main objectives of this study was to create a generator being able to create simple games and levels, enjoyable for human players.
