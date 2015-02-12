@@ -1,4 +1,4 @@
-\documentclass[a4paper,titlepage,final, twoside]{report}
+\documentclass[a4paper,titlepage,final]{report}
 
 % Page size
 \usepackage{a4wide}
@@ -17,6 +17,7 @@
 %\usepackage{subcaption}
 %\usepackage{float}
 \usepackage{listings}
+\usepackage{amsmath}
 \usepackage{underscore} % så behøver vi ikke escape underscores i tekst, fx til links
 \usepackage{lastpage}
 %\usepackage{pdfpages}
@@ -42,10 +43,21 @@
 \usepackage{tikz}
 \usetikzlibrary{calc,backgrounds,arrows,matrix,positioning}
 
+%Plotz n' graphs
+\usepackage{pgfplots}
+
 \usepackage{subfig}
 \usepackage{float}
 
 \usepackage{wasysym} %Pretty arrows
+
+\usepackage{csvsimple}
+
+%Color definitions (Wauw!)
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightBlue}{rgb}{0.4,0.4,1}
+\definecolor{LighterBlue}{rgb}{0.6,0.6,1}
+\definecolor{LightestBlue}{rgb}{0.8,0.8,1}
 
 
 %LISTINGS (showing code)
@@ -72,6 +84,13 @@ escapeinside={\%*}{*)}          % if you want to add a comment within your code
 \lstnewenvironment{vgdldesc}[1][] 
  {\lstset{frame=shadowbox,escapechar=`,linewidth=8cm, #1}}
  {}
+ 
+%siunitx setup
+\sisetup{
+round-mode = places,
+round-precision = 2
+}% 
+ 
 
 %Load data
 \DTLloaddb{examplesdata}{examplesdata.csv}
@@ -121,7 +140,7 @@ roundcorner=5pt
 %\setlength{\headheight}{15pt}
 \pagestyle{fancy}
 \fancyhead{}
-\fancyhead[RO,LE]{\rightmark}
+%\fancyhead[RO,LE]{\rightmark}
 \fancyhead[RE,LO]{\leftmark}
 \fancyfoot{}
 \fancyfoot[LE,RO]{\thepage}
@@ -565,12 +584,9 @@ The controllers approach can be seen below:
 \begin{algorithm}[H]
 \For{action : PossibleActions}{
 newGameState = gameState.copy().advance(action) \\
-value = newGameState.score \\
-\If{newGameState.gameEnded}{
-value += newGameState.won ? 1000 : -100000
+value[action] = value(newGameState) \\
 }
-}
-\Return action leading to highest value
+\Return action leading to highest value, or random action if values are equal
 \end{algorithm}
 
 \subsubsection*{Deep-search}
@@ -587,26 +603,24 @@ queue $\gets$ initial gameState \\
 			queue $\gets$ gameState.copy().advance(action)
 		}
 	}{
-		gameState.advance(random action)
+		gameState.advance(random action) \\
+		d $\gets$ depth of search (amount actions performed) \\
+		value[action] $+=$ value(newGameState) $* \text{PossibleActions.length}^{\text{d}}$
 	}
-
-
 }
-
-%\For{action : PossibleActions}{
-%newGameState = gameState.copy().advance(action) \\
-%value = newGameState.score \\
-%\If{newGameState.gameEnded}{
-%value += newGameState.won ? 1000 : -100000
-%}
-%}
-%\Return action leading to highest value
+\Return action leading to highest value, or random action if values are equal
 \end{algorithm}
 
 \subsubsection*{Explorer}
-Design specifically to play the arcade-style games of the GVG-AI framework. Unlike the other controllers which utilise open-loop searches, it stores information about visited tiles and prefers visiting unvisited locations. Also addresses a common element of the VGDL example games, randomness. The controller gains an advantage by simulating the results of actions repeatedly, before deciding the best move.
+The explorer controller was designed specifically to play the arcade-style games of the GVG-AI framework, and utilizes a series of methods to strengthen its decisions. 
+Unlike the other controllers which utilise open-loop searches, it stores information about visited tiles and prefers visiting unvisited locations. 
+Overall the controller uses three different arrays to choose an action: One considering how probable death is from each action, one examining the score that can be achieved from the actions, and one only looking at the boringness.
+If the \textit{death}-array have too high values, that array is used to take the decision (the action leading to the lowest value is chosen), otherwise the best action from the score-array is used.
+If the values of the \textit{score}-array happen to be too similar, the \textit{boringness}-array is lastly used instead.
 
-The Explorer was proven to be of a decent quality by getting a 2nd / 7th place in the GVG-AI competition.
+The controller also addresses a common element of the VGDL example games, randomness. The controller gains an advantage in many of the games by simulating the results of actions repeatedly, before deciding the best move.
+
+The Explorer was proven to be of a decent quality by getting a 2nd / 7th place in the GVG-AI competition. SOURCE
 
 \subsection{Puzzle controllers}
 
@@ -681,6 +695,8 @@ In addition to simplifying the mutation process, and having games more with a hi
 %When testing mutated games the original games' levels were used. Therefore the amount of sprites and the \texttt{LevelMapping} was not changed.
 
 
+EXAMPLE OF MUTATED GAME --- GAME DESCRIPTION ANDOR SCREENSHOT
+
 
 \subsection{Random game generation}
 \label{method:random}
@@ -719,125 +735,186 @@ Eight general videogame controllers were used to test the games. The controllers
 Each controller was marked with one of four types of intelligence for later tests: Intelligent (complex searches in game space are taken), semi-intelligent (game space search uses simple approach), random and do-nothing.
 
 
-
+\subsubsection*{Generated games}
+A set of XXX mutated games were generated, by mutating each of the designed games ten times using the approach described in the previous section.
+400 randomly generated games, each with a single generated level attached, were additionally developed and used in testing.
 
 \subsubsection*{Testing and result analysis}
 The eight controllers were used to play through different set of example-, mutated and randomly generated games. Because of CPU budget limitations, each game was played with a maximum amount clock ticks of 800, and each controller was restricted to use 50 ms on each tick. 
-For each playthrough only the default data from the GVG-AI framework was retrieved: The score, the win-lose value, the amount of ticks and a list of actions performed.
+For each playthrough only the default data from the GVG-AI framework was retrieved: The \textit{score}, the \textit{win-lose value}, the amount of \textit{clock ticks} used and a list of actions performed.
+
+
+
+A process to analyse the data was built, to calculate averages, standard deviations, max-, minimum and other statistics of each of the values, for each controller, with the possibility of calculating averages across several levels or games.
+To more accurately compare the \textit{score} for the different controllers when playing across a range of different games  we additionally calculate a normalised score using a max-min normalisation. 
+The entropy of actions performed was also calculated, again with an average over all play throughs- or games.
 
 Each game was played through 25 times, all within a single level attached to the game.
-
-A process to analyse the data was built, to calculate averages and standard deviations of each of the values, for each controller, with the possibility of calculating averages across several levels or games.
-
-To more accurately compare the score for the different controllers when playing across a range of different games,  we calculate an array of different statistics -- minimum- and maximum score, median score etc., and calculate a normalised score using a max-min normalisation. 
-In addition to the score and win-rate, the average entropy of actions chosen for the player avatar is shown in the tables below.
-
-
 
 
 \section{Initial test: Results}
 \label{sec_inittestresults}
  
 In this section we show results of the tests explained above, analyse the average of all play-throughs for each controller, and compare the results with each other.
+Before analysing and showing the data, for all of the below tests we first remove games from the set which are considered too difficult to analyse, namely two different considerations: 
+1) When a controller was disqualified (too many sprites- and/or interactions happening), and 2) where the standard deviation of score was zero for all controllers.
 
-\subsection{Designed games}
+\subsubsection*{Designed games}
 The eight controllers were set to play through each of the human-designed VGDL games, with the constraints mentioned above.
 
-We calculate averages across each games (can be seen in Appendix \ref{app_designedresults}) and across all of the games, seen in Figure \ref{table:examples}.
+We present the averages across each single game(can be seen in Appendix \ref{app_designedresults}) and averages across all of the games, seen in Figure \ref{table:designed}.
+The distributions show that more intelligent controllers tend to have more success, with both a higher win-rate and a significantly higher average score. 
+The \textit{clock-ticks} and \textit{action entropy} does not show any similar distribution for the collection of all games. 
+Examining the results from each game it is noticeable that the profiles for these values (\textit{clock-ticks} and \textit{entropy}) are very different from game to game.
 
-The distributions of normalised scores show that more intelligent controllers tend to have more success. 
-It is worth noticing that the \emph{score mean} and \emph{normalised score mean} have slightly different orderings.
-Notice also that distributions are slightly different when analysing the results of individual games. For instance, in \emph{Aliens}, Random has a higher average than Onestep.
-
-
-\begin{figure}[!ht]
-\centering
-\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
-\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{winrate} & \emph{act-entropy} &\\\midrule
-  \DTLforeach{examplesdata}{
-  \agent=Agent:,
-  \mean=Mean:,
-  \std=Std. deviation:,
-  \mmave=MaxMinN-Mean:,
-  \wrate=Winrate:,
-  \entropy=Actions entropy:}
-  {\DTLiffirstrow{}{\tabularnewline}%
-  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
-  \\ \bottomrule
-\end{stripedtabular}
-\caption{Results from the 20 example games}
-\label{table:examples}
-\end{figure}
-
-
-
-
-\subsection{Generated games}
-Figure~\ref{table:generated} shows results for the 65 randomly generated games, with problematic games removed according to the same criteria as in the previous section.
-
-%First of all, \emph{score means} are much higher than in the previous games, with the minimum average being 383.96, 8.5 times bigger than the higher mean in the mutated games (i.e. 45.22, by the Explorer).
-First of all, \emph{score std. deviations} are much higher than in the previous games, with the minimum being 199,406.58, over 1500 times larger than the highest in the set of example games (i.e. 121.55, by Explorer).
-%The ordering of controllers according to the \emph{score mean} has also changed, with Onestep-H on top followed by GA. 
-Clearly, only the \emph{normalised mean} can be on this set to compare scores across the the different game types. 
-The \emph{normalised score means} and \emph{win-rates} both have values that are more closely clustered togther, than in the previous game sets. 
-%The \emph{normalised score means} and \emph{win-rates} have more similar values than the previous games 
-%It is, from higher to lower, Onestep-H $>$ GA $>$ MCTS $>$ DoNothing $>$ Explorer $>$ Onestep-S $>$ Random.
-
+It should be noted that the uncertainties for average score, clock-ticks and action entropy assume a normal distribution of the data which in general is not true, and so these values should be taken with a grain of salt.
 
 \begin{figure}[!ht]
 \centering
-\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
-\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{win-rate} & \emph{act-entropy} &\\\midrule
-  \DTLforeach{generateddata}{
-  \agent=Agent:,
-  \mean=Mean:,
-  \std=Std. deviation:,
-  \mmave=MaxMinN-Mean:,
-  \wrate=Winrate:,
-  \entropy=Actions entropy:}
-  {\DTLiffirstrow{}{\tabularnewline}%
-  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
-  \\ \bottomrule
-\end{stripedtabular}
-\caption{Results from randomly generated games}\label{table:generated}
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{examplesdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+\caption{Averaged results across all the XX designed games}
+\label{table:designed}
 \end{figure}
 
-\subsection{Mutated games}
-When mutating games, two types of games are problematic: Games where the controllers never increase their score (and never win), and games where too many objects are created and each frame end up taking too long ($>50$ms). 
-We exclude both types of games in the following analysis.
 
-Averages from playing the remaining 146 mutated games (of 200 total) are shown in Figure~\ref{table:mutation}. 
+\subsubsection*{Mutated games} 
+After removing games by the requirements mentioned above, we were left with a toal of 146 games in which we had useful data.
+The results of playing through these games with the controllers can be seen in Figure~\ref{table:mutated}. 
 The scores have higher means and standard deviations, indicating outliers in the data. 
-The ordering of the \emph{normalised score mean}, however, shows a similar pattern as for the example games, with Explorer again excelling.
-%It is possible to notice that, in general, Explorer seems to excel against the others. 
-%Onestep-S is second, followed closely by GA and MCTS. 
-%With worse averages, Random, DoNothing and, surprisingly, Onestep-H are, respectively, the worse. 
-%It is also visible that average scores are considerably higher that those obtained in the example games.
+The ordering of the \emph{normalised score mean} and \textit{win-rate}, however, shows a similar pattern as for the example games, with Explorer again excelling.
 
+It should be noted here that the differences between the extreme values of \textit{score} and \textit{win-rate} are smaller than for the designed set of games.
+
+%all mutations average -- amount of games: 146 -- playthroughs: 25
 \begin{figure}[!ht]
 \centering
-\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
-\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{win-rate} & \emph{act-entropy} &\\\midrule
-  \DTLforeach{mutateddata}{
-  \agent=Agent:,
-  \mean=Mean:,
-  \std=Std. deviation:,
-  \mmave=MaxMinN-Mean:,
-  \wrate=Winrate:,
-  \entropy=Actions entropy:}
-  {\DTLiffirstrow{}{\tabularnewline}%
-  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
-  \\ \bottomrule
-\end{stripedtabular}
-\caption{Results from mutated games} \label{table:mutation}
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{mutateddata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+\caption{Averaged results across the 146 mutated games}
+\label{table:mutated}
 \end{figure}
 
 
+
+\subsubsection*{Generated games}
+Figure~\ref{table:generated} shows results for the remaining 65 randomly generated games (of 400), with problematic games removed according to the same criteria as in the previous section.
+
+First of all, the \emph{score} have much more extreme values than in the previous games, with the minimum being 199,406.58, over 1500 times larger than the highest in the set of example games (i.e. 121.55, by Explorer).
+Clearly, only the \emph{normalised mean} can be used to compare scores across the different controllers. 
+The \emph{normalised score means} and \emph{win-rates} both have values that are more closely clustered togther, than in the previous game sets. 
+
+It should be noted that the description generation process can often end up making games be automatically won (for instance, the goal of a game could be to destroy all coins, but all coins are of the \texttt{Flicker}-class and disappear after a certain amount of time), which causes the relative high \textit{win-rate} for the Do Nothing-controller.
+
+%gengames average -- amount of games: 65 -- playthroughs: 25
+\begin{figure}[!ht]
+\centering
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{generateddata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+\caption{Averaged results across the 65 generated games}
+\label{table:generated}
+\end{figure}
+
+
+\subsubsection*{Outcome and graphs}
+By examining the graphs (Figure \ref{graph:maxminmean} and Figure \ref{graph:winrate}) of the data just discussed, it is clear that there is a strong relationship between the performance profiles of playing with controllers of different types, on different set of games.
+However it should be noted here that some games from both the mutated- and generated game-set, contains games, which when examined by themselves have similar distributions as the average designed game.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[font=\small, scale=1]
+  \begin{axis}[
+	ybar, bar width=0.38cm,
+	xtick=data, xtick pos=left,
+	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1,
+	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	width=\textwidth, height=6cm,
+	legend style={
+	  overlay, area legend, anchor=north,legend columns=1, at={(0.88,1.00)} %, at={(0.5,-0.15)}
+	},
+	legend image code/.code={%
+          \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        }
+]
+    \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=MaxMinN-Mean:, y error=MaxMinN-SE:, col sep=comma] {examplesdata.csv};
+    \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=MaxMinN-Mean:, y error=MaxMinN-SE:, col sep=comma] {mutateddata.csv};
+    \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=MaxMinN-Mean:, y error=MaxMinN-SE:, col sep=comma] {generateddata.csv};
+\legend{examples,mutated,generated}
+\end{axis}
+\end{tikzpicture}
+\caption{Averaged normalised score across all games of the three different set of games: Designed-, mutated- and completely generated games}
+\label{graph:maxminmean}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[font=\small, scale=1]
+  \begin{axis}[
+	ybar, bar width=0.38cm,
+	xtick=data, xtick pos=left,
+	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1,
+	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	width=\textwidth, height=6cm,
+	legend style={
+	  overlay, area legend, anchor=north,legend columns=1, at={(0.88,1.00)} %, at={(0.5,-0.15)}
+	},
+	legend image code/.code={%
+          \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        }
+]
+    \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Winrate:, y error=Winrate-SE:, col sep=comma] {examplesdata.csv};
+    \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Winrate:, y error=Winrate-SE:, col sep=comma] {mutateddata.csv};
+    \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Winrate:, y error=Winrate-SE:, col sep=comma] {generateddata.csv};
+\legend{examples,mutated,generated}
+\end{axis}
+\end{tikzpicture}
+\caption{Averaged win-rate for the three sets}
+\label{graph:winrate}
+\end{figure}
 
 
 
 \section{Discussion of initial test results}
-The conclusion of the above tests is that the the result distribution of controllers can be used to score a game, with a high probability.
+The results display some interesting patterns. Win rates suggest a relationship between intelligent controllers' success and better game design; for better designed games, the relative performance of different types of algorithms differ more. This corroborates our hypothesis that relative algorithm performance profiles can be used to differentiate between games of different quality. In randomly generated games, which arguably tend to be less interesting than the others, smarter controllers (e.g. Explorer and MCTS) do only slightly better than the worse ones (i.e. Random and DoNothing). This is due to a general a lack of consistency between rules generated in this manner. Mutated games, however, derive from a designed game. Therefore, they maintain some characteristics of the original idea, which can improve the VGDL description's gameplay and playability. %!!!!!!!!!!!!!!!KOPIERET FRA ARTIEKL!!!!!!!!!!!
+
+While it is possible that random actions can result in good outcomes, this chance is very low, especially when compared to the chance of making informed decisions. In spite of that both Random and DoNothing do fairly well in randomly generated games. The performance of DoNothing emerges as a secondary indicator of (good) design: in human-designed games, DoNothing very rarely wins or even scores.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -845,11 +922,11 @@ The conclusion of the above tests is that the the result distribution of control
 
 \chapter{Evaluation of games (fitness functions)}
 
-The initial tests of the previous chapter shows that there is reason to explorer the relationship of AI's perfomance profiles to analyze a given VGDL game.
-This chapter focuses on creating fitness function to analyze different generated games and evolve enjoyable games by evolving game descriptions. 
-The resulting games are then discussed in detail.
+The initial tests of the previous chapter shows that there is reason to explore the relationship of AI's perfomance profiles to analyze a given VGDL game.
+This chapter focuses on creating fitness functions to analyze different generated games and evolve well-designed games by evolving game descriptions. 
+The resulting generated games are then discussed in detail.
 
-\section{Fitness function features}
+\section{Fitness function feature selection}
 From the above tests we can see that it is interesting to write a fitness function for controllers results, to be able to find out if new generated games are of a high quality.
 
 
