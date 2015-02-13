@@ -664,7 +664,9 @@ A set of VGDL games were used to mutate new game descriptions, analysed in this 
 After our addition of new games to GVG-AI framework (Chapter \ref{ch_extending}) we have access to 34 games, with five levels each. 
 However, only 23 of the games are of the arcade-action genre explored in this section. Additionally, as mentioned in Section \ref{ssec_vgdl} a few of the example games from the GVG-AI competition are original creations, which cannot equally be assumed to be human-enjoyable.
 
-Thirteen interpretions of existing games are left, and used as a baseline for testing and game generation: Aliens, Boulderdash, Frogs, Missile Command, Zelda, DigDug, Pacman, Seaquest, Eggomania, Solar Fox, Crackpots, Astrosmash and Centipede
+Thirteen interpretions of existing games are left, and used as a baseline for testing and game generation: Aliens, Boulderdash, Frogs, Missile Command, Zelda, DigDug, Pacman, Seaquest, Eggomania, Solar Fox, Crackpots, Astrosmash and Centipede.
+
+A slight change was also made to the GVG-AI framework, removing the possibility of players scoring lower than 0, which is the norm in the original games mentioned.
 
 
 %        games = new String[]{"aliens", "boulderdash", "butterflies", "chase", "frogs",
@@ -756,8 +758,8 @@ Each game was played through 25 times, all within a single level attached to the
 \label{sec_inittestresults}
  
 In this section we show results of the tests explained above, analyse the average of all play-throughs for each controller, and compare the results with each other.
-Before analysing and showing the data, for all of the below tests we first remove games from the set which are considered too difficult to analyse, namely two different considerations: 
-1) When a controller was disqualified (too many sprites- and/or interactions happening), and 2) where the standard deviation of score was zero for all controllers.
+Before analysing and presenting the data, for all of the below tests we first remove games from the set which we consider either too difficult to analyse, or too simple too possibly be of interest -- namely we remove games by three different considerations: 
+1) When a controller was disqualified (too many sprites- and/or interactions happening), 2) where the standard deviation of score was zero for all controllers, and 3) where the game always end in less than 50 clock ticks (which is the maximum lifetime of generated \texttt{Flicker}-sprites).
 
 \subsubsection*{Designed games}
 The eight controllers were set to play through each of the human-designed VGDL games, with the constraints mentioned above.
@@ -973,6 +975,11 @@ The results display some interesting patterns. Win rates suggest a relationship 
 
 While it is possible that random actions can result in good outcomes, this chance is very low, especially when compared to the chance of making informed decisions. In spite of that both Random and DoNothing do fairly well in randomly generated games. The performance of DoNothing emerges as a secondary indicator of (good) design: in human-designed games, DoNothing very rarely wins or even scores.
 
+\subsubsection*{Human play of generated games}
+As mentioned in Section \ref{sec_inittestresults} there was a series of generated games with performance profile basically indistinguishable from the designed games.
+We decided on examining many of these games further by studying their game descriptions, and playing the games with visuals enabled, both with AI controllers and human players. (SCREEEEEENSHTOS PL0X!!!)
+Besides a few mutated games which kept most of the original rules (and therefore were successful games), the tested generated games with well-formed performance profiles were in general too trivial to be entertaining.
+
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -1004,13 +1011,30 @@ As indicated in the previous section, a series of partly subjective decisions we
 To make an as informed decision as possible we ran a series of test described below, using different features, automatically choosing different set of features, evolving weights for the features, and examining the results using data mining principles.
 
 In the following we decided to use a \textit{relative difference}-function to compare the  statistics for two different controllers' results.
-This function (\texttt{relDiff(x1,x2)}) was constructed with the goal of returning values between $-1$ and $1$, with the value 1 for $x_1 > 0, x_2 = 0$ and $x_1 = 0, x_2 < 0$ (and vice-versa).
+%This function (\texttt{relDiff(x1,x2)}) was constructed with the goal of returning values between $-1$ and $1$, with the value 1 for $x_1 > 0, x_2 = 0$ and $x_1 = 0, x_2 < 0$ (and vice-versa).
 
 \subsection{Simple analysis of initial choices}
 As mentioned the score, win-rate and entropy seems to be interesting to use as fitness features.
 To measure the strength of different choices from we made a small comparison of different circumstances that could potentially be used, counting how many of the designed (and generated) games that fulfil the conditions.
 
+Below is the results of trying a few potential choices:
 
+
+\begin{figure}[!ht]
+\centering
+\csvreader[tabular=l|rr|rr|rr|,
+    table head=\toprule \textit{\textbf{data type}} & \multicolumn{2}{c|}{Designed} &\multicolumn{2}{c|}{Mutated} & \multicolumn{2}{c|}{Rnd. gen.} \\
+             & \textit{count} & \textit{\%} & \textit{count} & \textit{\%} & \textit{count} & \textit{\%},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{testcounts.csv}{1=\DataType, 2=\CountA, 3=\FracA, 4=\CountB, 5=\FracB, 6=\CountC, 7=\FracC}%
+{\DataType & \CountA & \FracA & \CountB & \FracB & \CountC & \FracC}%
+
+\caption{Simple analysis of possible fitness values}
+\label{table:simplefeatureanalysis}
+\end{figure}
 
 
 \subsection{Evolution of weights}
@@ -1123,6 +1147,13 @@ This is subsubsection with title ``\Subsectionname''.
 
 
 
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\chapter{Conclusion}
+
+It might be interesting to analyse games using a wider array of controllers, or analysing by letting the same controller (or controllers) play with a different amount of time allowed per clock-tick, or even using controllers designed to "play bad" (trying to die, decrease score) could be interesting
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%

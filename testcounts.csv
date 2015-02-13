@@ -1,0 +1,7 @@
+datatype,count1,fraction1,count2,fraction2,count3,fraction3
+Explorer.Mean>Random.Mean,17 (of 18),94.4,136 (of 146),93.2,40 (of 56),71.4
+Explorer.Mean>Do Nothing.Mean,16 (of 18),88.9,129 (of 146),88.4,32 (of 56),57.1
+Explorer.Winrate>Random.Winrate,11 (of 18),61.1,52 (of 146),35.6,7 (of 56),12.5
+Explorer.Winrate>Do Nothing.Winrate,10 (of 18),55.6,47 (of 146),32.2,5 (of 56),8.9
+Explorer.Median>Random.Median,15 (of 18),83.3,118 (of 146),80.8,33 (of 56),58.9
+Explorer.Median>Do Nothing.Median,15 (of 18),83.3,118 (of 146),80.8,27 (of 56),48.2
