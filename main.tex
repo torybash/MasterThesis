@@ -912,6 +912,7 @@ However it should be noted here that some games from both the mutated- and gener
 
 
 \section{Discussion of initial test results}
+\label{sec_discussionofinitialtest}
 The results display some interesting patterns. Win rates suggest a relationship between intelligent controllers' success and better game design; for better designed games, the relative performance of different types of algorithms differ more. This corroborates our hypothesis that relative algorithm performance profiles can be used to differentiate between games of different quality. In randomly generated games, which arguably tend to be less interesting than the others, smarter controllers (e.g. Explorer and MCTS) do only slightly better than the worse ones (i.e. Random and DoNothing). This is due to a general a lack of consistency between rules generated in this manner. Mutated games, however, derive from a designed game. Therefore, they maintain some characteristics of the original idea, which can improve the VGDL description's gameplay and playability. %!!!!!!!!!!!!!!!KOPIERET FRA ARTIEKL!!!!!!!!!!!
 
 While it is possible that random actions can result in good outcomes, this chance is very low, especially when compared to the chance of making informed decisions. In spite of that both Random and DoNothing do fairly well in randomly generated games. The performance of DoNothing emerges as a secondary indicator of (good) design: in human-designed games, DoNothing very rarely wins or even scores.
@@ -928,6 +929,22 @@ The resulting generated games are then discussed in detail.
 
 \section{Fitness function feature selection}
 From the above tests we can see that it is interesting to write a fitness function for controllers results, to be able to find out if new generated games are of a high quality.
+To make this possible we need to choose some set of values from the performance profiles of controllers from playing the games, to calculate an actual fitness value.
+As mentioned in Section \ref{sec_discussionofinitialtest} only the \textit{score} and \textit{win-rate} seems to have different distributions on the type of game, and therefore those values are probably more useful to inspect for an evaluation function.
+
+However even when limiting the features to score and win-rate, there is still an enormous amount of possible ways to calculate features-values for the fitness function.
+For instance, we could have a feature for the difference in average score between every single controller but it would result in $\binom{7}{2}=21$ features for a single statistic.
+About statistics, we could use an series of different values simply to compare the score: \textit{minimum}- and \textit{maximum} score, \textit{standard deviation} of score, \textit{median}, \textit{quartiles} or any form of normalised score. 
+There is also the question of 
+
+
+\subsection{Evolution of weights}
+
+
+\subsection{Outcome}
+
+In the end we chose to only use the Explorer controller as an intelligent decider, and the Random- and Do Nothing controller to compare with.
+In the end we chose the following set of values to compare: \textit{ave. score},  \textit{min. score}, \textit{max. score} and \textit{win-rate}.
 
 
 \subsection{Action-arcade games: Generated levels}
