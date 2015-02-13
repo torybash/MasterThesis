@@ -110,15 +110,15 @@ round-precision = 2
 \let\endstripedtabular\endtabular
 \renewenvironment{stripedtabular}{\rowcolors{0}{black!20}{black!5}\tabular}{\endtabular}
 
-%mdframed settings
+%mdframed settings - pretty box!
 \mdfdefinestyle{mystyle}{%
-linecolor=blue!40!black,outerlinewidth=1pt,%
-frametitlerule=true,frametitlefont=\sffamily\bfseries\color{white},%
-frametitlerulewidth=1pt,frametitlerulecolor=blue!40!black,%
-frametitlebackgroundcolor=blue!40!black,
-backgroundcolor=blue!5,
+linecolor=black,outerlinewidth=0.5pt,%
+frametitlerule=true,frametitlefont=\sffamily\bfseries\color{black},%
+frametitlerulewidth=1pt,frametitlerulecolor=black,%
+frametitlebackgroundcolor=LightBlue,
+backgroundcolor=LightestBlue,
 innertopmargin=\topskip,
-roundcorner=5pt
+roundcorner=2pt
 }
 \newmdenv[style=mystyle]{exa}
 \newenvironment{example}[1]
@@ -827,6 +827,7 @@ Figure~\ref{table:generated} shows results for the remaining 65 randomly generat
 First of all, the \emph{score} have much more extreme values than in the previous games, with the minimum being 199,406.58, over 1500 times larger than the highest in the set of example games (i.e. 121.55, by Explorer).
 Clearly, only the \emph{normalised mean} can be used to compare scores across the different controllers. 
 The \emph{normalised score means} and \emph{win-rates} both have values that are more closely clustered togther, than in the previous game sets. 
+For this set of games the \textit{action entropy} of the intelligent controllers has also fallen quite a bit (relative to the Random-controller), indicating that more of the games have simple solutions to win or increase the score
 
 It should be noted that the description generation process can often end up making games be automatically won (for instance, the goal of a game could be to destroy all coins, but all coins are of the \texttt{Flicker}-class and disappear after a certain amount of time), which causes the relative high \textit{win-rate} for the Do Nothing-controller.
 
@@ -866,7 +867,7 @@ However it should be noted here that some games from both the mutated- and gener
 	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
 	width=\textwidth, height=6cm,
 	legend style={
-	  overlay, area legend, anchor=north,legend columns=1, at={(0.88,1.00)} %, at={(0.5,-0.15)}
+	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
 	},
 	legend image code/.code={%
           \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
@@ -893,7 +894,7 @@ However it should be noted here that some games from both the mutated- and gener
 	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
 	width=\textwidth, height=6cm,
 	legend style={
-	  overlay, area legend, anchor=north,legend columns=1, at={(0.88,1.00)} %, at={(0.5,-0.15)}
+	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
 	},
 	legend image code/.code={%
           \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
@@ -909,6 +910,61 @@ However it should be noted here that some games from both the mutated- and gener
 \label{graph:winrate}
 \end{figure}
 
+
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[font=\small, scale=1]
+  \begin{axis}[
+	ybar, bar width=0.38cm,
+	xtick=data, xtick pos=left,
+	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1000,
+	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	width=\textwidth, height=6cm,
+	legend style={
+	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
+	},
+	legend image code/.code={%
+          \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        }
+]
+    \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Mean tick:, y error=Std tick err:, col sep=comma] {examplesdata.csv};
+    \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Mean tick:, y error=Std tick err:, col sep=comma] {mutateddata.csv};
+    \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Mean tick:, y error=Std tick err:, col sep=comma] {generateddata.csv};
+\legend{examples,mutated,generated}
+\end{axis}
+\end{tikzpicture}
+\caption{Averaged clock tick for the three sets}
+\label{graph:winrate}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[font=\small, scale=1]
+  \begin{axis}[
+	ybar, bar width=0.38cm,
+	xtick=data, xtick pos=left,
+	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1,
+	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	width=\textwidth, height=6cm,
+	legend style={
+	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
+	},
+	legend image code/.code={%
+          \draw[#1, draw=none] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);
+        }
+]
+    \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Actions entropy:, y error=Actions entropy err:, col sep=comma] {examplesdata.csv};
+    \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Actions entropy:, y error=Actions entropy err:, col sep=comma] {mutateddata.csv};
+    \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Actions entropy:, y error=Actions entropy err:, col sep=comma] {generateddata.csv};
+\legend{examples,mutated,generated}
+\end{axis}
+\end{tikzpicture}
+\caption{Averaged action entropy for the three sets}
+\label{graph:winrate}
+\end{figure}
 
 
 \section{Discussion of initial test results}
@@ -927,18 +983,42 @@ The initial tests of the previous chapter shows that there is reason to explore 
 This chapter focuses on creating fitness functions to analyze different generated games and evolve well-designed games by evolving game descriptions. 
 The resulting generated games are then discussed in detail.
 
-\section{Fitness function feature selection}
+\section{Fitness function features: Introduction}
 From the above tests we can see that it is interesting to write a fitness function for controllers results, to be able to find out if new generated games are of a high quality.
 To make this possible we need to choose some set of values from the performance profiles of controllers from playing the games, to calculate an actual fitness value.
-As mentioned in Section \ref{sec_discussionofinitialtest} only the \textit{score} and \textit{win-rate} seems to have different distributions on the type of game, and therefore those values are probably more useful to inspect for an evaluation function.
+As mentioned in Section \ref{sec_discussionofinitialtest} the \textit{score} and \textit{win-rate} seems to have the most distinct distributions for the different type of games, making them interesting to use for an evaluation function.
+The \textit{action entropy} might also be appropriate to use, but the difference in distributions for that value is not as unique.
 
 However even when limiting the features to score and win-rate, there is still an enormous amount of possible ways to calculate features-values for the fitness function.
 For instance, we could have a feature for the difference in average score between every single controller but it would result in $\binom{7}{2}=21$ features for a single statistic.
-About statistics, we could use an series of different values simply to compare the score: \textit{minimum}- and \textit{maximum} score, \textit{standard deviation} of score, \textit{median}, \textit{quartiles} or any form of normalised score. 
-There is also the question of 
+About statistics, we could use a series of different values simply to compare the score: \textit{minimum}- and \textit{maximum} score, \textit{standard deviation} of score, \textit{median}, \textit{quartiles} or any form of normalised score, and of course we could  use combined values for the features, e.g. the \textit{score} increase per \textit{clock tick}.
+
+Additionally it is not clear which approach to use in actually calculating each feature. 
+For instance, if we want to compare the analyse the score difference of the Explorer- and Random controller achieved in a given game, we need to compare two values that can have both positive and negative values.
+
+
+
+\section{Fitness function features: Selection}
+In this section we describe the process in which the fitness features were selected.
+As indicated in the previous section, a series of partly subjective decisions were needed for  choosing features for fitness functions.
+To make an as informed decision as possible we ran a series of test described below, using different features, automatically choosing different set of features, evolving weights for the features, and examining the results using data mining principles.
+
+In the following we decided to use a \textit{relative difference}-function to compare the  statistics for two different controllers' results.
+This function (\texttt{relDiff(x1,x2)}) was constructed with the goal of returning values between $-1$ and $1$, with the value 1 for $x_1 > 0, x_2 = 0$ and $x_1 = 0, x_2 < 0$ (and vice-versa).
+
+\subsection{Simple analysis of initial choices}
+As mentioned the score, win-rate and entropy seems to be interesting to use as fitness features.
+To measure the strength of different choices from we made a small comparison of different circumstances that could potentially be used, counting how many of the designed (and generated) games that fulfil the conditions.
+
+
 
 
 \subsection{Evolution of weights}
+After choosing 
+
+
+\subsection{Data mining}
+We tried to analyse data for different choices of features using different data mining techniques. I.e. we tried using different classifiers to find a set of features that work better than others.
 
 
 \subsection{Outcome}
@@ -947,9 +1027,22 @@ In the end we chose to only use the Explorer controller as an intelligent decide
 In the end we chose the following set of values to compare: \textit{ave. score},  \textit{min. score}, \textit{max. score} and \textit{win-rate}.
 
 
-\subsection{Action-arcade games: Generated levels}
-Results of what happens when generating levels for the example games.
 
+
+
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+
+\section{Fitness function feature selection}
+
+
+
+%------------------------------------------------------------------------------------------------------------------------------%
+
+
+\section{HUUUUSK Designed action-arcade games: Generated levels}
+Results of what happens when generating levels for the example games.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
