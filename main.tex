@@ -730,6 +730,11 @@ EXAMPLE OF MUTATED GAME --- GAME DESCRIPTION ANDOR SCREENSHOT
 \subsection{Random game generation}
 \label{method:random}
 A similar process as mentioned above was used to randomly put game descriptions together creating new games completely from scratch, constructing the textual lines for different parts of a VGDL description: Generating an array of sprites (for the SpriteSet), interaction-rules (InteractionSet), termination-rules (TerminationSet) and level mappings (LevelMapping). 
+
+Several partly subjective choices were again made for the range for the amount of different sprites, and interaction- and termination rules. 
+Even though some of the original games contain a larger set of elements, we constricted the ranges to sprites: ${3-8}$, interactions: ${3-10}$ and terminations: ${2}$ (a "win-" and a "lose"-termination).
+
+
 When generating descriptions, we used similar constraints to those mentioned in section~\ref{method:mutation}, partly to avoid generating descriptions with invalid elements, and partly to increase the proportion of interesting outcomes. 
 As for the mutated games, some partly subjective decisions were made on defining the possible amount of sprites and rules, the proportion of sprites that has a level mapping, and when generating new sprite definitions.
 
@@ -1102,9 +1107,12 @@ Two different approaches were used to create new games:
 From the project it should be obvious that the first approach, using existing games and levels, have a much better chance of both achieving a high fitness-value and be an enjoyable game.
 However, the second approach allows for magnitudes of more options and possibilities, since it is not restricted to any set of sprites- or levels.
 
+The figure below shows the process which was used in both evolution approaches.
 
-MAKE A PICTURE OF THE GENERATION PROCESS PL0X
+HERE SHOULD BE A PICTURE OF THE GENERATION PROCESS
 
+
+Generate game --> if not player runs out of time --> if not any sprites out of bounds --> get results --> if no disq --> if no low time wins --> if no all squares equal
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -1112,7 +1120,7 @@ MAKE A PICTURE OF THE GENERATION PROCESS PL0X
 \label{sec_task2evolvingGames}
 
 
-MAKE A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION PL0X
+HERE GOES A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
