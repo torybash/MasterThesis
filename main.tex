@@ -175,7 +175,7 @@ roundcorner=2pt
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \chapter*{Acknowledgement}
-I would like to say thank brah
+I would like to say "thanks brah"
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -201,36 +201,53 @@ PCG has also been used to create a wider array of weapons and items (Borderlands
 
 \section{Introduction to game generation}
 \label{sec_introtogamegen}
-An interesting next step to take is to not only generate content for games, but generate the games themeselves.
-A way to generate complete games might be to search through a space of games represented in a programming language like C or Java. However, the proportion of programs in such languages that can in any way be considered a game is quite small. Increasing the density of games in the search space can be achieved by searching programs defined in a a game description language (GDL) designed to encode games. % kopieret fra Julian
+An interesting next step to take is to not only generate content for a game, but to generate completely new games and game-play -- i.e. to both generate a set of rules and mechanics, and  generate the content necessary to play the game (levels, sprites etc.).
 
-Even searching a reasonably well defined space of games still supposes that we have a way of automatically telling good games from bad games (or not-quite-so-bad games from really bad games). In other words, we need a fitness function. Part of the fitness function could consist in inspecting the rules as expressed in the GDL, e.g. to make sure that there are winning conditions which could in principle be fulfilled. But there are many bad games that fulfil such criteria. To really understand a game, you need to play it. It seems the fitness function therefore needs to incorporate a capacity to play the games it is evaluating. % kopieret fra Julian
+A possible way of automatically generating complete games might be to search through a space of games represented in a programming language like C or Java. 
+However, the proportion of programs designed in such languages that can actually be considered a game is rather small (and much less, the amount of human-enjoyable games).
+Searching through programs defined in a game description language (GDL), designed to encode games (and only games), can increase the density of well-defined games.
+
+Even searching a fairly well defined space of games still expect that we have some way of automatically telling good games from bad games (or at least, not-very-good games from really bad games). 
+In other words, we need a fitness function. 
+A fitness function could partly consist of inspecting the generated rules as expressed in the GDL, e.g. to make sure that the player can interact with the game in some way, and that there are winning- and losing conditions, which could in principle be fulfilled. 
+However there are many bad games that fulfil such criteria.
+
+To really understand a game it seems you need to play it. 
+The fitness function therefore needs to incorporate a capacity to automatically play the games it is evaluating.
+
 
 \section{Research Objectives}
 \label{sec_researchobj}
-The main objectives of this study was to create a generator being able to create simple games and levels, enjoyable for human players.
-The focus of the study was to create fitness functions able to differentiate between games (and levels) of different quality, to be able to create interesting content. Making the generator able to create a large amount of games, and then select the ones with the highest quality.
+The main objectives of this study was to construct a generation process able to create simple games and levels using the game description language (VGDL), with the goal of being as enjoyable for human players as possible.
+The focus of the study was to create a fitness function able to differentiate between games (and levels) of different quality, to be able to search and sort a set of generated games, and thereby create interesting content.
 
-\subsection{General Evaluation - Arcade-/Action Games}
-The first goal was to use the results of a series of general game-playing (knowledge free) algorithms to value a given game.
+The main approach used to create the fitness function was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to construct individual fitness features.
+A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for "good games" and was intensely used in choosing and weighing fitness features.
+This approach was focused on a specific genre and type of games (\textit{arcade-action games}), which is in the focus of the framework used (the GVG-AI framework). 
+Additionally this type of games fit very well with general game-playing algorithms used, which are not very good at exploring deep into a space of game-states (which is often not need in the game-genre -- quick movements to avoid enemies and increase the score is in the focus).
 
-\subsection{Breadth First Search - Puzzle Games}
-The second goal was to 
+The second part of this thesis is focused on games of the \textit{puzzle}-genre described in VGDL, which overall has a much smaller game-state space and so potentially are more well-suited for a more in-depth analysis.
+This approach is mainly focused on generating new game-levels for either existing games, or generated VGDL programs, by completely searching through all possible states of a game (using a breadth-first algorithm), finding all possible solutions, with the goal of being able to judge the difficulty, and thereby the quality of a game/level pair.
 
-\subsection{Assumptions}
-We assume that the games metioned are of high quality (i.e. highly enjoyable for human players). This is not always clear when playing the games in their form, since they need crucial element to keep a game fun: Audio, graphic effects, control-scheme fiiting to the games.
-We reason this because they are clones of existing games.
+
+\subsubsection*{Assumptions}
+As mentioned above, we assume that the a subset of the human-designed VGDL games described (Section \ref{sec_gvgaiframework}, \ref{sec_writingnewvgdl}) -- the ones which are interpretations of commercial games -- are of high quality (i.e. enjoyable for human players). 
+This is not always clear when actually playing the games in the framework used, since they mostly need crucial element like, audio, graphic effects and a proper control-scheme fitting to the game.
+
+We additionally assume that completely randomly generated games using the VGDL language (without sorting/searching using a fitness function) produce games with an extremely (almost negligible) low chance of being human-enjoyable.
+This assumption is mostly made from initial tests into game generation using the VGDL language.
 
 
 \section{How to read this thesis}
 \label{sec_howtoread}
-In the following chapters the research goals are being fulfilled. 
-The figure below shows the structure of the thesis, explaining how each chapter fits in to the larger picture:
+In the following chapters we will define the problem in more detail and explain the existing research and framework used.
+We will then show the results of of the seeking to fulfil the different research goals, and finally discuss the conclusion of the results.
+The figure below shows the structure of the thesis, explaining the reasoning behind each chapter and how it fits in to the larger picture.
 
 \begin{center}
 \begin{tikzpicture}[
-chapterparts/.style={rectangle, draw=black!80, very thick, text width=2.4cm, font = \scriptsize,inner xsep = 0.1cm,rounded corners},
-chapterheader/.style={rectangle, draw=black!80, fill=black!15, very thick, text centered, text width=2.4cm, font = \footnotesize,inner xsep = 0.1cm,},
+chapterparts/.style={rectangle, draw=black!80, very thick, text width=3.4cm, font = \scriptsize,inner xsep = 0.1cm,rounded corners},
+chapterheader/.style={rectangle, draw=black!80, fill=black!15, very thick, text centered, text width=3.4cm, font = \footnotesize,inner xsep = 0.1cm,},
 roundnode/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=7mm},
 squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size=5mm},
 nodes = {align = center}
@@ -316,9 +333,9 @@ In search-based generation a \textit{fitness function} is used to score generate
 \subsection{Game-level generation}
 Almost all video games are highly dependent on designed level or map (or levels/map) in which the game play takes place. Levels are often responsible for creating increasingly challenging situations, and thereby entertaining game play. Super Mario would be way less interesting if enemies and platforms were spread randomly across each level, which would almost certainly result in the game being ether too easy or too difficult.
 
-In recent years, game developers have begun using automatic generation of game-levels, to decrease the human work-load while still creating interesting content for games. Using PCG for creating "dungeon"-type maps have long been a successful endeavor for certain type of games as seen in \textit{Rogue} \citeyearpar{game:rogue}, the \textit{Diablo}-series, and in newer times \textit{Minecraft} \citeyearpar{game:minecraft} and \textit{Spelunky} \citeyearpar{game:spelunky}. PCG were additionally successfully implemented in strategy games like "Civilization II", "Command \& Conquer: Tiberian Sun" and "XCom: UFO Defense", but otherwise automatically generating levels have not been hugely successful in other game genres.
+Several scientific projects have focused on the topic of level-generation with an array of different approaches, some requiring player-input, or simply a helper for human level-designer.
 
-Several scientific projects have focused on the topic as well with an array of different approaches, some requiring player-input, or simply a helper for human level-designer. In addition to the other game genres mentioned above, a lot of work has been done in generating levels for puzzle games (ie. Sokoban and Cut The Rope).
+In addition to the other game genres mentioned above, a lot of work has been done in generating levels for puzzle games (ie. Sokoban and Cut The Rope).
 Most of the work is focused on generating levels for single game, where some attempt to create general level generation procedures.
 
 
@@ -534,29 +551,29 @@ This puts the game \emph{Portals} in the arcade genre, even though it contains p
 \chapter{Extending VGDL}
 \label{ch_extending}
 This chapter describes a series of extensions we constructed for VGDL and the GVG-AI framework, making a more in-depth analysis possible.
-
-We created a series of extensions to VGDL during the project.
-
+We created a series of VGDL games, AI controllers and a implemented a new, simplified framework to play through \textit{puzzle games} with less time and memory use.
 
 
 \section{Writing new VGDL games}
 \label{sec_writingnewvgdl}
-To increase the size of the set of designed games, and to allow for more precise analysis we created a series of fourteen new game descriptions in VGDL. 
+To increase the size of the set of designed games, to allow for a more precise analysis of what makes a game "good", we created fourteen new game descriptions in VGDL. 
 
-Another important reason for creating new descriptions, was to introduce a series of \emph{puzzle games} to be analysed, since, as mentioned in Section \ref{ssec_vgdl} the example games from the GVG-AI competetion has a severe lack of that game-genre. 
+Another important reason for creating new descriptions, was to introduce a series of \emph{puzzle games} to be analysed, since, as mentioned in Section \ref{ssec_vgdl} the example games from the GVG-AI competetion are almost all \textit{action-arcade} games.
 
 
 \subsection{Describing existing games in VGDL}
 The main goal when developing a game - which also applies in this case - is to ensure that it is enjoyable to human-players. 
 Therefore the games implemented are all interpretations of published existing games (and not original creations).
-As described in \textbf{Section \ref{ssec_gamegenres}} VGDL can only describe relatively simple games of certain type/genre, and so only a limited number of games can be translated without severely changing the game-play.
-The games are in general "exact" copies of the original ones - containing all the game-play features and interactions but lacking elements like audio, graphics and controls. However many lack certain (non-essential) game-play features like bonus point sprites, infrequently appearing enemies or features which only appear in some levels of the games.
+As described in \textbf{Section \ref{ssec_gamegenres}} VGDL can only describe relatively simple games of certain types/genres, and so only a limited number of games can be translated without severely changing the game-play.
+
+The games we created, and described below are in general "exact" copies of the originals - containing all the game-play features and interactions but lacking elements like audio, graphics and controls. 
+However many lack certain (non-essential) game-play features like bonus points (like fruits in Pac-Man), infrequently appearing enemies (UFOs in Space Invaders) or features which only appear in some levels of the games.
 
 
 \subsection{Results}
 A series of fourteen commercial games was re-created in VGDL to be used in future tests. 
 Figure \ref{fig:centipedeTranslation} shows one of the games translated to VGDL.
-Minor changes to the GVG-AI framework was made for a small number of the games, to be able to correctly copy the games' gameplay features.
+Minor changes to the GVG-AI framework was made for a small number of the games, to be able to correctly copy the games' core gameplay features.
 The original game levels were additionally translated into VGDL level description, with five levels being created for each game.
 For some of games the levels could not be completely copied, for instance because the levels were too large in size (\textit{Bolo Adventures}), or because a lack of game features implemented in the clones (\textit{Chip's Challenge}), and the resulting levels are therefore simplifications of the originals..
 
@@ -665,7 +682,7 @@ SMALL TEST SHOWING TIME AND MEMORY DIFFERENCE PL0X!!!
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \chapter{Automatic generation of VGDL descriptions}
-\label{ch_autogenofvgdl}
+\label{ch_task1autogenofvgdl}
 This chapter describes the setup- and methodology used in generating new games (i.e. game descriptions).
 Additonally an initial play test of set of both human-designed and generated games, using an array of different AI-controllers explained in the previous chapters.
 
@@ -692,7 +709,7 @@ A slight change was also made to the GVG-AI framework, removing the possibility 
 
 
 \section{Generating processes}
-\label{sec_genproces}
+\label{sec_task1genApproach}
 Using the GVG-AI framework described in Section \ref{sec_gvgaiframework} we constructed a setup for generating large sets of new game description.
 We used two different approaches in generating new game description in VGDL: Mutating existing (designed) games, and randomly generating games from scratch.
 In both approaches several constraints were set upon the generation process to prevent crashes, and to increase the chance of a human playable game.
@@ -700,7 +717,7 @@ In both approaches several constraints were set upon the generation process to p
 
 
 \subsection{Mutation of example games}
-\label{method:mutation}
+\label{ssec_task1mutation}
 A process was built for parsing existing VGDL game descriptions, mutating certain sprites- or rules, and returning new, valid game descriptions,.
 The set of games described at the beginning of this chapter, were chosen to be used as a basis for mutating new game descriptions, analysed in this section.
 
@@ -728,7 +745,7 @@ EXAMPLE OF MUTATED GAME --- GAME DESCRIPTION ANDOR SCREENSHOT
 
 
 \subsection{Random game generation}
-\label{method:random}
+\label{ssec_task1rndGen}
 A similar process as mentioned above was used to randomly put game descriptions together creating new games completely from scratch, constructing the textual lines for different parts of a VGDL description: Generating an array of sprites (for the SpriteSet), interaction-rules (InteractionSet), termination-rules (TerminationSet) and level mappings (LevelMapping). 
 
 Several partly subjective choices were again made for the range for the amount of different sprites, and interaction- and termination rules. 
@@ -762,7 +779,7 @@ The generator designates a level built using a given size, and inserts sprite ma
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \section{Initial test: Experimental setup}
-\label{sec_inittestsetup}
+\label{sec_task1inittestsetup}
 In this section we present a set of initial results from playing through both designed and generated games using different AI controllers, and discuss different ways to analyse the resulting data.
 
 
@@ -789,7 +806,7 @@ Each game was played through 25 times, all within a single level attached to the
 
 
 \section{Initial test: Results}
-\label{sec_inittestresults}
+\label{sec_task1inittestresults}
  
 In this section we show results of the tests explained above, analyse the average of all play-throughs for each controller, and compare the results with each other.
 Before analysing and presenting the data, for all of the below tests we first remove games from the set which we consider either too difficult to analyse, or too simple too possibly be of interest -- namely we remove games by three different considerations: 
@@ -1004,7 +1021,7 @@ However it should be noted here that some games from both the mutated- and gener
 
 
 \section{Discussion of initial test results}
-\label{sec_discussionofinitialtest}
+\label{sec_task1discussion}
 The results display some interesting patterns. Win rates suggest a relationship between intelligent controllers' success and better game design; for better designed games, the relative performance of different types of algorithms differ more. This corroborates our hypothesis that relative algorithm performance profiles can be used to differentiate between games of different quality. In randomly generated games, which arguably tend to be less interesting than the others, smarter controllers (e.g. Explorer and MCTS) do only slightly better than the worse ones (i.e. Random and DoNothing). This is due to a general a lack of consistency between rules generated in this manner. Mutated games, however, derive from a designed game. Therefore, they maintain some characteristics of the original idea, which can improve the VGDL description's gameplay and playability. %!!!!!!!!!!!!!!!KOPIERET FRA ARTIEKL!!!!!!!!!!!
 
 While it is possible that random actions can result in good outcomes, this chance is very low, especially when compared to the chance of making informed decisions. In spite of that both Random and DoNothing do fairly well in randomly generated games. The performance of DoNothing emerges as a secondary indicator of (good) design: in human-designed games, DoNothing very rarely wins or even scores.
@@ -1012,10 +1029,22 @@ While it is possible that random actions can result in good outcomes, this chanc
 \subsubsection*{Human play of generated games}
 As mentioned in Section \ref{sec_inittestresults} there was a series of generated games with performance profile basically indistinguishable from the designed games.
 We decided on examining many of these games further by studying their game descriptions, and playing the games with visuals enabled, both with AI controllers and human players. (SCREEEEEENSHTOS PL0X!!!)
-Besides a few mutated games which kept most of the original rules (and therefore were successful games), the tested generated games with well-formed performance profiles were in general too trivial to be entertaining.
-
+Besides a few mutated games which kept most of the original rules (and therefore were successful games), the tested generated games with well-formed performance profiles were in general too trivial and aimless to be entertaining.
 This however gives an indication of in important assumption: That we can assume that the generated games, at least from the randomly generated set, are of a overall low quality.
 We will carefully use this assumption to construct an evaluation function for games, in the next chapter,
+
+Besides the above, a few re-occurring problems was found in the generated games.
+
+\begin{itemize}
+\item Sprites often leave the level playing field.
+\item Several of the sprites- and/or rules are never used.
+\item The game can only be won in the first few (<50) frames.
+\item Too much random stuff going on.
+\end{itemize}
+
+
+
+
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -1051,10 +1080,10 @@ As indicated in the previous section, a series of partly subjective decisions we
 To make an as informed decision as possible we ran a series of test described below, using different features, automatically choosing different set of features, evolving weights for the features, and examining the results using data mining principles.
 
 In the following we decided to use a \textit{relative difference}-function to compare the  statistics for two different controllers' results.
-%This function (\texttt{relDiff(x1,x2)}) was constructed with the goal of returning values between $-1$ and $1$, with the value 1 for $x_1 > 0, x_2 = 0$ and $x_1 = 0, x_2 < 0$ (and vice-versa).
 
-\subsection{Simple analysis of initial choices}
-As mentioned the score, win-rate and entropy seems to be interesting to use as fitness features.
+\subsection{Analysis of feature choices}
+As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices, to to adopt as fitness features.
+Also, the there seems to be a consistent difference in the values between the Explorer-, and the OneStep, Random and Do Nothing-controllers.
 To measure the strength of different choices from we made a small comparison of different circumstances that could potentially be used, counting how many of the designed (and generated) games that fulfil the conditions.
 
 Below is the results of trying a few potential choices:
@@ -1076,6 +1105,8 @@ Below is the results of trying a few potential choices:
 \label{table:simplefeatureanalysis}
 \end{figure}
 
+The features above (and other sets) were analysed by data mining techniques -- i.e classification processes were to used to see if it was possible to differentiate between the designed- and generated set of games.
+
 
 \subsection{Selection and evolution of weights}
 In choosing a set of evaluation features it is natural to value each with a weight, making the addition from each feature count in a balanced fashion.
@@ -1085,13 +1116,11 @@ For this task another problem arise however: Generating a fitness function to sc
 Several different approaches were tried for this task, but all relying on calculating the fitness for each of designed- and randomly generated games, and making the overall fitness for the designed game set higher than for the generated games -- using the assumption that the games from the generated set are of a low quality (discussed in Section \ref{sec_discussionofinitialtest}).
 
 
-\subsection{Data mining}
-We tried to analyse data for different choices of features using different data mining techniques. I.e. we tried using different classifiers to find a set of features that work better than others.
 
 
 \subsection{Outcome}
 
-In the end we chose to only use the Explorer controller as an intelligent decider, and the Random- and Do Nothing controller to compare with.
+In the end, partly because of a restricted schedule, we chose to only use the Explorer controller as an intelligent decider, and the Random- and Do Nothing controller to compare with.
 In the end we chose the following set of values to compare: \textit{ave. score},  \textit{min. score}, \textit{max. score} and \textit{win-rate}.
 
 
@@ -1118,7 +1147,7 @@ Generate game --> if not player runs out of time --> if not any sprites out of b
 %------------------------------------------------------------------------------------------------------------------------------%
 \section{Evolution of games: Results}
 \label{sec_task2evolvingGames}
-
+The resulting game kindda suck
 
 HERE GOES A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION
 
@@ -1127,6 +1156,10 @@ HERE GOES A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION
 
 \section{Discussion of results}
 \label{sec_task2discussion}
+The resulting games are unfortunately pretty bad.
+
+It would be interesting to retrieve more data from playing through each game.
+For instance, by examining the proportion of sprites- and rules that have been in use in the game, the amount of sprites that has left the level field, or the amount of objects that have been killed or created.
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
