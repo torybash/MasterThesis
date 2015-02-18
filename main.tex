@@ -195,7 +195,7 @@ Automatically generating content allow game developers to provide more content, 
 Additonally PCG is often used to maintain a challenge for the player by presenting an unpredictable and renewed game experience on re-playing the games in which it is used.
 
 Rogue \citeyearpar{game:rogue} is one of the earliest examples on proceduraly generating game levels (or dungeons). 
-Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold \citeyearpar{game:sevencities}, Civilazation II(-V) \citeyearpar{game:civilizationii}, Minecraft \citeyearpar{game:minecraft}, Spelunky \citeyearpar{game:spelunky} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus! \citeyearpar{game:rescurefractalus}, Farcry 2 \citeyearpar{game:farcry}.
+Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold \citeyearpar{game:sevencities}, Civilazation II(-V) \citeyearpar{game:civilizationii}, Minecraft \citeyearpar{game:minecraft}, Spelunky \citeyearpar{game:spelunky}, Lux \citeyearpar{game:lux} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus! \citeyearpar{game:rescurefractalus}, Farcry 2 \citeyearpar{game:farcry}.
 PCG has also been used to create a wider array of weapons and items (Borderlands-series \citeyearpar{game:borderlandsseries}, Diablo-series \citeyearpar{game:diabloseries}, Torchlight-series \citeyearpar{game:diabloseries}, Dark Age of Camelot \citeyearpar{game:darkage}), or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
 
 
@@ -758,6 +758,7 @@ As for the mutated games, some partly subjective decisions were made on defining
 To simplify the sprite creation process, no parent-child structure was used in the \texttt{SpriteSet}.
 However, the goal of the parent-child structure is only to make rule definitions less verbose, and does not make actual new game features possible.
 
+All sprites were given a random sprite image, while the avatar-sprite was given the same sprite for each game, to make the game more easy to understand when visualizing the games (and actually play through them).
 
 %\begin{figure}[ht]
 %	\centering
@@ -1120,7 +1121,20 @@ Several different approaches were tried for this task, but all relying on calcul
 
 \subsection{Outcome}
 
-In the end, partly because of a restricted schedule, we chose to only use the Explorer controller as an intelligent decider, and the Random- and Do Nothing controller to compare with.
+In the end we chose to only use the Explorer, OneStep-, Random- and Do Nothing controller in calucalting fitness.
+
+We decided on a set of 19 features, where 15 are calculated from the relative difference between a pair of controllers, and 4 values, each with a unique calculation.
+The chosen features were:
+
+\begin{itemize}
+\item[Score mean] 3 feautures comparing the Explorer, with each of the other controllers.
+\item[Score median] 3 feautures comparing the contr
+\item[Score quartion 1] 3 feautures comparing the Explorer, with each of the other controllers.
+\item[Score mean] 3 feautures comparing the Explorer, with each of the other controllers.
+\item[Score mean] 3 feautures comparing the Explorer, with each of the other controllers.
+
+\end{itemize}
+
 In the end we chose the following set of values to compare: \textit{ave. score},  \textit{min. score}, \textit{max. score} and \textit{win-rate}.
 
 
@@ -1181,12 +1195,14 @@ Results of what happens when generating levels for the example games.
 The games described in this section are games where the puzzles are the only game-play. There is no fast movement, or quick reaction time required to win. Additionally, because the games are described using the GVG-AI framework, the games focus around a player avatar which can only move up, down, left or right (also, in the games described below, all movement are from one game-tile to another).
 
 \subsection{Games} 
-Description of the puzzle games used in tests. 
+From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own additions (Section \ref{sec_writingnewvgdl}), there is a total of 10 puzzle games to use in the following analysis.
 
+However, several of the games were deemed unfit for a complete examination, because either the levels were too difficult (Bolo Adventures and Chip's Challenge), that the game had features difficult to solve for a the puzzle-solving AI controllers (Bombuzal), or that the gameplay was too simple (Painter).
+The games used in the following are Bait, Brainman, The Citadel, Zen Puzzle, Sokoban, Modality
 
 
 \subsection{Puzzle solving AIs} 
-As mentioned in (WHERE ITS MENTIONED), the controllers from the GVG-AI competietion are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
+As mentioned in (WHERE ITS MENTIONED), the controllers from the GVG-AI competition are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
 Two general puzzle solving algorithms were implemented. The overall goal of the controllers were to analyze the game as much as possibl, rather than finding a solution fast, or using as low memory as possible
 They controllers use fact that wall-sprites in the different games always push back the player, and so the controllers do not try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game. 
 Also, the controllers store each path it is had tried. For each path a game state is calculated and stored, by finding the position and type of each (non-wall) sprite in the game. A path is cut off if the calculated game state is the same as has appeared before.
@@ -1253,7 +1269,13 @@ This is subsubsection with title ``\Subsectionname''.
 
 \chapter{Conclusion}
 
+A huge problem in evolving games with the process used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game ten times takes the Explorer controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
+
+A more clever approach might be to first probe the games with some more simple controllers, or decreasing the allowed time for intelligent controllers, allowing the games to be played through more quickly, and decide if the game is worth spending time on for a more precise analysis (using intelligent controllers).
+
 It might be interesting to analyse games using a wider array of controllers, or analysing by letting the same controller (or controllers) play with a different amount of time allowed per clock-tick, or even using controllers designed to "play bad" (trying to die, decrease score) could be interesting
+
+Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
