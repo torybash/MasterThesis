@@ -1,7 +1,22 @@
-datatype,count1,fraction1,count2,fraction2,count3,fraction3
-Explorer.Mean>=Random.Mean,17 (of 18),94.4,139 (of 146),95.2,42 (of 56),75.0
-Explorer.Mean>=Do Nothing.Mean,16 (of 18),88.9,131 (of 146),89.7,38 (of 56),67.9
-Explorer.Winrate>=Random.Winrate,18 (of 18),100.0,140 (of 146),95.9,56 (of 56),100.0
-Explorer.Winrate>=Do Nothing.Winrate,17 (of 18),94.4,141 (of 146),96.6,55 (of 56),98.2
-Explorer.Median>=Random.Median,17 (of 18),94.4,138 (of 146),94.5,45 (of 56),80.4
-Explorer.Median>=Do Nothing.Median,16 (of 18),88.9,134 (of 146),91.8,41 (of 56),73.2
+datatype,count1,aveRelDiff1,count2,aveRelDiff2,count3,aveRelDiff3
+(Explorer>=Onestep-H).Mean,16 (of 18),0.677,147 (of 169),0.570,65 (of 83),0.258
+(Explorer>=Random).Mean,17 (of 18),0.662,162 (of 169),0.594,66 (of 83),0.295
+(Explorer>=Do Nothing).Mean,16 (of 18),0.752,154 (of 169),0.685,65 (of 83),0.253
+(Explorer>=Onestep-H).Winrate,16 (of 18),0.444,154 (of 169),0.177,82 (of 83),0.046
+(Explorer>=Random).Winrate,18 (of 18),0.551,163 (of 169),0.238,81 (of 83),0.026
+(Explorer>=Do Nothing).Winrate,17 (of 18),0.549,164 (of 169),0.273,82 (of 83),0.058
+(Explorer>=Onestep-H).Median,16 (of 18),0.625,160 (of 169),0.532,67 (of 83),0.232
+(Explorer>=Random).Median,17 (of 18),0.626,161 (of 169),0.565,71 (of 83),0.283
+(Explorer>=Do Nothing).Median,16 (of 18),0.690,157 (of 169),0.634,68 (of 83),0.196
+(Explorer>=Onestep-H).Quart 1,16 (of 18),0.544,158 (of 169),0.501,66 (of 83),0.133
+(Explorer>=Random).Quart 1,17 (of 18),0.585,162 (of 169),0.587,74 (of 83),0.266
+(Explorer>=Do Nothing).Quart 1,16 (of 18),0.618,157 (of 169),0.614,67 (of 83),0.117
+(Explorer>=Onestep-H).Quart 3,17 (of 18),0.797,161 (of 169),0.568,69 (of 83),0.243
+(Explorer>=Random).Quart 3,18 (of 18),0.738,165 (of 169),0.551,72 (of 83),0.238
+(Explorer>=Do Nothing).Quart 3,17 (of 18),0.871,159 (of 169),0.673,72 (of 83),0.231
+(Explorer>=Onestep-H).Min,16 (of 18),0.393,142 (of 169),0.315,66 (of 83),-0.016
+(Explorer>=Random).Min,17 (of 18),0.578,157 (of 169),0.543,77 (of 83),0.185
+(Explorer>=Do Nothing).Min,15 (of 18),0.505,149 (of 169),0.429,62 (of 83),-0.060
+(Explorer>=Onestep-H).Max,18 (of 18),0.856,167 (of 169),0.663,76 (of 83),0.341
+(Explorer>=Random).Max,17 (of 18),0.543,162 (of 169),0.449,75 (of 83),0.238
+(Explorer>=Do Nothing).Max,18 (of 18),0.987,166 (of 169),0.784,79 (of 83),0.391

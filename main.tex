@@ -42,6 +42,10 @@
 %Tikzpicture (pretty flowcharts etc.)
 \usepackage{tikz}
 \usetikzlibrary{calc,backgrounds,arrows,matrix,positioning}
+\makeatletter
+\tikzset{anchor/.append code=\let\tikz@auto@anchor\relax}
+\tikzset{inside/.code=\preto\tikz@auto@anchor{\pgf@x-\pgf@x\pgf@y-\pgf@y}}
+\makeatother
 
 %Plotz n' graphs
 \usepackage{pgfplots}
@@ -164,9 +168,17 @@ roundcorner=2pt
 \setcounter{page}{0}
 
 % Abstract
-\begin{spacing}{1.5}
+\begin{spacing}{1.2}
 \begin{abstract}
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+In this thesis a framework for generating games- and levels in the video game description language VGDL is presented.
+The generator is able to automatically generate games, test the playability and difficulty using AI controllers, and score each game according to a series of evaluation criteria.
+
+The research and framework is separated into two parts, divided by different game genres: 1) An analysis of 2-dimensional action-arcade games, with the goal of producing a generator focusing on evolving a set of game-rules using the results from a series of general game-playing algorithms.
+And 2) An examination of 2-dimensional turn-based puzzle games- and the especially the levels of puzzle games, with the ambition of being able to generate simple sets of game-rules and focusing on the evolution of levels for those games.
+
+The results of this thesis show that automatically generating game design is indeed very promising, with several interesting complete Sokoban-like puzzle games generated, but indicating that creating action games is in general a more difficult terrain for generating rules- and mechanics enjoyable for humans.
+
+
 \end{abstract}
 \end{spacing}
 
@@ -190,120 +202,188 @@ I would like to say "thanks brah"
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 \chapter{Introduction}
-Procedural generation of game content (PCG-G) has become a widely used tool for video-game developers.
-Automatically generating content allow game developers to provide more content, with more differentation, from a limited supply of assets, most often by helping to produce levels, maps or dungeons for their games. 
-Additonally PCG is often used to maintain a challenge for the player by presenting an unpredictable and renewed game experience on re-playing the games in which it is used.
+In this chapter the idea of generating complete games-, and the content within them is introduced.
+The research goals of the thesis is then shown, and an overview of the project is presented.
 
-Rogue \citeyearpar{game:rogue} is one of the earliest examples on proceduraly generating game levels (or dungeons). 
-Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold \citeyearpar{game:sevencities}, Civilazation II(-V) \citeyearpar{game:civilizationii}, Minecraft \citeyearpar{game:minecraft}, Spelunky \citeyearpar{game:spelunky}, Lux \citeyearpar{game:lux} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus! \citeyearpar{game:rescurefractalus}, Farcry 2 \citeyearpar{game:farcry}.
-PCG has also been used to create a wider array of weapons and items (Borderlands-series \citeyearpar{game:borderlandsseries}, Diablo-series \citeyearpar{game:diabloseries}, Torchlight-series \citeyearpar{game:diabloseries}, Dark Age of Camelot \citeyearpar{game:darkage}), or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
+\section{Introduction to content generation}
+\label{sec_introtocontentgen}
 
+Procedural generation of game content (levels, textures, items, quests, audio, characters etc.) has become a widely used tool for video-game developers, and has been applied to an array of different game- genres and types.
+Automatically generating content allow game developers to provide more content, with more differentiation, from a limited supply of assets, most often by helping to produce levels, maps or dungeons for their games. 
+PCG is often used to maintain a challenge for the player by presenting an unpredictable and renewed game experience on re-playing the games in which it is used.
+
+Rogue \citep{game:rogue} is one of the earliest examples of a game using procedurally generated levels (dungeons) as a main part of the game design.
+The space-trading game Elite \citep{game:elite} used PCG to both save disk space, and to generate a large array of planets and galaxies, each with a different set of unique properties generated for every play through. 
+
+Since then several highly successful games, from genres including platform-, first person shooter- (FPS) and strategy games, have used PCG to generate levels-, maps and worlds, as either used in their main game mode (e.g. Spelunky \citep{game:spelunky}, Minecraft \citep{game:minecraft}), or as an extra feature, making the games have additional re-playability (e.g. Civilazation II(-V) \citep{game:civilizationii}, Heroes of Might and Magic III \citep{game:homm3}).
+PCG has additionally been used to create a wider array of weapons and items, especially in role-playing games (RPGS) where "looting" (finding new gear) is a main part of the game design (e.g. Borderlands-series \citep{game:borderlandsseries}, Diablo-series \citep{game:diabloseries}, Torchlight-series \citep{game:diabloseries}, Dark Age of Camelot \citep{game:darkage}).
+
+Several game-developers, companies and research groups has additionally used PCG to create content of other types of game-content, or at different stages, including complete worlds, environments and stories (\citep{game:dwarffortress}), and graphics and audio (RoboBlitz \citep{game:roboblitz}, .kkrieger \citep{game:kkrieger}).
+
+%, or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
+
+
+%Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold \citeyearpar{game:sevencities}, Civilazation II(-V) \citeyearpar{game:civilizationii}, Minecraft \citeyearpar{game:minecraft}, Spelunky \citeyearpar{game:spelunky}, Lux \citeyearpar{game:lux} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus! \citeyearpar{game:rescurefractalus}, Farcry 2 \citeyearpar{game:farcry}.
+%PCG has also been used to create a wider array of weapons and items (Borderlands-series \citeyearpar{game:borderlandsseries}, Diablo-series \citeyearpar{game:diabloseries}, Torchlight-series \citeyearpar{game:diabloseries}, Dark Age of Camelot \citeyearpar{game:darkage}), or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
+
+%Lux \citep{game:lux}, 
 
 \section{Introduction to game generation}
 \label{sec_introtogamegen}
-An interesting next step to take is to not only generate content for a game, but to generate completely new games and game-play -- i.e. to both generate a set of rules and mechanics, and  generate the content necessary to play the game (levels, sprites etc.).
+An interesting next step to take is to not only generate content for a video game, but to generate completely new games and game design -- i.e. to generate the set of rules and mechanics of a game, and necessarily to generate the content for actually playing the game (even simple games like Tetris or Pong is dependant on a playing field (or level) and a definition of each object).
 
-A possible way of automatically generating complete games might be to search through a space of games represented in a programming language like C or Java. 
-However, the proportion of programs designed in such languages that can actually be considered a game is rather small (and much less, the amount of human-enjoyable games).
-Searching through programs defined in a game description language (GDL), designed to encode games (and only games), can increase the density of well-defined games.
+A possible approach to automatically generating complete games might be to search through a space of programs represented in a programming language like C or Java. 
+However, the proportion of programs designed in such languages that can even be considered a game is rather small -- and much less, the amount games that a human player would find enjoyable.
+To reduce this problem a game description language (GDL), designed to encode games (and only games), can be used, severely increasing the density density of well-defined games.
 
-Even searching a fairly well defined space of games still expect that we have some way of automatically telling good games from bad games (or at least, not-very-good games from really bad games). 
-In other words, we need a fitness function. 
+Even searching a fairly well defined space of possible games, we still have a need for some way of actually telling good games from bad ones (or at least, mediocre games from really bad games) -- a fitness function is needed. 
 A fitness function could partly consist of inspecting the generated rules as expressed in the GDL, e.g. to make sure that the player can interact with the game in some way, and that there are winning- and losing conditions, which could in principle be fulfilled. 
-However there are many bad games that fulfil such criteria.
+However there are many bad games that fulfil such criteria, so intuitively it seems one need to actually play the games that are generated. 
 
-To really understand a game it seems you need to play it. 
-The fitness function therefore needs to incorporate a capacity to automatically play the games it is evaluating.
+A fitness function for generating complete games therefore needs to incorporate a capacity to automatically play the games it is evaluating, giving each game a score dependant on certain values from the results of playthroughs.
 
 
 \section{Research Objectives}
 \label{sec_researchobj}
-The main objectives of this study was to construct a generation process able to create simple games and levels using the game description language (VGDL), with the goal of being as enjoyable for human players as possible.
-The focus of the study was to create a fitness function able to differentiate between games (and levels) of different quality, to be able to search and sort a set of generated games, and thereby create interesting content.
+The main objectives of this study was to construct a generation process able to create simple games and levels using the game description language (VGDL). 
+With the goal of making games as enjoyable for human players as possible.
+The main focus of the study was to create a fitness function able to differentiate between games (and levels) of different quality, to be able to search and sort a set of generated games, and thereby create interesting content.
 
 The main approach used to create the fitness function was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to construct individual fitness features.
 A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for "good games" and was intensely used in choosing and weighing fitness features.
 This approach was focused on a specific genre and type of games (\textit{arcade-action games}), which is in the focus of the framework used (the GVG-AI framework). 
 Additionally this type of games fit very well with general game-playing algorithms used, which are not very good at exploring deep into a space of game-states (which is often not need in the game-genre -- quick movements to avoid enemies and increase the score is in the focus).
 
-The second part of this thesis is focused on games of the \textit{puzzle}-genre described in VGDL, which overall has a much smaller game-state space and so potentially are more well-suited for a more in-depth analysis.
+The second part of this thesis is focused on games of the \textit{puzzle}-genre described in VGDL, which overall has a much smaller game-state space (the amount of possible arrangements of sprites and values) and so potentially are more well-suited for a more in-depth analysis.
 This approach is mainly focused on generating new game-levels for either existing games, or generated VGDL programs, by completely searching through all possible states of a game (using a breadth-first algorithm), finding all possible solutions, with the goal of being able to judge the difficulty, and thereby the quality of a game/level pair.
 
 
 \subsubsection*{Assumptions}
 As mentioned above, we assume that the a subset of the human-designed VGDL games described (Section \ref{sec_gvgaiframework}, \ref{sec_writingnewvgdl}) -- the ones which are interpretations of commercial games -- are of high quality (i.e. enjoyable for human players). 
-This is not always clear when actually playing the games in the framework used, since they mostly need crucial element like, audio, graphic effects and a proper control-scheme fitting to the game.
+This is not always clear when actually playing the games in the framework used, since they mostly need crucial element like, audio, proper graphic assets- and effects and an input mapping scheme fitting to the game.
 
-We additionally assume that completely randomly generated games using the VGDL language (without sorting/searching using a fitness function) produce games with an extremely (almost negligible) low chance of being human-enjoyable.
+We additionally assume that completely randomly generated games, using randomly generated levels in the VGDL language (without sorting/searching using a fitness function) produce games with an extremely (almost negligible) low chance of being human-enjoyable.
 This assumption is mostly made from initial tests into game generation using the VGDL language.
 
 
 \section{How to read this thesis}
 \label{sec_howtoread}
-In the following chapters we will define the problem in more detail and explain the existing research and framework used.
-We will then show the results of of the seeking to fulfil the different research goals, and finally discuss the conclusion of the results.
-The figure below shows the structure of the thesis, explaining the reasoning behind each chapter and how it fits in to the larger picture.
+In the following chapters we will define the problem in more detail, explain the existing research and framework used, present the results of fulfilling the research goal and finally the ultimate products of the analysis of this thesis: Generated games.
+
+The figure below shows the structure of the thesis, explaining the content and reasoning behind each chapter and how it fits in to the larger picture.
 
 \begin{center}
 \begin{tikzpicture}[
-chapterparts/.style={rectangle, draw=black!80, very thick, text width=3.4cm, font = \scriptsize,inner xsep = 0.1cm,rounded corners},
-chapterheader/.style={rectangle, draw=black!80, fill=black!15, very thick, text centered, text width=3.4cm, font = \footnotesize,inner xsep = 0.1cm,},
-roundnode/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=7mm},
+chapterparts/.style={rectangle, draw=black!80, very thick, text width=5.5cm, font = \scriptsize,inner xsep = 0.1cm,rounded corners, align=left},
+chapterheader/.style={rectangle, draw=black!80, fill=black!15, very thick, text centered, text width=5.5cm, font = \footnotesize,inner xsep = 0.1cm,},
+largebox/.style={rectangle, draw=black, very thick, minimum size=7mm},
 squarednode/.style={rectangle, draw=red!60, fill=red!5, very thick, minimum size=5mm},
 nodes = {align = center}
 ]
 %Nodes
-
-\node[chapterparts]      (theory)
-									{\quad\\-Research in content generation\\
-									-Research in game generation\\
-									-Framework};
-\node[chapterparts]      (background) [right=of theory, shift = (left:0.5cm)]
-									 {\quad\\-New VGDL games\\
-									-New VGDL controllers \\
-									-New VGDL implementation};
-\node[chapterparts]      (task1) [below=of theory, shift = (left:1.5cm), yshift=-0.5cm]
-									 {\quad\\-New VGDL games\\
-									-New VGDL controllers \\
-									-Discussion};
-\node[chapterparts]      (task2) [right=of task1, shift = (left:0.5cm)]
-									 {\quad\\-New VGDL games\\
-									-New VGDL controllers \\
-									-Discussion};
-\node[chapterparts]      (task3) [right=of task2, shift = (left:0.5cm)]
-									 {\quad\\-New VGDL games\\
-									-New VGDL controllers \\
-									-Discussion};
-\node[chapterparts]      (conclusion) [below=of task2]
-									 {\quad\\-Discussion\\
-									-Conclusion};
-\node[chapterheader]   (theoryh)  [above=of theory, shift = (down:1.2cm)]		
+\node[chapterheader]   (theoryh)		
 {2. Theory and framework};
-\node[chapterheader]   (backgroundh)  [above=of background, shift = (down:1.2cm)]		
+\node[chapterheader]   (backgroundh)  [right=of theoryh, shift = (right:0.0cm)]		
 {3. Background};
-\node[chapterheader]   (task1h)  [above=of task1, shift = (down:1.2cm)]		
+\node[chapterheader]   (task1h)  [below=of theoryh, shift = (down:3.8cm)]		
 {4. Generation of VGDL games};
-\node[chapterheader]   (task2h)  [above=of task2, shift = (down:1.2cm)]		
+\node[chapterheader]   (task2h)  [right=of task1h, shift = (right:0.0cm)]		
 {5. Evaluation of VGDL games};
-\node[chapterheader]   (task3h)  [above=of task3, shift = (down:1.2cm)]		
+\node[chapterheader]   (task3h)  [below=of task1h, shift = (down:5.2cm)]		
 {6. Puzzle analysis};
-\node[chapterheader]   (conclusionh)  [above=of conclusion, shift = (down:1.2cm)]		
+\node[chapterheader]   (conclusionh)  [right=of task3h, shift = (right:0.0cm)]		
 {7. Conclusion};
+  \begin{scope}[on background layer]
+\node[chapterparts]      (theory) [below=of theoryh, shift = (up:1.2cm)]	
+									{\quad\\
+									Describes the existing research into content- and game generation, and describes the framwork used in the thesis. Sections: \\\quad\\
+									
+									\begin{enumerate}\itemsep0pt
+									\item Research in content generation
+									\item Research in game generation
+									\item Framework: VGDL/GVG-AI
+									\end{enumerate}
+									};
+\node[chapterparts]      (background) [below=of backgroundh, shift = (up:1.2cm)]	
+									 {\quad\\
+									 After the examination of the the VGDL framework, presents an array of additions created during the thesis, which are used throughout the report. Sections:	
+									 \begin{enumerate} \itemsep0pt
+									\item New VGDL games
+									\item New VGDL controllers
+									\item VGDL implementation focused on puzzle games
+									\end{enumerate}
+									};
+\node[chapterparts]      (task1) [below=of task1h, shift = (up:1.2cm)]	
+									 {\quad\\
+									By examining the set of human-designed games a process is created to randomly generate complete games- and levels, either by mutating the existing games or generating from scracth. Result from playing through both human-designed- and generated games, using an array of general game playing algorithms are then presented and discussed. Sections:											 													\begin{enumerate}\itemsep0pt
+									\item Generating prcess
+									\item Initial test: Setup
+									\item Initial test: Resutls
+									\item Discussion
+									\end{enumerate}
+									};
+\node[chapterparts]      (task2)[below=of task2h, shift = (up:1.2cm)]	
+									 {\quad\\
+									 Focuses on using the results of the analysis to create a set of fitness features to analyse different generated games, allowing a genetic program to evolve well-designed games, by creating and evolving VGDL game descriptions.
+The resulting generated games are then discussed in detail. Sections:
+									 \begin{enumerate}\itemsep0pt
+									\item Fitness function: Intro
+									\item Fitness function: Selection
+									\item Evoltion of games: Setup
+									\item Evoltion of games: Results
+									\item Discussion
+									\end{enumerate}
+									};
+\node[chapterparts]      (task3)[below=of task3h, shift = (up:1.2cm)]	
+									 {\quad\\
+									 A shorter analysis on puzzles. Sections:
+									 \begin{enumerate}\itemsep0pt
+									\item Puzzle analysis: Intro
+									\item Data from designed games
+									\item Evoltion of levels: Setup
+									\item Evoltion of levels: Results
+									\item Evoltion of game/level pair: Setup
+									\item Evoltion of game/level pair: Results
+									\item Discussion
+									\end{enumerate}
+									};
+\node[chapterparts]      (conclusion)[below=of conclusionh, shift = (up:1.2cm)]	
+									 {\quad\\
+									 Discusses the results and tries to find a conlcusion on the research goals. Sections:											 													\begin{enumerate}\itemsep0pt
+									\item Discussion of game generators
+									\item Conclusion
+									\end{enumerate}};
+\node[largebox]			(backgroundbox)[above=of theoryh, shift = (down:4.8cm), shift = (right:3.4cm), minimum height = 4.8cm, minimum width = 13cm, label={[anchor=north]above:Background}]{};
+\node[largebox]			(actionbox)[above=of task1h, shift = (down:6.2cm), shift = (right:3.4cm), minimum height = 6.0cm, minimum width = 13cm, label={[anchor=north]above:Action-arcade game generation}]{};
+\node[largebox]			(puzzlebox)[above=of task3h, shift = (down:5.2cm), shift = (right:0.0cm), minimum height = 5.2cm, minimum width = 6.5cm, label={[anchor=north]above:Puzzle game generation}]{};
+\node[largebox]			(conclusionbox)[above=of conclusionh, shift = (down:3.5cm), shift = (right:0.0cm), minimum height = 3.5cm, minimum width = 6.5cm, label={[anchor=north]above:Conclusions}]{};
+\end{scope}
 
 %Lines
-\draw[->] (theory.east) -- (background.west);
-\draw[->] (background.south) to[bend right=10] (task1h.north);
-\draw[->] (background.south) to[bend left=10] (task3h.north);
-\draw[->] (task1.east) -- (task2.west);
+\draw[->,line width=1.5pt] (backgroundbox.south) -- (actionbox.north);
+\draw[->,line width=1.5pt] (backgroundbox.west) to[bend right=10] (puzzlebox.west);
+\draw[->,line width=1.5pt] (actionbox.south) -- (conclusionbox.north);
+\draw[->,line width=1.5pt] (puzzlebox.east) -- (conclusionbox.west);
+%\draw[->,line width=1.5pt] (theory.east) -- (background.west);
+%\draw[->,line width=1.5pt] (theory.south) -- (task1h.north);
+%\draw[->,line width=1.5pt] (theory.south) -- (task2h.north);
+%\draw[->,line width=1.5pt] (background.south) -- (task1h.north); %to[bend left=10]
+%\draw[->,line width=1.5pt] (theory.east) -- (task2.west)
+%\draw[->,line width=1.5pt] (task1.south) -- (task3h.north);
+%\draw[->,line width=1.5pt] (theory.west) to[bend right=20] (task3.west);
+%\draw[->,line width=1.5pt] (background.west) -- (task3.east);
+%\draw[->,line width=1.5pt] (task1.east) -- (task2.west);
+%\draw[->,line width=1.5pt] (task2.south) -- (conclusionh.north);
+%\draw[->,line width=1.5pt] (task3.south) to[bend right=45] (conclusion.south);
 
 \end{tikzpicture}
 \end{center}
 
 \subsection{Terms}
-This project is focused a games of two restricted genres and types: 
+This project is focused a games of two restricted genres and types -- these restrictions mostly stems from the framework used in the work, but allows a more focused analysis: 
 
 1) Single-player, 2-dimensional, top-down, action games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an "action"-(shoot etc.) button.
-These games will be referred to as \textbf{Action-arcade games}.
+These games will be simply be referred to as \textbf{Action-arcade games}.
 
 And: 2) Single-player, 2-dimensional, top-down, turn-based puzzle games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an "action"-(shoot etc.) button., and all events occur as a result of player actions (i.e. no NPC's or falling boulders). 
 This type of games will be referred to as \textbf{Puzzle games} in the project.
@@ -595,6 +675,14 @@ A set of puzzle games from several different platform, all featuring a single av
 Several of these games can be described as \textit{Sokoban}-clones with different spins on the gameplay.
 The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge}, \textit{Modality} and \textit{Painter}.
 
+
+\begin{figure}[!ht]
+${\vcenter{\hbox{\includegraphics[height=4.8cm]{origboloadventures.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
+\vcenter{\includegraphics[height=4.8cm]{vgdlboloadventures.png}}
+$
+    	\caption{Interpretation of both the game and part of a level, from the DOS game Bolo Adventures III}
+\label{fig:centipedeTranslation}
+\end{figure}
 
 
 
@@ -1094,7 +1182,7 @@ Below is the results of trying a few potential choices:
 \centering
 \csvreader[tabular=l|rr|rr|rr|,
     table head=\toprule \textit{\textbf{data type}} & \multicolumn{2}{c|}{Designed} &\multicolumn{2}{c|}{Mutated} & \multicolumn{2}{c|}{Rnd. gen.} \\
-             & \textit{count} & \textit{\%} & \textit{count} & \textit{\%} & \textit{count} & \textit{\%},
+             & \textit{count} & \textit{diff.} & \textit{count} & \textit{diff.} & \textit{count} & \textit{diff.},
     late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
     late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
     late after last line=\\\bottomrule
@@ -1150,6 +1238,8 @@ Two different approaches were used to create new games:
 From the project it should be obvious that the first approach, using existing games and levels, have a much better chance of both achieving a high fitness-value and be an enjoyable game.
 However, the second approach allows for magnitudes of more options and possibilities, since it is not restricted to any set of sprites- or levels.
 
+The evolution process was stopped when the highest fitness stopped increasing over ten iteration, or when the best games fitness were above 0.98 -- a very good fitness score.
+
 The figure below shows the process which was used in both evolution approaches.
 
 HERE SHOULD BE A PICTURE OF THE GENERATION PROCESS
@@ -1161,7 +1251,64 @@ Generate game --> if not player runs out of time --> if not any sprites out of b
 %------------------------------------------------------------------------------------------------------------------------------%
 \section{Evolution of games: Results}
 \label{sec_task2evolvingGames}
-The resulting game kindda suck
+XX games were generated over a duration of XX days, 
+
+
+\begin{figure}[!ht]
+\centering
+\begin{vgdldesc}[linewidth=14cm]
+BasicGame
+	SpriteSet
+		city  > Immovable color=GREEN img=city
+		explosion > Flicker limit=5 img=explosion
+		movable >
+			avatar  > ShootAvatar stype=explosion
+			incoming >
+				incoming_slow  > Chaser stype=city color=ORANGE speed=0.1
+				incoming_fast  > Chaser stype=city color=YELLOW speed=0.3
+
+	LevelMapping
+		c > city
+		m > incoming_slow
+		f > incoming_fast
+		
+	InteractionSet
+		movable wall  > stepBack
+		incoming city > killSprite
+		city incoming > killSprite scoreChange=-1
+		incoming explosion > killSprite scoreChange=2
+
+	TerminationSet
+		SpriteCounter stype=city   win=False
+		SpriteCounter stype=incoming win=True
+\end{vgdldesc}
+\caption{Example of VGDL description - a simple implementation of the game Missile Command}
+\label{fig:vgdlgame}
+\end{figure}
+
+Additionally each game can only be played using level files. 
+A level file is written using the \texttt{LevelMapping} characters, where each character defines a tile of the game, and spaces defines empty tiles.
+
+\begin{figure}[!ht]
+\centering
+\begin{vgdldesc}[linewidth=14cm]
+w    m  m   m  m  m m mw
+w                      w
+w                      w
+w                      w
+w                      w
+w                      w
+w           A          w
+w                      w
+w                      w
+w                      w
+w   c c c c c c c c    w
+wwwwwwwwwwwwwwwwwwwwwwww
+\end{vgdldesc}
+\caption{Example of VGDL level description - a level for the implementation of the game Missile Command}
+\label{fig:vgdlgame_level}
+\end{figure}
+
 
 HERE GOES A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION
 
@@ -1187,36 +1334,60 @@ Results of what happens when generating levels for the example games.
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \chapter{Puzzle generation}
-\label{ch_puzzles}
+\label{ch_task3}
+In this chapter I will explore the possibility of automatically generating puzzle games in the VGDL language.
 
-\section{Turn-based puzzle games}
+\section{Puzzle analysis introduction}
+\label{sec_task3intro}
+To analyse and generate puzzle games more quickly, my implementation of VGDL: FastVGDL, was used to test- and generate levels, instead of the GVG-AI framework.
+
 
 \subsubsection*{Definition of games}
 The games described in this section are games where the puzzles are the only game-play. There is no fast movement, or quick reaction time required to win. Additionally, because the games are described using the GVG-AI framework, the games focus around a player avatar which can only move up, down, left or right (also, in the games described below, all movement are from one game-tile to another).
 
-\subsection{Games} 
+\subsubsection*{Games} 
 From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own additions (Section \ref{sec_writingnewvgdl}), there is a total of 10 puzzle games to use in the following analysis.
 
 However, several of the games were deemed unfit for a complete examination, because either the levels were too difficult (Bolo Adventures and Chip's Challenge), that the game had features difficult to solve for a the puzzle-solving AI controllers (Bombuzal), or that the gameplay was too simple (Painter).
 The games used in the following are Bait, Brainman, The Citadel, Zen Puzzle, Sokoban, Modality
 
 
-\subsection{Puzzle solving AIs} 
+\subsubsection*{Solving puzzle games} 
 As mentioned in (WHERE ITS MENTIONED), the controllers from the GVG-AI competition are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
 Two general puzzle solving algorithms were implemented. The overall goal of the controllers were to analyze the game as much as possibl, rather than finding a solution fast, or using as low memory as possible
 They controllers use fact that wall-sprites in the different games always push back the player, and so the controllers do not try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game. 
 Also, the controllers store each path it is had tried. For each path a game state is calculated and stored, by finding the position and type of each (non-wall) sprite in the game. A path is cut off if the calculated game state is the same as has appeared before.
 
-\begin{description}
-\item[Breadth-first search]
-A breadth-first search algorithm was implemented by using a queue and letting each node expand to the adjacent tiles, using the "tricks" described above. 
-Additionally the controller was given a low- and high-memory option: In the high memor
 
-\item[Best-first search]
-\end{description}
+\section{Data from designed games}
+\label{sec_task3data}
+To analyse the six designed puzzle games mentioned above, the puzzle solving controller was set to play through all of the levels of the games, finding both the fastest possible solution, and all other possible routes.
+
+Below is a summary of the results:
+
+\begin{figure}[!ht]
+\centering
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{game}}
+             & \textit{lvl}
+             & \textit{found sol.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{desingedpuzzedata.csv}{1=\Game, 2=\Level, 3=\Finished}%
+{\Game & \Level & \Finished}%
+
+\caption{Averaged results across the 146 mutated games}
+\label{table:mutated}
+\end{figure}
+
+As can be seen, many of the levels were never completed -- because the solutions were too complex.
 
 
-\subsection{Level generation} 
+
+\section{Evolution of levels: Setup} 
+\label{sec_task3evolvingLevelsSetup}
 A setup for creating levels for a given game were constructed using an evolutionary algorithm. The level generator described in section \ref{sec:actiongames} was used to generate simple levels for games.  In addition two extra options were added: Wall-sprites and ground-sprites. This reduces a lot of troubles since the avatar would otherwise be able to escape the level in a lot of the games. Ground-sprites signify which sprite should appear on empty locations.
 
 The fitness function used in evolving levels was found by letting the two "puzzle solving AIs" play through the level. 
@@ -1252,6 +1423,23 @@ The setup was as follows:
 
 
 
+
+\section{Evolution of levels: Results} 
+\label{sec_task3evolvingLevelsResults}
+
+
+
+
+
+
+\section{Discussion of results} 
+\label{sec_task3discussion}
+
+
+
+
+
+
 \subsection{Level generation for generated games} 
 
 
@@ -1276,6 +1464,13 @@ A more clever approach might be to first probe the games with some more simple c
 It might be interesting to analyse games using a wider array of controllers, or analysing by letting the same controller (or controllers) play with a different amount of time allowed per clock-tick, or even using controllers designed to "play bad" (trying to die, decrease score) could be interesting
 
 Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
+
+
+Maybe one could make an algorithm to play a game in a more similar fashion as humans:
+First reading, and understanding the rules (in pac-man: eat all the cheese, in boulderdash: get to the exit after getting X gems).
+Then, using a learning-approach, playing through the game/level, not know much about possible interactions, but maybe assuming that colliding with moving sprites is dangerous (they could be enemies!).
+And then playing the game repeatedly to learn to play the game better.
+
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
