@@ -1,0 +1,4 @@
+framework,time,space
+GVG-AI,OutOfMemoryError,OutOfMemoryError
+FastVGDL,OutOfMemoryError,OutOfMemoryError
+FastVGDL_LowMem,xxx ms,xx MB

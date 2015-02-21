@@ -35,7 +35,7 @@
 %\usepackage{xcolor}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
-\usepackage[]{algorithm2e}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 \usepackage[authoryear]{natbib}
 \usepackage[toc,page]{appendix}
 
@@ -284,7 +284,7 @@ nodes = {align = center}
 \node[chapterheader]   (theoryh)		
 {2. Theory and framework};
 \node[chapterheader]   (backgroundh)  [right=of theoryh, shift = (right:0.0cm)]		
-{3. Background};
+{3. Extending VGDL};
 \node[chapterheader]   (task1h)  [below=of theoryh, shift = (down:3.8cm)]		
 {4. Generation of VGDL games};
 \node[chapterheader]   (task2h)  [right=of task1h, shift = (right:0.0cm)]		
@@ -711,17 +711,18 @@ newGameState = gameState.copy().advance(action) \\
 value[action] = value(newGameState) \\
 }
 \Return action leading to highest value, or random action if values are equal
+\caption{One-step algorithm}
 \end{algorithm}
 
 \subsubsection*{Deep-search}
 This controller starts out in a similar fashion as the One-step, by expanding using all possible actions by copying the initial game-state.
 These game-states are then simulated further upon by advancing each game state a single time, with a random action, without copying the state (a rather costly procedure).
-This expansion is continued until the controller runs out of time, and a value for each action is calculated by considering the score and win/lose-value for each state that can be achieved from each of the initial states.
+This expansion is continued until the controller runs out of time, and a value for each action is calculated by considering the score and win/lose-value for each state that can be achieved from each of the initial states. \\
 
 \begin{algorithm}[H]
 queue $\gets$ initial gameState \\
 \While{has time left}{
-	gameState = q.poll() \\
+	gameState = queue.poll() \\
 	\eIf{gameState == initial gameState}{
 		\For{action : PossibleActions}{
 			queue $\gets$ gameState.copy().advance(action)
@@ -733,6 +734,7 @@ queue $\gets$ initial gameState \\
 	}
 }
 \Return action leading to highest value, or random action if values are equal
+\caption{Deep-search algorithm}
 \end{algorithm}
 
 \subsubsection*{Explorer}
@@ -744,14 +746,21 @@ If the values of the \textit{score}-array happen to be too similar, the \textit{
 
 The controller also addresses a common element of the VGDL example games, randomness. The controller gains an advantage in many of the games by simulating the results of actions repeatedly, before deciding the best move.
 
-The Explorer was proven to be of a decent quality by getting a 2nd / 7th place in the GVG-AI competition. SOURCE
+The Explorer was proven to be of a decent quality by getting a 1st / 5th place in the GVG-AI's competition between controllers \footnote{The controller (nicknamed \textit{thorbjrn_other}) has of now (28/02-2015) a 1st place in the "training-set" (first 10 games of the GVG-AI framework), and 5th in the "validation-set" (the second 10 games).}.
+
+
+
 
 \subsection{Puzzle controllers}
+The general game-playing algorithms from the GVG-AI competition and the ones described above, are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
+To analyse an arbitrary puzzle game and be able to find the fastest solution, a breadth-first search algorithm was implemented.
 
-\subsubsection*{Breadth first}
+\subsubsection*{Puzzle solver}
+The breadth-first search algorithm use the fact that most of the puzzle games contain wall-sprites which always push back the player, and so the controllers never try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game. 
+Also, for each path a signature of the game state is calculated and stored, built up from the position and types of each (non-wall) sprite appearing in the given state. 
+A path is cut off if the calculated game state is the same as has appeared before.
 
-\subsubsection*{Best first}
-
+The controller was additionally geared up with a two different approaches to memory handling: 1) Storing the actual game state for nodes in the search queue, and 2) only storing the game state signature and path, making it necessary to re-create the game state from the initial state of the game, whenever an element is polled from the queue.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
@@ -760,10 +769,57 @@ The Explorer was proven to be of a decent quality by getting a 2nd / 7th place i
 Since the GVG-AI framework has some functions and properties which are not interesting for some parts of this work, we created an implementation of a lighter version of VGDL, solely focused on analysing puzzle games in more detail.
 The implementation is basically a clone of the GVG-AI framework, but with several time- and memory consuming features removed, which in part was possible due to the puzzle games being relatively more simple (for instance, only movement from one tile to another is possible in FastVGDL, whereas sprites can move and collide in-between tiles in the GVG-AI framework).
 
-SMALL TEST SHOWING TIME AND MEMORY DIFFERENCE PL0X!!!
+The puzzle solver controller was in addition adapted to run using FastVGDL.
+Below we present the results of a small test of running a increasingly difficult game/level-pairs using the puzzle solver, in both the GVG-AI framework and using FastVGDL, both with- and without the "low-memory" option.
 
- 
+\begin{figure}[!ht]
+\centering
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{framework}}
+             & \textit{time}
+             & \textit{mem.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{fastvgdlsokoban3.csv}{1=\Framwork, 2=\Time, 3=\Space}%
+{\Framwork & \Time & \Space}%
+\caption{Results from playing through the game \textit{(Real) Sokoban}, level 4 (of 5) using the puzzle solver controller}
+\label{table:fastvgdlsokoban3}
+\end{figure}
 
+ \begin{figure}[!ht]
+\centering
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{framework}}
+             & \textit{time}
+             & \textit{mem.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{fastvgdlsokoban1.csv}{1=\Framwork, 2=\Time, 3=\Space}%
+{\Framwork & \Time & \Space}%
+\caption{Results from playing through the game \textit{(Real) Sokoban}, level 2 (of 5) using the puzzle solver controller}\label{table:fastvgdlsokoban1}
+\end{figure}
+
+ \begin{figure}[!ht]
+\centering
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{framework}}
+             & \textit{time}
+             & \textit{mem.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{fastvgdlthecitadel4.csv}{1=\Framwork, 2=\Time, 3=\Space}%
+{\Framwork & \Time & \Space}%
+\caption{Results from playing through the game \textit{The Citadel}, level 5 (of 5) using the puzzle solver controller}\label{table:fastvgdlthecitadel4}
+\end{figure}
+
+The results show a clear difference in time and space usage between the GVG-AI framework and FastVGDL, with FastVGDL being about twice as fast.
+There is a huge time difference between using the low-memory approach or not (however not much of a space usage difference), but as can be seen from the last test (Figure \ref{table:fastvgdlthecitadel4}) the advantage of the approach is that it can actually finish certain game/level-pairs.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -1214,14 +1270,14 @@ In the end we chose to only use the Explorer, OneStep-, Random- and Do Nothing c
 We decided on a set of 19 features, where 15 are calculated from the relative difference between a pair of controllers, and 4 values, each with a unique calculation.
 The chosen features were:
 
-\begin{itemize}
-\item[Score mean] 3 feautures comparing the Explorer, with each of the other controllers.
-\item[Score median] 3 feautures comparing the contr
-\item[Score quartion 1] 3 feautures comparing the Explorer, with each of the other controllers.
-\item[Score mean] 3 feautures comparing the Explorer, with each of the other controllers.
-\item[Score mean] 3 feautures comparing the Explorer, with each of the other controllers.
+\begin{description}
+\item[3 features comparing score mean] between Explorer and OneStep, Random and Do Nothing.
+\item[3 features comparing score median] between Explorer and OneStep, Random and Do Nothing.
+\item[3 features comparing score quartion 1] between Explorer and OneStep, Random and Do Nothing.
+\item[3 features comparing score quartion 3]  between Explorer and OneStep, Random and Do Nothing.
+\item[3 features comparing win-rate] between Explorer and OneStep, Random and Do Nothing.
 
-\end{itemize}
+\end{description}
 
 In the end we chose the following set of values to compare: \textit{ave. score},  \textit{min. score}, \textit{max. score} and \textit{win-rate}.
 
@@ -1352,11 +1408,12 @@ However, several of the games were deemed unfit for a complete examination, beca
 The games used in the following are Bait, Brainman, The Citadel, Zen Puzzle, Sokoban, Modality
 
 
-\subsubsection*{Solving puzzle games} 
-As mentioned in (WHERE ITS MENTIONED), the controllers from the GVG-AI competition are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
-Two general puzzle solving algorithms were implemented. The overall goal of the controllers were to analyze the game as much as possibl, rather than finding a solution fast, or using as low memory as possible
-They controllers use fact that wall-sprites in the different games always push back the player, and so the controllers do not try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game. 
-Also, the controllers store each path it is had tried. For each path a game state is calculated and stored, by finding the position and type of each (non-wall) sprite in the game. A path is cut off if the calculated game state is the same as has appeared before.
+%\subsubsection*{Solving puzzle games} 
+%As mentioned in (WHERE ITS MENTIONED), the controllers from the GVG-AI competition are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
+%Two general puzzle solving algorithms were implemented. The overall goal of the controllers were to analyze the game as much as possible, rather than finding a solution fast, or using as low memory as possible
+%They controllers use fact that wall-sprites in the different games always push back the player, and so the controllers do not try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game. 
+%Also, the controllers store each path it is had tried. For each path a game state is calculated and stored, by finding the position and type of each (non-wall) sprite in the game. A path is cut off if the calculated game state is the same as has appeared before.
+%JEG HAR KOPIERET MEGET AF DET HER TIL "EXTENDING VGDL"
 
 
 \section{Data from designed games}

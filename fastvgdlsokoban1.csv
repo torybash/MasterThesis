@@ -1,0 +1,4 @@
+framework,time,space
+GVG-AI,9420 ms,270 MB
+FastVGDL,4354 ms,59 MB
+FastVGDL_LowMem,41691 ms,58 MB
