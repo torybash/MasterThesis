@@ -57,6 +57,10 @@
 
 \usepackage{csvsimple}
 
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
 %Color definitions (Wauw!)
 \definecolor{Gray}{gray}{0.85}
 \definecolor{LightBlue}{rgb}{0.4,0.4,1}
@@ -293,7 +297,8 @@ nodes = {align = center}
 {6. Puzzle analysis};
 \node[chapterheader]   (conclusionh)  [right=of task3h, shift = (right:0.0cm)]		
 {7. Conclusion};
-  \begin{scope}[on background layer]
+ % \begin{scope}[on background layer]
+ \begin{pgfonlayer}{background}
 \node[chapterparts]      (theory) [below=of theoryh, shift = (up:1.2cm)]	
 									{\quad\\
 									Describes the existing research into content- and game generation, and describes the framwork used in the thesis. Sections: \\\quad\\
@@ -357,7 +362,8 @@ The resulting generated games are then discussed in detail. Sections:
 \node[largebox]			(actionbox)[above=of task1h, shift = (down:6.2cm), shift = (right:3.4cm), minimum height = 6.0cm, minimum width = 13cm, label={[anchor=north]above:Action-arcade game generation}]{};
 \node[largebox]			(puzzlebox)[above=of task3h, shift = (down:5.2cm), shift = (right:0.0cm), minimum height = 5.2cm, minimum width = 6.5cm, label={[anchor=north]above:Puzzle game generation}]{};
 \node[largebox]			(conclusionbox)[above=of conclusionh, shift = (down:3.5cm), shift = (right:0.0cm), minimum height = 3.5cm, minimum width = 6.5cm, label={[anchor=north]above:Conclusions}]{};
-\end{scope}
+\end{pgfonlayer}
+%\end{scope}
 
 %Lines
 \draw[->,line width=1.5pt] (backgroundbox.south) -- (actionbox.north);
