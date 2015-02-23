@@ -2,9 +2,5 @@
 *.log
 *.gz
 *.toc
-<<<<<<< HEAD
-*.blg
-=======
 *.bbl
 *.blg
->>>>>>> origin/master
