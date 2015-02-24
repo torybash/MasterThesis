@@ -425,8 +425,8 @@ In addition to the other game genres mentioned above, a lot of work has been don
 Most of the work is focused on generating levels for single game, where some attempt to create general level generation procedures.
 
 
-\subsection{Other uses of PCG}
-Other games have been published applying PCG in different ways. In \textit{Borderlands 2} \citeyearpar{game:borderlands} the player have access to an extreme amount of different weapons, designed by automatic generation.
+%\subsection{Other uses of PCG}
+%Other games have been published applying PCG in different ways. In \textit{Borderlands 2} \citeyearpar{game:borderlands} the player have access to an extreme amount of different weapons, designed by automatic generation.
 
 
 \subsection{Advantages and disadvantages using PCG}
@@ -1354,7 +1354,7 @@ The resulting generated games are then discussed in detail.
 \section{Fitness function features: Introduction}
 \label{sec_task2intro}
 The tests of the previous chapter indicates that the relationship between general game playing controllers performance could potentially be used to determine the quality of games. 
-To make it possible to use the performance relationships it is necessary to find the most important and selective statistical values from playthrough results for use in a fitness function, while trying to exclude statistics that do not signify game quality.
+To make it possible to use the performance relationships, while not overfitting the parameters to the small set of "good" data points (13 human-designed games), it is necessary to find the most important and selective statistical values from playthrough results for use in a fitness function, while trying to exclude statistics that do not signify game quality.
 
 As mentioned in Section \ref{sec_discussionofinitialtest} the \textit{score} and \textit{win-rate} seems to have the most distinct distributions for the different type of games, with human-designed games all having a signficant difference between e.g. the Explorer- and Random controller, making them interesting to use for an evaluation function.
 However, the \textit{action entropy} might also be appropriate to use, but the difference in the statistical distributions are much smaller for these values.
@@ -1377,14 +1377,13 @@ In this section I describe the process in which the initial fitness features wer
 As indicated in the previous section, a series of partly subjective decisions were needed for  choosing features for fitness functions.
 To make an as informed decision as possible I ran a series of test described below, using different features, automatically choosing different set of features, evolving weights for the features, and examining the results using data mining principles.
 
-In the following I decided to use a \textit{relative difference}-function ($f=\lvert\frac{a-b}{max(a,b)}\rvert$) to compare the statical values between two controllers' performance results.
+In the following I decided to use a \textit{relative difference}-function ($f=\lvert\frac{a-b}{max(a,b)}\rvert$) to compare the statistical values retrieved from playthroughs.
 
 \subsection{Analysis of feature choices}
-As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices, to to adopt as fitness features.
-Also, the there seems to be a consistent difference in the values between the Explorer-, and the OneStep, Random and Do Nothing-controllers.
-To measure the strength of different choices from I made a small comparison of different circumstances that could potentially be used, counting how many of the designed (and generated) games that fulfil the conditions.
+As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices, to adopt as fitness features.
+Also, the there seems to be a consistent difference in the values between the intelligent controllers (especially Explorer and DeepSearch) and the less intelligent ones: The OneStep, Random and Do Nothing-controllers.
 
-Below is the results of trying a few potential choices:
+To measure the strength of different possible choices from I performed a small test, counting how often a specific intelligent controller has a higher value than a simple one, and calculating the average relative difference between the two. The results can be seen in Figure \ref{table:simplefeatureanalysis}.
 
 
 \begin{figure}[!ht]
@@ -1403,10 +1402,15 @@ Below is the results of trying a few potential choices:
 \label{table:simplefeatureanalysis}
 \end{figure}
 
-The features above (and other sets) were analysed by data mining techniques -- i.e classification processes were to used to see if it was possible to differentiate between the designed- and generated set of games.
+Some of the features in the above table immediately seems interesting, like the score average difference between the intelligent- and the DoNothing controller, which is consistently higher in the for the intelligent, while the same is not true for several of the games from the mutated- and randomly generated set.
+The average clock ticks between, for instance Explorer and OneStep additionally could be interesting to use as an indication of a bad game, since the value is never higher for OneStep.
+However the actual relative difference between the controllers is tiny, and so might not be that significant. 
+Also the designed games do not have a clear relationship profile for the clock ticks (as discusses in Section \ref{sec_task1discussion}).
+
+%The features above (and other sets) were analysed by data mining techniques -- i.e classification processes were to used to see if it was possible to differentiate between the designed- and generated set of games.
 
 
-\subsection{Selection and evolution of weights}
+\subsubsection*{Selection and evolution of weights}
 In choosing a set of evaluation features it is natural to value each with a weight, making the addition from each feature count in a balanced fashion.
 
 For most of the set of chosen features (when many features were selected) there was no clear indication of which values were more important, and so I continuously used a CMA-ES approach to evolve a set of weights.

@@ -1,16 +1,19 @@
-datatype,count1,aveRelDiff1,count2,aveRelDiff2,count3,aveRelDiff3
-(Explorer>=MCTSish).Mean score,4 (of 13),-0.100,67 (of 111),0.004,212 (of 240),-0.006
-(Explorer>=MCTS).Mean score,11 (of 13),0.282,87 (of 111),0.228,215 (of 240),0.055
-(Explorer>=Onestep-S).Mean score,13 (of 13),0.723,101 (of 111),0.400,220 (of 240),0.071
-(Explorer>=Random).Mean score,13 (of 13),0.849,106 (of 111),0.527,224 (of 240),0.101
-(Explorer>=Do Nothing).Mean score,13 (of 13),1.000,105 (of 111),0.668,221 (of 240),0.118
-(Explorer>=MCTSish).Winrate,6 (of 13),-0.119,95 (of 111),-0.012,239 (of 240),0.001
-(Explorer>=MCTS).Winrate,10 (of 13),0.155,101 (of 111),0.116,239 (of 240),0.001
-(Explorer>=Onestep-S).Winrate,13 (of 13),0.676,109 (of 111),0.229,240 (of 240),0.010
-(Explorer>=Random).Winrate,13 (of 13),0.766,109 (of 111),0.265,240 (of 240),0.009
-(Explorer>=Do Nothing).Winrate,13 (of 13),0.846,108 (of 111),0.283,239 (of 240),0.024
-(Explorer>=MCTSish).Mean tick,5 (of 13),-0.207,66 (of 111),-0.086,234 (of 240),-0.002
-(Explorer>=MCTS).Mean tick,1 (of 13),-0.406,60 (of 111),-0.167,231 (of 240),-0.005
-(Explorer>=Onestep-S).Mean tick,8 (of 13),0.133,77 (of 111),0.020,225 (of 240),-0.029
-(Explorer>=Random).Mean tick,9 (of 13),0.387,90 (of 111),0.264,227 (of 240),-0.029
-(Explorer>=Do Nothing).Mean tick,6 (of 13),0.054,71 (of 111),-0.011,230 (of 240),-0.018
+datatype,count1,aveRelDiff1,count2,aveRelDiff2,count3,aveRelDiff3,desGenDiff
+Mean score:Explorer>Onestep-S,13 (of 13),0.717,78 (of 90),0.494,43 (of 66),0.240,0.477
+Mean score:Explorer>Random,13 (of 13),0.848,81 (of 90),0.651,43 (of 66),0.334,0.514
+Mean score:Explorer>Do Nothing,13 (of 13),1.000,82 (of 90),0.823,45 (of 66),0.404,0.596
+Mean score:DeepSearch>Onestep-S,13 (of 13),0.736,73 (of 90),0.474,35 (of 66),0.214,0.522
+Mean score:DeepSearch>Random,13 (of 13),0.864,81 (of 90),0.659,41 (of 66),0.307,0.557
+Mean score:DeepSearch>Do Nothing,13 (of 13),1.000,83 (of 90),0.821,42 (of 66),0.375,0.625
+Winrate:Explorer>Onestep-S,11 (of 13),0.675,36 (of 90),0.282,4 (of 66),0.035,0.640
+Winrate:Explorer>Random,11 (of 13),0.756,39 (of 90),0.327,5 (of 66),0.033,0.723
+Winrate:Explorer>Do Nothing,11 (of 13),0.846,36 (of 90),0.349,6 (of 66),0.086,0.760
+Winrate:DeepSearch>Onestep-S,12 (of 13),0.762,35 (of 90),0.299,3 (of 66),0.029,0.733
+Winrate:DeepSearch>Random,12 (of 13),0.846,39 (of 90),0.350,5 (of 66),0.026,0.820
+Winrate:DeepSearch>Do Nothing,12 (of 13),0.923,35 (of 90),0.345,6 (of 66),0.081,0.842
+Mean tick:Explorer>Onestep-S,8 (of 13),0.197,39 (of 90),0.026,0 (of 66),-0.076,0.273
+Mean tick:Explorer>Random,9 (of 13),0.439,56 (of 90),0.280,1 (of 66),-0.084,0.523
+Mean tick:Explorer>Do Nothing,7 (of 13),0.082,34 (of 90),0.015,2 (of 66),-0.072,0.153
+Mean tick:DeepSearch>Onestep-S,8 (of 13),0.251,42 (of 90),0.098,1 (of 66),-0.083,0.334
+Mean tick:DeepSearch>Random,10 (of 13),0.504,59 (of 90),0.328,2 (of 66),-0.086,0.589
+Mean tick:DeepSearch>Do Nothing,6 (of 13),0.160,35 (of 90),0.082,2 (of 66),-0.075,0.234
