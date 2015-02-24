@@ -800,7 +800,7 @@ The Explorer was proven to be of a decent quality by getting a 1st / 5th place i
 
 
 
-\subsection{Puzzle controllers}
+\subsection{Puzzle controller}
 The general game-playing algorithms from the GVG-AI competition and the ones described above, are not well-suited for playing puzzle games, because the goal can often only be achieved by applying a specific series of moves, which the controllers are not very good at.
 To analyse an arbitrary puzzle game and be able to find the fastest solution, a breadth-first search algorithm was implemented.
 
@@ -813,7 +813,7 @@ The controller was additionally geared up with a two different approaches to mem
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
-\section{FastVGDL}
+\section{SimpleVGDL}
 \label{sec_fastvgdl}
 Since the GVG-AI framework has some functions and properties which are not interesting for some parts of this work, I created an implementation of a lighter version of VGDL, solely focused on analysing puzzle games in more detail.
 The implementation is basically a clone of the GVG-AI framework, but with several time- and memory consuming features removed, which in part was possible due to the puzzle games being relatively more simple (for instance, only movement from one tile to another is possible in FastVGDL, whereas sprites can move and collide in-between tiles in the GVG-AI framework).
@@ -1351,7 +1351,7 @@ The initial tests of the previous chapter shows that there is reason to explore 
 This chapter focuses on, using the results of the previous chapter and several analysis methods, creating a set of fitness functions to analyse different generated games, allowing a genetic program to evolve well-designed games, by creating and evolving VGDL game descriptions.
 The resulting generated games are then discussed in detail.
 
-\section{Fitness function features: Introduction}
+\section{Fitness function: Introduction}
 \label{sec_task2intro}
 The tests of the previous chapter indicates that the relationship between general game playing controllers performance could potentially be used to determine the quality of games. 
 To make it possible to use the performance relationships, while not overfitting the parameters to the small set of "good" data points (13 human-designed games), it is necessary to find the most important and selective statistical values from playthrough results for use in a fitness function, while trying to exclude statistics that do not signify game quality.
@@ -1367,19 +1367,26 @@ Additionally it is not straightforward to calculate a feature even with if I dec
 I could use a simple relative difference formula (e.g. $f=\lvert\frac{a-b}{max(a,b)}\rvert$), and use the result as a feature, but it might make more sense to hand-craft each feature to a specific goal, for instance for the \textit{action entropy} it seems (from the data of the last chapter) designed games cause the intelligent controllers to have a similar value as the Random controller, while the same is not true for the randomly generated games -- in the generated games the intelligent controllers often find a simple solution requiring similar moves.
 A feature could therefore be made to have a value of 1 if the entropies are the close (and going toward 0/-1 when random has a higher entropy), while not rewarding the game for having the intelligent controllers \textit{action entropy} be higher than Random (which the data do not show as a relationship in designed games).
 
+Also, how each fitness feature adds to the complete fitness function is not straightforward.
+One could use a simple sum of each chosen feature, maybe with a weight constant attached signifying how much each feature adds the overall value ($f = w_1a_1+...+w_na_n$), but approach can have the outcome of some features overruling others, unless best possible know weights are know (which they typically are not).
+
 In the following I will try to shed light on which features are the most interesting, by both analysing the data in more detail, and by evolving games using the features and analysing the evolved games.
 
 
 
-\section{Fitness function features: Selection}
+\section{Performance relationship analysis}
 \label{sec_task2fitnessSelection}
-In this section I describe the process in which the initial fitness features were selected (i.e. before starting to evolve games using the fitness function).
-As indicated in the previous section, a series of partly subjective decisions were needed for  choosing features for fitness functions.
+%This section describes the process in which the initial fitness features were selected (i.e. before starting to evolve games using the fitness function).
+Since the relationships between controllers acting intelligent, and acting random or doing nothing, seems to be a possible indication of game quality, an analysis of the relationship between different controllers using varying values was performed.
+As indicated in the previous section, choosing how to evaluate game for the fitness function almost certainly have an element of  subjectivity. 
 To make an as informed decision as possible I ran a series of test described below, using different features, automatically choosing different set of features, evolving weights for the features, and examining the results using data mining principles.
 
-In the following I decided to use a \textit{relative difference}-function ($f=\lvert\frac{a-b}{max(a,b)}\rvert$) to compare the statistical values retrieved from playthroughs.
+In the following I repeatedly to use a \textit{relative difference}-function ($f=\lvert\frac{a-b}{max(a,b)}\rvert$) to compare statistical values  between controllers performance results, retrieved from playthroughs.
+Additionally I chose to simply construct the fitness function be a sum of the individual features.
 
-\subsection{Analysis of feature choices}
+Also, the assumption that the games from the generated- and mutated set simply are of a low quality (discussed in Section \ref{sec_discussionofinitialtest}), is used throughout the following analysis.
+
+\subsubsection*{Analysis of possible relationship features}
 As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices, to adopt as fitness features.
 Also, the there seems to be a consistent difference in the values between the intelligent controllers (especially Explorer and DeepSearch) and the less intelligent ones: The OneStep, Random and Do Nothing-controllers.
 
@@ -1402,26 +1409,30 @@ To measure the strength of different possible choices from I performed a small t
 \label{table:simplefeatureanalysis}
 \end{figure}
 
-Some of the features in the above table immediately seems interesting, like the score average difference between the intelligent- and the DoNothing controller, which is consistently higher in the for the intelligent, while the same is not true for several of the games from the mutated- and randomly generated set.
-The average clock ticks between, for instance Explorer and OneStep additionally could be interesting to use as an indication of a bad game, since the value is never higher for OneStep.
-However the actual relative difference between the controllers is tiny, and so might not be that significant. 
+Some of the features in the table immediately seems interesting and significant, for instance the score average- and win-rate difference between the intelligent- and the DoNothing controller is consistently higher for the intelligent controllers, while the same is not true for several of the games from the mutated- and randomly generated set.
+The average clock ticks between, for instance Explorer and OneStep additionally could be interesting to use as an indication of a bad game, since the value is never higher for OneStep in the generated game set.
+However the actual relative difference between the controllers is tiny, and so the relationship might not be that significant. 
 Also the designed games do not have a clear relationship profile for the clock ticks (as discusses in Section \ref{sec_task1discussion}).
 
 %The features above (and other sets) were analysed by data mining techniques -- i.e classification processes were to used to see if it was possible to differentiate between the designed- and generated set of games.
 
 
-\subsubsection*{Selection and evolution of weights}
-In choosing a set of evaluation features it is natural to value each with a weight, making the addition from each feature count in a balanced fashion.
+\subsubsection*{Analysis of feature sets}
+From the above analysis, a selection of interesting feature values are available, and of these I continuously tested the results of  selecting different sets of features (between 2-20) of relative difference values between pairs of controllers.
+
+From the varying sets of feature selections, I first of all calculated and compared the resulting fitness (by summing the features) of games from both the designed- and generated set, noticing how each game was scored -- while examining high-fitness generated-, and low-fitness designed games further.
+
+I tried choosing a set of weights for individual features, and to 
 
 For most of the set of chosen features (when many features were selected) there was no clear indication of which values were more important, and so I continuously used a CMA-ES approach to evolve a set of weights.
 For this task another problem arise however: Generating a fitness function to score a chosen set of weights.
-Several different approaches were tried for this task, but all relying on calculating the fitness for each of designed- and randomly generated games, and making the overall fitness for the designed game set higher than for the generated games -- using the assumption that the games from the generated set are of a low quality (discussed in Section \ref{sec_discussionofinitialtest}).
+Several different approaches were tried for this task, but all relying on calculating the fitness for each of designed- and randomly generated games, and making the overall fitness for the designed game set higher than for the generated games.
+
+The construction and evolution did not
 
 
-
-
-\subsection{Outcome}
-
+\subsubsection*{Outcome}
+Because
 In the end I chose to only use the Explorer, OneStep-, Random- and Do Nothing controller in calucalting fitness.
 
 I decided on a set of 19 features, where 15 are calculated from the relative difference between a pair of controllers, and 4 values, each with a unique calculation.
