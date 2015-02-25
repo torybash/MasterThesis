@@ -710,7 +710,7 @@ For some of games the levels could not be completely copied, for instance becaus
 
 \subsubsection*{Action-arcade games}
 A set of four Atari -arcade and -2600 games were found to be suitable for interpretation; \textit{Solar Fox}, \textit{Crackpots}, \textit{Centipede} and \textit{Astrosmash}, and a VGDL game description was written for each. 
-A description of each of the games and their interpretations can be seen in Appendix \ref{app_thesisgames}
+A description of each of the games and their interpretations can be seen in Appendix \ref{app_thesisgames}.
 
 \begin{figure}[!ht]
 ${\vcenter{\hbox{\includegraphics[height=6cm]{origcentipede.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
@@ -726,8 +726,10 @@ A set of puzzle games from several different platform, all featuring a single av
 The games can mostly be described as \textit{Sokoban}-clones with different spins on the gameplay.
 Some of the games have action- gameplay aspects, with enemies hindering the progression of the player, but as per the defintion of \textit{puzzle games} used in the thesis these parts were removed only leaving the puzzles of games.
 
-The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge}, \textit{Modality} and \textit{Painter}.
+One thing to notice, a few of the games contain elements which are not strictly in line with the definition of VGDL puzzle games (from Section \ref{ssec:aicontrollersandtesting}), for instance some of games feature gliding boxes or rolling boulders (implemented using the \texttt{Missile} sprite class), which can cause effects to happen many frames after the avatar has acted.
 
+The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge}, \textit{Modality} and \textit{Painter}.
+A summary of the games can be seen in Appendix \ref{app_thesisgames}.
 
 \begin{figure}[!ht]
 ${\vcenter{\hbox{\includegraphics[height=4.8cm]{origboloadventures.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
@@ -1717,32 +1719,32 @@ The values used to compare results were, rather subjectively, chosen to be:
 \end{enumerate}
 
 
-\subsubsection*{Mutation} 
+%\subsubsection*{Mutation} 
 
 
 
-\subsubsection*{Crossover} 
-Two different levels were constructed into a new, by going over each tile on the level and with 50\% chance take the sprite residing in the two different original levels.
+%\subsubsection*{Crossover} 
+%Two different levels were constructed into a new, by going over each tile on the level and with 50\% chance take the sprite residing in the two different original levels.
 
 
-The setup was as follows:
-\\
-
-\begin{algorithm}[H]
- %\KwData{this text}
- %\KwResult{how to write algorithm with \LaTeX2e }
-% initialization\;
- \While{not at end of this document}{
-  read current\;
-  \eIf{understand}{
-   go to next section\;
-   current section becomes this one\;
-   }{
-   go back to the beginning of current section\;
-  }
- }
- \caption{How to write algorithms}
-\end{algorithm}
+%The setup was as follows:
+%\\
+%
+%\begin{algorithm}[H]
+% %\KwData{this text}
+% %\KwResult{how to write algorithm with \LaTeX2e }
+%% initialization\;
+% \While{not at end of this document}{
+%  read current\;
+%  \eIf{understand}{
+%   go to next section\;
+%   current section becomes this one\;
+%   }{
+%   go back to the beginning of current section\;
+%  }
+% }
+% \caption{How to write algorithms}
+%\end{algorithm}
 
 
 
@@ -1754,19 +1756,42 @@ The setup was as follows:
 The general puzzle level generator was set to create levels for the five designed puzzle games analysed above.
 Because space of game states quickly become too large for the PuzzleSolver, all levels were generated using a level size of 8x8, with walls on all edges -- making the actual levels consist of only 6x6 tiles.
 
-Even with the tight restriction, several levels of high difficulty was created
+Even with the tight restriction, several levels of high difficulty was created for the five games.
+Figure XXXXXX shows the data retrieved from the best (i.e. longest solution) level generated for different games after a successful evolution.
 
 
 
 \section{Puzzle game generation} 
 \label{sec_task3evolvingGames}
-After showing that the general level generator is able to create levels of a decent quality, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}, to create both the game-rules and the levels for a game.
+After showing that the general level generator is able to create levels of a decent quality, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}), to create both a set of game rules- and the levels, for a game.
+
+As mentioned in Section \ref{ssec:aicontrollersandtesting} puzzle games allow a smaller set of sprite classes, and interaction-rules defined in their VGDL description\footnote{Sprites like \texttt{RandomNPC}, and interaction-rules like \texttt{reverseDirection} (changing direction is only interesting for constant moving sprites like \texttt{Missile}s) can not be used in the definition of puzzle games used.}, making the overall space of possible games smaller.
+
+However, even with the smaller space of games, it is not at all certain that a randomly generated game description would contain a interesting combination of rules and sprites, making it an viable subject for generating a difficult level.
+
+\subsection{Experimental setup} 
+To increase the chance of retrieving well-formed game description I decided to implement a process to first check the if a game description at all could be interesting, and only after starting to evolve a level.
+The process worked by:
+
+\begin{enumerate}
+\item Generate a simple game description, using the small set of allowed classes, with a small number of sprites (2-3 + the avatar)
+\item Generate 50 randomly generated levels for the game, and let the PuzzleSolver play through them all.
+\item If the most difficult level from step 2 requires at least 2 actions AND 1 non-avatar sprite has been moved in the solution, go to next step, otherwise generate a new game description (step 1).
+\item Start evolving a level for the game
+\end{enumerate}
+
+To limit the time spend evolving each level the PuzzleSolver was set to have a limit of 80000 visited nodes (paths) in its memory, before giving up and going to the next level.
 
 
+\subsection{Results} 
+Over a period of about 10 days, the generator was able to generate XXX VGDL puzzle game description, each with a 8x8 level to play through the game with.
+Of these games, XX requires more than 90 actions for the shortest solution, and XX requires more than 50.
 
+From the set of the most difficult set of game-level pairs, several non-trivial game-designs has emerged.
+For instance, in 
+EXAMPLEEEES.  
 
-
-
+The generated games all have a strong similarity to Sokoban however, mostly because of the requirement of moving non-avatar sprites, and could be in general be described as Sokoban- clones or imitations.
 
 \section{Discussion of results} 
 \label{sec_task3discussion}
@@ -1776,13 +1801,6 @@ After showing that the general level generator is able to create levels of a dec
 
 
 
-\subsection{Level generation for generated games} 
-
-
-\begin{example}{The Title}
-Put here cool text like what is going on in the wauw
-\end{example}
-This is subsubsection with title ``\Subsectionname''.
 
 
 
