@@ -1104,17 +1104,20 @@ Using the setup described above averages of all play-throughs for each controlle
 
 In the results below, a series of data from the generated set of games were removed due to being either too difficult to analyse (because a controller was disqualified), or for having certain values which I deem impossible for a quality game.
 Namely I remove games by three different considerations: 
-1) When a controller was disqualified (too many sprites- and/or interactions happening), 2) when all controllers get the same score (and win-rate) for all playthroughs, and 3) where the game always end in less than 50 clock ticks (which is the maximum lifetime of generated \texttt{Flicker}-sprites).
+1) When a controller was disqualified (because of too many sprites- and/or interactions happening, making a frame using more than the allowed 50 ms), 2) when all controllers get the same score -- and win-rate -- for all playthroughs, and 3) where the game always (for all controllers, for all playthroughs) end in less than 50 clock ticks (this is also the maximum lifetime of generated \texttt{Flicker}-sprites -- initial trials into VGDL game generation showed that many games was won when a certain type of sprites was all destroyed, but the sprite in question were \texttt{Flicker}s and so even the simplest controller would always win).
+
+It should be noted that the uncertainties for average score, clock-ticks and action entropy in the data below assume a normal distribution of the data, which in general is not true, and so these values should be taken with a grain of salt.
 
 \subsubsection*{Designed games}
 The six controllers were set to play through each of the human-designed VGDL games, with the constraints mentioned above.
 
-I present the averages across each single game(can be seen in Appendix \ref{app_designedresults}) and averages across all of the games, seen in Figure \ref{table:designed}.
+Below I present the averages across all the games from the designed set (Figure \ref{table:designed}). 
+Averages across each single game can be seen in Appendix \ref{app_designedresults}, 
+
 The distributions show that more intelligent controllers tend to have more success, with both a higher win-rate and a significantly higher average score. 
 The \textit{clock-ticks} and \textit{action entropy} does not show any similar distribution for the collection of all games. 
 Examining the results from each game it is noticeable that the profiles for these values (\textit{clock-ticks} and \textit{entropy}) are very different from game to game.
 
-It should be noted that the uncertainties for average score, clock-ticks and action entropy assume a normal distribution of the data which in general is not true, and so these values should be taken with a grain of salt.
 
 \begin{figure}[!ht]
 \centering
@@ -1132,20 +1135,20 @@ It should be noted that the uncertainties for average score, clock-ticks and act
 {examplesdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
 {\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
 
-\caption{Averaged results across all the XX designed games}
+\caption{Averaged results across all the 13 designed games}
 \label{table:designed}
 \end{figure}
 
 
 \subsubsection*{Mutated games} 
-After removing games by the requirements mentioned above, I were left with a toal of 146 games in which I had useful data.
+After removing games by the requirements mentioned above, I were left with a toal of 90 games in which I had useful data.
 The results of playing through these games with the controllers can be seen in Figure~\ref{table:mutated}. 
 The scores have higher means and standard deviations, indicating outliers in the data. 
 The ordering of the \emph{normalised score mean} and \textit{win-rate}, however, shows a similar pattern as for the example games, with Explorer again excelling.
 
 It should be noted here that the differences between the extreme values of \textit{score} and \textit{win-rate} are smaller than for the designed set of games.
 
-%all mutations average -- amount of games: 146 -- playthroughs: 25
+%all mutations average -- amount of games: 90 -- playthroughs: 10
 \begin{figure}[!ht]
 \centering
 \csvreader[tabular=lrrrrr,
@@ -1162,14 +1165,14 @@ It should be noted here that the differences between the extreme values of \text
 {mutateddata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
 {\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
 
-\caption{Averaged results across the 146 mutated games}
+\caption{Averaged results across the 90 (out of 200) mutated games, which fulfil the criteria described at the beginning of this section}
 \label{table:mutated}
 \end{figure}
 
 
 
-\subsubsection*{Generated games}
-Figure~\ref{table:generated} shows results for the remaining 65 randomly generated games (of 400), with problematic games removed according to the same criteria as in the previous section.
+\subsubsection*{Randomly generated games}
+Figure~\ref{table:generated} shows results for the remaining 66 randomly generated games (of 400), with problematic games removed according to the same criteria as above.
 
 First of all, the \emph{score} have much more extreme values than in the previous games, with the minimum being 199,406.58, over 1500 times larger than the highest in the set of example games (i.e. 121.55, by Explorer).
 Clearly, only the \emph{normalised mean} can be used to compare scores across the different controllers. 
@@ -1178,7 +1181,7 @@ For this set of games the \textit{action entropy} of the intelligent controllers
 
 It should be noted that the description generation process can often end up making games be automatically won (for instance, the goal of a game could be to destroy all coins, but all coins are of the \texttt{Flicker}-class and disappear after a certain amount of time), which causes the relative high \textit{win-rate} for the Do Nothing-controller.
 
-%gengames average -- amount of games: 65 -- playthroughs: 25
+%2000ticks average -- amount of games: 66 -- playthroughs: 10
 \begin{figure}[!ht]
 \centering
 \csvreader[tabular=lrrrrr,
@@ -1195,7 +1198,7 @@ It should be noted that the description generation process can often end up maki
 {generateddata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
 {\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
 
-\caption{Averaged results across the 65 generated games}
+\caption{Averaged results across the 66 (out of 400) randomly generated games which fulfil the criteria of a "not-completely-terrible" game}
 \label{table:generated}
 \end{figure}
 
@@ -1211,7 +1214,7 @@ However it should be noted here that some games from both the mutated- and gener
 	ybar, bar width=0.38cm,
 	xtick=data, xtick pos=left,
 	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1,
-	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	symbolic x coords={Explorer,DeepSearch,MCTS,Onestep, Random, Do Nothing},
 	width=\textwidth, height=6cm,
 	legend style={
 	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
@@ -1223,7 +1226,7 @@ However it should be noted here that some games from both the mutated- and gener
     \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=MaxMinN-Mean:, y error=MaxMinN-SE:, col sep=comma] {examplesdata.csv};
     \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=MaxMinN-Mean:, y error=MaxMinN-SE:, col sep=comma] {mutateddata.csv};
     \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=MaxMinN-Mean:, y error=MaxMinN-SE:, col sep=comma] {generateddata.csv};
-\legend{examples,mutated,generated}
+\legend{designed,mutated,generated}
 \end{axis}
 \end{tikzpicture}
 \caption{Averaged normalised score across all games of the three different set of games: Designed-, mutated- and completely generated games}
@@ -1238,7 +1241,7 @@ However it should be noted here that some games from both the mutated- and gener
 	ybar, bar width=0.38cm,
 	xtick=data, xtick pos=left,
 	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1,
-	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	symbolic x coords={Explorer,DeepSearch,MCTS,Onestep, Random, Do Nothing},
 	width=\textwidth, height=6cm,
 	legend style={
 	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
@@ -1250,7 +1253,7 @@ However it should be noted here that some games from both the mutated- and gener
     \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Winrate:, y error=Winrate-SE:, col sep=comma] {examplesdata.csv};
     \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Winrate:, y error=Winrate-SE:, col sep=comma] {mutateddata.csv};
     \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Winrate:, y error=Winrate-SE:, col sep=comma] {generateddata.csv};
-\legend{examples,mutated,generated}
+\legend{designed,mutated,generated}
 \end{axis}
 \end{tikzpicture}
 \caption{Averaged win-rate for the three sets}
@@ -1265,8 +1268,8 @@ However it should be noted here that some games from both the mutated- and gener
   \begin{axis}[
 	ybar, bar width=0.38cm,
 	xtick=data, xtick pos=left,
-	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1000,
-	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=3000,
+	symbolic x coords={Explorer,DeepSearch,MCTS,Onestep, Random, Do Nothing},
 	width=\textwidth, height=6cm,
 	legend style={
 	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
@@ -1278,7 +1281,7 @@ However it should be noted here that some games from both the mutated- and gener
     \addplot[fill=LightBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Mean tick:, y error=Std tick err:, col sep=comma] {examplesdata.csv};
     \addplot[fill=LighterBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Mean tick:, y error=Std tick err:, col sep=comma] {mutateddata.csv};
     \addplot[fill=LightestBlue, error bars/.cd, y dir=both, y explicit] table [x=Agent:, y=Mean tick:, y error=Std tick err:, col sep=comma] {generateddata.csv};
-\legend{examples,mutated,generated}
+\legend{designed,mutated,generated}
 \end{axis}
 \end{tikzpicture}
 \caption{Averaged clock tick for the three sets}
@@ -1294,7 +1297,7 @@ However it should be noted here that some games from both the mutated- and gener
 	ybar, bar width=0.38cm,
 	xtick=data, xtick pos=left,
 	ylabel=Average normalised score, ymajorgrids, ymin=0, ymax=1,
-	symbolic x coords={Explorer,MCTS,GA,Onestep-S,Onestep-H, Random, Do Nothing},
+	symbolic x coords={Explorer,DeepSearch,MCTS,Onestep, Random, Do Nothing},
 	width=\textwidth, height=6cm,
 	legend style={
 	  overlay, area legend, anchor=north,legend columns=1, at={(0.913,1.00)} %, at={(0.5,-0.15)}
@@ -1333,7 +1336,7 @@ Besides the above, a few re-occurring problems was found in the generated games.
 \item Sprites often leave the level playing field.
 \item Several of the sprites- and/or rules are never used.
 \item The game can only be won in the first few (<50) frames.
-\item Too much random stuff going on.
+\item Too much random stuff going on: Many of the sprites can not be interacted with, or can only be interacted by certain NPCs.
 \end{itemize}
 
 
@@ -1343,7 +1346,7 @@ Besides the above, a few re-occurring problems was found in the generated games.
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
 
-\chapter{Evaluation of games (fitness functions)}
+\chapter{Evaluation of games (fitness function)}
 \label{ch_task2}
 
 The initial tests of the previous chapter shows that there is reason to explore the relationship of AI's perfomance profiles to analyze a given VGDL game, and give some indications of interesting statistical values to analyse.
@@ -1368,7 +1371,7 @@ I could use a simple relative difference formula (e.g. $f=\lvert\frac{a-b}{max(a
 A feature could therefore be made to have a value of 1 if the entropies are the close (and going toward 0/-1 when random has a higher entropy), while not rewarding the game for having the intelligent controllers \textit{action entropy} be higher than Random (which the data do not show as a relationship in designed games).
 
 Also, how each fitness feature adds to the complete fitness function is not straightforward.
-One could use a simple sum of each chosen feature, maybe with a weight constant attached signifying how much each feature adds the overall value ($f = w_1a_1+...+w_na_n$), but approach can have the outcome of some features overruling others, unless best possible know weights are know (which they typically are not).
+One could use a simple sum of each chosen feature, maybe with a weight constant attached signifying how much each feature adds the overall value ($f = w_1a_1+...+w_na_n$), but the approach can have the outcome of some features overruling others, unless best possible know weights are know (which they typically are not).
 
 In the following I will try to shed light on which features are the most interesting, by both analysing the data in more detail, and by evolving games using the features and analysing the evolved games.
 
@@ -1420,47 +1423,96 @@ Also the designed games do not have a clear relationship profile for the clock t
 \subsubsection*{Analysis of feature sets}
 From the above analysis, a selection of interesting feature values are available, and of these I continuously tested the results of  selecting different sets of features (between 2-20) of relative difference values between pairs of controllers.
 
-From the varying sets of feature selections, I first of all calculated and compared the resulting fitness (by summing the features) of games from both the designed- and generated set, noticing how each game was scored -- while examining high-fitness generated-, and low-fitness designed games further.
+From the varying sets of feature selections, I first of all calculated and compared the resulting fitness (by summing the features) of games from both the designed- and generated set, noticing how each game was scored -- while examining the data from high-fitness generated-, and low-fitness designed games further.
 
-I tried choosing a set of weights for individual features, and to 
+I continuously tried evolving a set of weights for individual features, to balance the contribution from each type of values using a CMA-ES algorithm \footnote{https://www.lri.fr/~hansen/cmaes\_inmatlab.html}.
+For this task another problem arise however: Creating a fitness function to score a chosen set of weights.
+Several different approaches were tried for this task, but all relying on the assumption that all the games from the randomly generated set of Chapter \ref{ch_task2} were of a low quality.
+Using the assumption, the fitness was increased if the set of weights caused the overall fitness of the designed games to be larger than for the randomly generated set (from Chapter \ref{ch_task1}).
 
-For most of the set of chosen features (when many features were selected) there was no clear indication of which values were more important, and so I continuously used a CMA-ES approach to evolve a set of weights.
-For this task another problem arise however: Generating a fitness function to score a chosen set of weights.
-Several different approaches were tried for this task, but all relying on calculating the fitness for each of designed- and randomly generated games, and making the overall fitness for the designed game set higher than for the generated games.
-
-The construction and evolution did not
+Because the amount of games assumed to be of a good quality were rather small (13 human-designed games) this approach was discarded, in fear of overfitting the fitness function to the data points.
 
 
 \subsubsection*{Outcome}
-Because
-In the end I chose to only use the Explorer, OneStep-, Random- and Do Nothing controller in calucalting fitness.
+From the above analyses I decided to only use two different relative difference values from performance profiles of the controllers, to use in the fitness function, both having a unique form in the designed set of games, while not appearing similarly in the generated set of games.
 
-I decided on a set of 19 features, where 15 are calculated from the relative difference between a pair of controllers, and 4 values, each with a unique calculation.
 The chosen features were:
-
 \begin{description}
-\item[3 features comparing score mean] between Explorer and OneStep, Random and Do Nothing.
-\item[3 features comparing score median] between Explorer and OneStep, Random and Do Nothing.
-\item[3 features comparing score quartion 1] between Explorer and OneStep, Random and Do Nothing.
-\item[3 features comparing score quartion 3]  between Explorer and OneStep, Random and Do Nothing.
-\item[3 features comparing win-rate] between Explorer and OneStep, Random and Do Nothing.
-
+\item[A function comparing score means] between DeepSearch and DoNothing. Returning the relative difference between the two values.
+\item[A features comparing win-rates] between DeepSearch and DoNothing. Returning the relative difference between the two values.
 \end{description}
 
-In the end I chose the following set of values to compare: \textit{ave. score},  \textit{min. score}, \textit{max. score} and \textit{win-rate}.
+Where the total fitness of a game was given by the sum of the two values.
+Using these features, 12 of the designed games has a "perfect score" of 1, while the game DigDug only score 0.5 since the DeepSearch controller was never able to win.
+30 of the mutated games has a score of 0.95 or higher (23 has perfect score), while only 4 of the generated games has a fitness above 0.5 (however these are all perfect scores of 1).
+
+I tested many of the games from the mutated set of games, but they can in general be described as a twist on the original games, but with some game-breaking element (for instance the avatar suddenly becomes able to walk through wall, dirt or water), and because of the sheer amount of games with high fitness they become difficult to analyse thoroughly (too see if any of them actually contains interesting game design).
+
+The four randomly generated games additionally were not much fun to test, and in general they contained similar problems as those discussed at the end of the last chapter (Section \ref{sec_task1discussion}): They were too trivial, and the winning solutions caused the game to end too quickly.
+Of the games, \texttt{gen_game44} probably contains the most interesting game design (see Figure \ref{fig:gengame44}).
+The player avatar can only move left and right, but also place ground sprites. 
+There is a "door" sprite falling down slowly from above, and the goal is simply to place a ground sprite below the door.
+The "crate"- and "gem" sprites has no effect in the game.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.24]{gengame44.png}
+\caption{Screenshot of a generated VGDL game (\texttt{gen_game44}) with a fitness score of 1}
+\label{fig:gengame44}
+\end{figure}
 
 
+
+%------------------------------------------------------------------------------------------------------------------------------%
+
+
+\section{Further selection of features}
+\label{sec_task2furtherfeatures}
+
+After examining the resulting fitness values from generated VGDL games, and increasingly starting to evolve games using the fitness function (described in the next section), it became clear that I would need to introduce more fitness features, especially using non-relative values (i.e. instead of comparing controllers' results, using for instance averaged results across the controllers or only use results from a single controller).
+
+The first insight was (which was also discussed in Chapter \ref{ch_task1}) that games where the intelligent controllers can win too quick -- I decided on 50 clock ticks -- should have a reduced fitness.
+A correlated problem is that the intelligent controllers often has a low \textit{action entropy} in these games, but this is seemingly directly related to the fact that they can win with only a few precise moves.
+
+The second insight was that the the intelligent controllers is often able to both win AND lose in many of the designed games (controllers standard deviation of win-rate above zero), while this happens rarely in the generated games. 
+Although this is not true for all of the designed games, it gives a indication of the difficulty of a game which seems to otherwise be missing.
+
+As a result, the fitness function used to evolve games had the following form: \\
+
+$fitness = \frac{relDiff(\text{average score}) + relDiff(\text{average wins}) + \text{[can win in 50 ticks]} + \text{[can win and lose]}}{4}$ \\
+
+Where [can win in 50 ticks] returns -1 if a  controller is able to win in less than 50 clock ticks, and otherwise gives 1, and [can win and lose] similarly returns either a 1 or -1 if the standard deviation of win-rate is above 0 (1 if true).
+The resulting fitness is a numerical value between -1 and 1.
+
+In addition a game is automatically given a fitness of 1, if it does not fulfil the criteria used in accepting games in Chapter \ref{task1}: 
+That the controllers are not disqualified, that the score and wins is not always the same, and that the controllers do not all finish in less than 50 clock ticks.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \section{Evolution of games: Setup}
 \label{sec_task2evolvingGames}
 A process for generating evolving new VGDL games were built using the fitness function found in the previous section.
-Two different approaches were used to create new games:
+Two different approaches were again used to create new game description:
 1) Evolving from an existing, human-designed game description, using human-designed levels, and 2) evolving from randomly generated games, using randomly generated levels.
 
-From the project it should be obvious that the first approach, using existing games and levels, have a much better chance of both achieving a high fitness-value and be an enjoyable game.
-However, the second approach allows for magnitudes of more options and possibilities, since it is not restricted to any set of sprites- or levels.
+In both approaches a simple evolution strategy (ES) approach, using mutation- and crossover operations across several generations, in order to increase the fitness of a population (of games).
+For each generation a population of game descriptions are tested using the two controllers DeepSearch and DoNothing, and a fitness is calculated for each game, with the lowest fitness games being removed from the population.
+As in the previous chapter, only the interaction rules (of the \texttt{InteractionSet}) were evolved over each generation.
+
+Because of CPU scheduling issues \footnote{The problem is mostly that it just takes a lot of time for intelligent controllers to play through each game. Each controller is allowed up to 50 ms per tick, and so even with a maximum of 800 ticks, playing through a game 6 times can take up to $50ms \cdot 800 \cdot  6 = 240s$. With a population size of 10 over 20 generation, a single game can in the worst case take over 13 hours to evolve.} the populations size was limited to ten, with five members surviving each generation, and a limit of 20 generations.
+Additionally the maximum amount of clock ticks for playthroughs was limited to 800.
+
+The evolution process was stopped when the highest fitness stopped increasing over 10 generation, when the best games fitness were above 0.98 (an almost perfect score), or when the 20 generations allowed were over.
+
+%\subsubsection*{Evolving designed games}
+
+
+\subsubsection*{Evolving randomly generated games}
+An additional process was used to evolve games from a randomly generated game (using the generation process of Section \ref{sec_task1genApproach}), which also requires a level generated for the description, to allow playing it.
+Since the evolution process itself is only focused on changing the interaction rules, it should be certain that the \texttt{SpriteSet}, \texttt{TerminationSet} and the level description (and \texttt{LevelMapping} are well-formed, so the evolution strategy is actually able to find games of high fitness.
+
+Therefore a process was built to first continuously generating a new game- and level description, playing through it with the controllers, and then simply checking for 1) that the controllers was not disqualified (ran out of time) in playing the game, and 2) that intelligent controller was actually able to win.
+From the results of Section \ref{sec_task2results} it should be noted that DeepSearch has win-rate of 0.11 in a set of randomly generated games (however, where 334 games has already been removed), and so we can expect that it is possible to win in at least $\frac{66}{400}\cdot 0.11 = 0.018 = 1.8\%$ of the games .
 
 The evolution process was stopped when the highest fitness stopped increasing over ten iteration, or when the best games fitness were above 0.98 -- a very good fitness score.
 
