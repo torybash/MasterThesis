@@ -276,9 +276,11 @@ The most important game design for a puzzle game is to be able to keep challengi
 This project is focused a games of two restricted genres and types -- these restrictions mostly stems from the framework used in the work, but allows a more focused analysis: 
 
 1) Single-player, 2-dimensional, top-down, action games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an "action"-(shoot etc.) button.
+The games are all focused on a increasing the players score.
 These games will be simply be referred to as \textbf{Action-arcade games}.
 
 And: 2) Single-player, 2-dimensional, top-down, turn-based puzzle games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an "action"-(shoot etc.) button., and all events occur as a result of player actions (i.e. no NPC's or falling boulders). 
+Additionally these games are constructed using only a subset of the VGDL classes- and functions defined in the GVG-AI framework (see Section \ref{sec_gvgaiframework}).
 This type of games will be referred to as \textbf{Puzzle games} in the project.
 
 
@@ -892,7 +894,7 @@ As can be see from the last test (Figure \ref{table:fastvgdlthecitadel4}) the ma
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \chapter{Automatic generation of VGDL descriptions}
-\label{ch_task1autogenofvgdl}
+\label{ch_task1}
 This chapter describes the setup- and methodology used in generating new games (i.e. game descriptions).
 Additonally an initial play test of set of both human-designed and generated games, using an array of different AI-controllers explained in the previous chapters.
 
@@ -1681,13 +1683,15 @@ Figure \ref{table:designedpuzzleresults} show the results of playing through the
 \csvreader[tabular=lrrrrr,
     table head=\toprule \textit{\textbf{game}}
              & \textit{lvl}
-             & \textit{found sol.},
+             & \textit{found sol.}
+             & \textit{sol.length}
+             & \textit{time},
     late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
     late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
     late after last line=\\\bottomrule
     ]%
-{desingedpuzzedata.csv}{1=\Game, 2=\Level, 3=\Finished}%
-{\Game & \Level & \Finished}%
+{desingedpuzzedata.csv}{1=\Game, 2=\Level, 3=\Finished, 4=\SolLength, 5=\Time}%
+{\Game & \Level & \Finished & \SolLength & \Time}%
 
 \caption{Results from the five human-designed puzzle games examined}
 \label{table:designedpuzzleresults}
@@ -1700,7 +1704,7 @@ As can be seen, many of the levels were never completed, because the solutions w
 
 \section{General puzzle level generation} 
 \label{sec_task3evolvingLevelsSetup}
-Since the PuzzleSolver controller is able to complete an arbitrary level of a puzzle game, it becomes interesting to use it to solve generated levels for game.
+Since the PuzzleSolver controller is able to complete an arbitrary level of a puzzle game, as long as the solution(s) are not too complex, it becomes interesting to use it to solve generated levels for games.
 By using an approach similar to that used to generate general level descriptions, for randomly generated games in Section \ref{ssec_task1rndGen}, it became clear that the PuzzleSolver could be used to not only find out if randomly generated levels are any good, but use its results to evolve new and better levels.
 
 A setup for generating levels for a given game were constructed using an evolutionary strategy, utilising both mutation- and crossover operations on a population of levels.
@@ -1718,7 +1722,7 @@ The values used to compare results were, rather subjectively, chosen to be:
 \item The time used in finding the solution.
 \end{enumerate}
 
-
+For the following tests of the generator, the evolutions strategy was run with a population of 100 level, with 50 subjects surviving every generation, evolved over a maximum of 100 iterations.
 %\subsubsection*{Mutation} 
 
 
@@ -1757,13 +1761,34 @@ The general puzzle level generator was set to create levels for the five designe
 Because space of game states quickly become too large for the PuzzleSolver, all levels were generated using a level size of 8x8, with walls on all edges -- making the actual levels consist of only 6x6 tiles.
 
 Even with the tight restriction, several levels of high difficulty was created for the five games.
+Figure \ref{fig:lvlevolveprocess} show how the generated level for the game Bait increases in difficulty over the generations.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{vgdldesc}[linewidth=14cm]
+1.          30.         100.
+wwwwwwww    wwwwwwww    wwwwwwww
+w  w w w    wG  wK w    w   wK w
+www 1  w    w   w  w    w G ww0w
+w w G  w >> w 1  w w >> w 1  wMw
+w w wK w >> ww  w  w >> ww0  wMw
+w  0ww w    w A  0 w    w A    w
+wwwwA Mw    w1  w  w    w   0  w
+wwwwwwww    wwwwwwww    wwwwwwww
+\end{vgdldesc}
+\caption{The evolution of a randomly generated level for the game Bait. The three levels are the best in the population at generation 1 (requires 7 moves), generation 30 (requires 35 moves} and generation 100 (requires 57 moves), respectively.
+\label{fig:lvlevolveprocess}
+\end{figure}
+
+
 Figure XXXXXX shows the data retrieved from the best (i.e. longest solution) level generated for different games after a successful evolution.
 
 
 
 \section{Puzzle game generation} 
 \label{sec_task3evolvingGames}
-After showing that the general level generator is able to create levels of a decent quality, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}), to create both a set of game rules- and the levels, for a game.
+After showing that the general level generator is able to create levels of a certain difficulty, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}), to create both a set of game rules- and the levels, for a game.
 
 As mentioned in Section \ref{ssec:aicontrollersandtesting} puzzle games allow a smaller set of sprite classes, and interaction-rules defined in their VGDL description\footnote{Sprites like \texttt{RandomNPC}, and interaction-rules like \texttt{reverseDirection} (changing direction is only interesting for constant moving sprites like \texttt{Missile}s) can not be used in the definition of puzzle games used.}, making the overall space of possible games smaller.
 
@@ -1780,7 +1805,7 @@ The process worked by:
 \item Start evolving a level for the game
 \end{enumerate}
 
-To limit the time spend evolving each level the PuzzleSolver was set to have a limit of 80000 visited nodes (paths) in its memory, before giving up and going to the next level.
+%To limit the time spend evolving each level the PuzzleSolver was set to have a limit of 80000 visited nodes (paths) in its memory, before giving up and going to the next level.
 
 
 \subsection{Results} 
@@ -1795,7 +1820,15 @@ The generated games all have a strong similarity to Sokoban however, mostly beca
 
 \section{Discussion of results} 
 \label{sec_task3discussion}
+The fitness function used to evolve levels were chosen rather subjectively, and could almost definitely be improved, to be able to generate levels of a higher quality.
+It might be that better levels could be generated if the amount of clock ticks were the most focused, but because of time schedule issues I did not have time to explore the function further.
 
+The generator is able to generate levels for any designed VGDL games, and certain generated games, restricted to a subset of classes, that -- at least -- have non-trivial solutions which are not immediately obvious, even with the tight restrictions of the level size (6x6 playing field).
+The drawback of the generator is that it is rather slow at generating even small levels, and has severe problems with larger level- and game space sizes.
+Also, it is not guaranteed to find the most interesting levels for the games -- human level designers would almost definitely be able to create harder and more enjoyable levels.
+
+Probably the most interesting aspect of the level generator is however the process of generating both a complete game- and level description.
+As mentioned, the tight restrictions of my defintion of VGDL puzzle games, and the process the evolution strategy use (requiring that a sprite has been moved), causes the actual games- and levels generated to have strong similarities.
 
 
 
@@ -1811,7 +1844,16 @@ The generated games all have a strong similarity to Sokoban however, mostly beca
 
 \chapter{Conclusion}
 
-A huge problem in evolving games with the process used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game ten times takes the Explorer controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
+
+\section{My work}
+The goal of this project was to create a process for creating games and levels in the game description language VGDL of a "as-high-possible" quality.
+To reach this goal, two different approaches was attempted : 
+1) Generating general game description -- action-arcade games, using all the possible classes and functions of VGDL.
+And 2) Generating game descriptions restricted to a subset of VGDL classes -- puzzle games.
+
+The main focus was on creating the descriptions of action-arcade games using the performance of general game playing algorithms to assess the games' quality.
+Using an evolution strategy a set of playable (action-arcade) VGDL games was generated, and
+A large problem in the process of evolving the action-arcade games used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game ten times takes the Explorer controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
 
 A more clever approach might be to first probe the games with some more simple controllers, or decreasing the allowed time for intelligent controllers, allowing the games to be played through more quickly, and decide if the game is worth spending time on for a more precise analysis (using intelligent controllers).
 
@@ -1819,6 +1861,8 @@ It might be interesting to analyse games using a wider array of controllers, or 
 
 Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
 
+
+\section{Future work}
 
 Maybe one could make an algorithm to play a game in a more similar fashion as humans:
 First reading, and understanding the rules (in pac-man: eat all the cheese, in boulderdash: get to the exit after getting X gems).
@@ -1913,40 +1957,248 @@ The game ends if the laser cannon is hit a few times  by the incoming objects.
 \chapter{Designed games results}
 \label{app_designedresults}
 
-This chapter shows the individual data for each game, for the test discussed in Section \ref{sec_inittestresults}. 
+This chapter shows the individual data for each game, for the test discussed in Section \ref{sec_task1inittestresults}. 
+Each game was played through ten times by each controller.
 
 \subsubsection*{Aliens}
 
-\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
-\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{winrate} & \emph{act-entropy} &\\\midrule
-  \DTLforeach{aliensdata}{
-  \agent=Agent:,
-  \mean=Mean:,
-  \std=Std. deviation:,
-  \mmave=MaxMinN-Mean:,
-  \wrate=Winrate:,
-  \entropy=Actions entropy:}
-  {\DTLiffirstrow{}{\tabularnewline}%
-  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
-  \\ \bottomrule
-\end{stripedtabular}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{aliensdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+
+\subsubsection*{Astroblast}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{astroblastdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
 
 
 \subsubsection*{Boulderdash}
 
-\begin{stripedtabular}{llS[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 6.2, round-mode=places, round-precision=2]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]S[table-format = 1.4, round-mode=places, round-precision=4]l}  \toprule
-\rowcolor{white}&\textbf{\emph{controller}} & \emph{score mean} & \emph{std.dev.} & \emph{normalised-mean}  & \emph{winrate} & \emph{act-entropy} &\\\midrule
-  \DTLforeach{aliensdata}{
-  \agent=Agent:,
-  \mean=Mean:,
-  \std=Std. deviation:,
-  \mmave=MaxMinN-Mean:,
-  \wrate=Winrate:,
-  \entropy=Actions entropy:}
-  {\DTLiffirstrow{}{\tabularnewline}%
-  & \agent & \mean  & \std  & \mmave  & \wrate & \entropy &} 
-  \\ \bottomrule
-\end{stripedtabular}
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{boulderdashdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+\subsubsection*{Centipede}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{centipededata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+
+\subsubsection*{Crackpots}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{crackpotsdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+
+\subsubsection*{Dig Dug}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{digdugdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+
+\subsubsection*{Eggomania}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{eggomaniadata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+
+\subsubsection*{Frogs}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{frogsdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+\subsubsection*{Missile Command}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{missilecommanddata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+\subsubsection*{Pac-Man}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{pacmandata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+
+\subsubsection*{Seaquest}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{seaquestdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+\subsubsection*{Solar Fox}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{solarfoxdata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
+
+\subsubsection*{Zelda}
+
+\csvreader[tabular=lrrrrr,
+    table head=\toprule \textit{\textbf{controller}}
+             & \textit{ave. score}
+             & \textit{norm. score}
+             & \textit{win-rate}
+             & \textit{ave ticks}
+             & \textit{ave. act entr.},
+    late after head=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}}\midrule,
+    late after line=\csvifoddrow{\\\rowcolor{black!5}}{\\\rowcolor{black!25}},
+    late after last line=\\\bottomrule
+    ]%
+{zeldadata.csv}{1=\Agent,2=\Mean,4=\MeanErr,5=\MMMean,7=\MMMeanErr,8=\WR,9=\WRErr,15=\TicksMean,17=\TicksMeanErr,18=\ActEntMean,19=\ActEntMeanErr}%
+{\Agent & \num{\Mean} (\num{\MeanErr}) & \num{\MMMean} (\num{\MMMeanErr}) & \num{\WR} (\num{\WRErr}) & \num{\TicksMean} (\num{\TicksMeanErr}) & \num{\ActEntMean} (\num{\ActEntMeanErr})}%
+
+
 
 
 \end{appendices}

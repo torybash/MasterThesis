@@ -1,4 +1,26 @@
-game,level,finished
-bait,0,true
-bait,1,true
-bait,2,false
+game,level,solved,sol. length,time
+Bait,0,true,9,500ms
+Bait,1,true,38,2440ms
+Bait,2,true,71,612040ms
+Bait,3,false,-,-
+Bait,4,true,35,753400ms
+Brainman,0,true,30,20800ms
+Brainman,1,true,32,221400ms
+Brainman,2,false,-,-
+Brainman,3,false,-,-
+Brainman,4,true,32,9600ms
+Modality,0,true,6,240ms
+Modality,1,true,33,1440ms
+Modality,2,true,66,2920ms
+Modality,3,true,158,16640ms
+Modality,4,true,27,1080ms
+Sokoban,0,true,25,106920ms
+Sokoban,1,true,107,28960ms
+Sokoban,2,false,-,-
+Sokoban,3,true,97,6080ms
+Sokoban,4,true,30,1280ms
+The Citadel,0,true,15,3920ms
+The Citadel,1,false,-,-
+The Citadel,2,false,-,-
+The Citadel,3,false,-,-
+The Citadel,4,false,-,-
