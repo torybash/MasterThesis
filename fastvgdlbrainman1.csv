@@ -1,4 +1,4 @@
 framework,time,space
 GVG-AI,OutOfMemoryError,OutOfMemoryError
-FastVGDL,OutOfMemoryError,OutOfMemoryError
-FastVGDL_LowMem,327441 ms,347 MB
+SimpleVGDL,OutOfMemoryError,OutOfMemoryError
+SimpleVGDL_LowMem,327441 ms,347 MB

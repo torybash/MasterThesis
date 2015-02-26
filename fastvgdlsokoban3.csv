@@ -1,4 +1,4 @@
 framework,time,space
 GVG-AI,962 ms,32 MB
-FastVGDL,535 ms,6 MB
-FastVGDL_LowMem,3642 ms,5 MB
+SimpleVGDL,535 ms,6 MB
+SimpleVGDL_LowMem,3642 ms,5 MB
