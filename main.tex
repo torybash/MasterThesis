@@ -224,7 +224,7 @@ The space-trading game Elite \citep{game:elite} used PCG to both save disk space
 Since then several highly successful games, from genres including platform-, first person shooter- (FPS) and strategy games, have used PCG to generate levels-, maps and worlds, as either used in their main game mode (e.g. Spelunky \citep{game:spelunky}, Minecraft \citep{game:minecraft}), or as an extra feature, making the games have additional re-playability (e.g. Civilazation II(-V) \citep{game:civilizationii}, Heroes of Might and Magic III \citep{game:homm3}).
 PCG has additionally been used to create a wider array of weapons and items, especially in role-playing games (RPGS) where ``looting'' (finding new gear) is a main part of the game design (e.g. Borderlands-series \citep{game:borderlandsseries}, Diablo-series \citep{game:diabloseries}, Dark Age of Camelot \citep{game:darkage}).
 
-Several game-developers, companies and research groups has additionally used PCG to create content of other types of game-content, or at different stages, including complete worlds, environments and stories (\citep{game:dwarffortress}), and graphics and audio (e.g. RoboBlitz \citep{game:roboblitz}, .kkrieger \citep{game:kkrieger}).
+Several game-developers, companies and research groups has additionally used PCG in the generation of other types of game-content, or at different stages, including complete worlds, environments and stories (e.g. Dwarf Fortress \citep{game:dwarffortress}), and graphics and audio (e.g. RoboBlitz \citep{game:roboblitz}, .kkrieger \citep{game:kkrieger}).
 
 %, or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
 
@@ -307,11 +307,11 @@ nodes = {align = center}
 \node[chapterheader]   (backgroundh)  [right=of theoryh, shift = (right:0.0cm)]		
 {3. Extending VGDL};
 \node[chapterheader]   (task1h)  [below=of theoryh, shift = (down:3.8cm)]		
-{4. Generation of VGDL games};
+{4. Analysis of generated games};
 \node[chapterheader]   (task2h)  [right=of task1h, shift = (right:0.0cm)]		
-{5. Evaluation of VGDL games};
+{5. Evaluation and evolution of games};
 \node[chapterheader]   (task3h)  [below=of task1h, shift = (down:5.2cm)]		
-{6. Puzzle analysis};
+{6. Puzzle generation};
 \node[chapterheader]   (conclusionh)  [right=of task3h, shift = (right:0.0cm)]		
 {7. Conclusion};
  % \begin{scope}[on background layer]
@@ -644,7 +644,7 @@ One of these controllers were chosen to be used in this project to examine desig
 \end{description}
 
 \subsubsection*{GVG-AI example games}
-The framework additionally contains 20 human-designed games, which partly consist of interpretations of classic video games (e.g. Boulderdash, Frogger, Missile Command and Pacman), while some are original creations by the General Video-Game AI Competition's organisers. 
+The framework additionally contains 20 human-designed games, which partly consist of interpretations of classic video games (e.g. \textit{Boulderdash}, \textit{Frogger}, \textit{Missile Command} and \textit{Pacman}), while some are original creations by the General Video-Game AI Competition's organisers. 
 The interpretations of existing games all have different stages of simplifications to them, causing several of the games' features to be missing -- for instance, the player cannot push boulders in the VGDL version of Boulderdash and they do not ``roll'' as in the original, and the ghosts in Pacman behave in a much more simplified fashion than in the original.
 A short summary of each of the example games can be seen in Appendix \ref{app_gvgaigames}
 
@@ -742,7 +742,7 @@ Some of the games have action- gameplay aspects, with enemies hindering the prog
 
 However, even with the removal of enemies, a few of the interpreted games contain elements which are not strictly in line with the definition of VGDL \textit{puzzle games}, for instance some of games feature gliding boxes or rolling boulders (implemented using the \texttt{Missile} sprite class), which can cause effects to happen many frames after the avatar has acted.
 
-The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge}, \textit{Modality} and \textit{Painter}.
+The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge} and \textit{Modality}.
 A summary of the games can be seen in Appendix \ref{app_thesisgames}.
 
 \begin{figure}[!ht]
@@ -932,7 +932,7 @@ This chapter is only focused on \textit{action-arcade} games - analysis and gene
 \subsubsection*{Selection of designed arcade-action games}
 A subset of the human-designed games mentioned in Section \ref{sec_gvgaiframework} and \ref{sec_writingnewvgdl} were selected for the following analyses games, and for creating new games by mutation.
 
-After my addition of VGDL game descriptions to GVG-AI framework there is a total 34 human designed games which could potentially be used as a base-line for quality in games. 
+After my addition of VGDL game descriptions to GVG-AI framework there is a total 33 human designed games which could potentially be used as a base-line for quality in games. 
 However, using the definitions from the introduction, only 23 of the games are of the \textit{arcade-action} genre explored in this section, which the general game playing algorithms play decently.
 Additionally, as mentioned in Section \ref{ssec_vgdl} several of the example games from the GVG-AI competition are original creations by the completion organisers, which cannot equally be assumed to be human-enjoyable.
 
@@ -1763,7 +1763,7 @@ From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own addition
 However, several of the games were deemed unfit for a complete examination.
 Some, because the levels were too difficult for the a breadth first search algorithm to have a chance (Bolo Adventures and Chip's Challenge).
 Three other games were removed from a more technical reason: 
-The games Bombuzal, ZenPuzzle and Painter all has a continuous creation of \texttt{Flicker}-sprites, which (as mentioned in Section \ref{sec_creatingnewcontrollers})  halts the PuzzleSolver in its progress.
+The games Bombuzal and ZenPuzzle all has a continuous creation of \texttt{Flicker}-sprites, which (as mentioned in Section \ref{sec_creatingnewcontrollers})  halts the PuzzleSolver in its progress.
 Because of this, only the following five games were used as a base-line for ``good'' puzzle games: Bait, Brainman, The Citadel, Sokoban and Modality.
 
 
@@ -2006,11 +2006,10 @@ Also, it could be interesting to retrieve more extrinsic data from playing throu
 
 \chapter{GVG-AI example games}
 \label{app_gvgaigames}
-Below is a short summary of each of games, describing the winning conditions, and how the player can increase his/her score:
+Below is a short summary of each of VGDL games from the GVG-AI framework, discussed in \ref{ssec:aicontrollersandtesting}.
+
 \begin{description}
-\item [Aliens] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
-\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
-\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
+\item [Aliens] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.
 \item [Boulderdash] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
 \item [Butterflies] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
 \item [Chase] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
@@ -2039,34 +2038,40 @@ Below is a short summary of each of games, describing the winning conditions, an
 \chapter{Games designed during thesis}
 \label{app_thesisgames}
 
+This chapter described each of the VGDL games introduced in Section \ref{sec_writingnewvgdl}.
+The games are all interpretations of existing games designed on different platforms.
+
 \section{Action arcade games}
 
 \begin{description}
-\item [Crackpots] \citeyearpar{game:crackpots} VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
-\item [Solar Fox] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
-\item [Astrosmash]  \citeyearpar{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
-The game ends if the laser cannon is hit a few times  by the incoming objects.
-\item [Centipede] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
+\item [Astrosmash]  \citep{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
+\item [Centipede] \citep{game:centipede} A centipede is approaching from the top of the screen. The player controls an cannon at the bottom of the screen able to shoot the enemy, but hitting the centipede in everywhere but its ends causes it to split into two parts.
+\item [Crackpots] \citep{game:crackpots} Spiders are crawling up from the bottom of the screen, and the player must push flowerpots, which appear again a short while after being pushed, to stop and kill them. 
+\item [Solar Fox] \citep{game:solarfox} The player controls a spaceship which is constantly moving, and only the direction can be controlled. The goal is to collect all of the coins in each level, while evading the missiles of the enemies on the top- and bottom of the screen.
 \end{description}
+
 
 \section{Puzzle games}
 
 \begin{description}
-\item [Bait] VGDL interpretation of the classic arcade game \emph{Space Invaders}. A large amount of aliens are spawned from the top of the screen. The player wins by shooting all the approaching aliens.\\
-\textbf{Goal} Destroy all the incoming aliens, without being hit by them or their projectiles.\\
-\textbf{Scoring} Destroy all the incoming aliens, without being hit by them or their projectiles.
-\item [The Citadel] VGDL interpretation of \emph{Boulder Dash}. The avatar has to dig through a cave to collect diamonds while avoiding being smashed by falling rocks or killed by enemies. 
-\item [Bombuzal] The avatar has to capture all butterflies before all the cocoons are opened. Cocoons open when a butterfly touches them.
-\item [Chip's Challenge] About chasing and killing fleeing goats. However, if a fleeing goat encounters the corpse of another, it get angry and start chasing the player instead.
-\item [Bolo Adventures] VGDL interpretation of \emph{Dig Dug}. Avatar collects gold coins and gems, digs his way through a cave and avoid or shoot boulders at enemies.
-\item [(Real) Sokoban] VGDL interpretation of \emph{Eggomania}. Avatar moves from left to right collecting eggs that fall from a chicken at the top of the screen, in order to use these eggs to shoot at the chicken, killing it.
-\item [Brainman] Goal is to reach the exit by burning wood that is on the way. Ammunition is required to set things on fire.
-\item [Modality] Player must avoid flames from hell gates until he finds the exit of a maze.
-\item [Painter] VGDL interpretation of \emph{Frogger}. Player is a frog that has to cross a road and a river, without getting killed.
-\item [Zen Puzzle] Objective is to infect all healthy animals. The player gets infected by touching a bug. Medics can cure infected animals.
+\item [Bait] \citep{game:bait} \textit{Bait} is a game with similar mechanics to \textit{Sokoban} but otherwise unique game play. In each level the player must push boxes to get across the playing field, to reach a button, and afterwards head for the exit,.
+\item [Bolo Adventures] \citep{game:boloadventures} Another game closely related to \textit{Sokoban}, but with several unique features like lasers and rolling boulders. The levels of the game are in general extremely difficult.
+\item [Bombuzal] \citep{game:bombuzal} The goal is to blow up all the bombs, which are spread wide across each level. When a bomb is exploded it erodes nearby tiles, or even other bombs, forcing the player to find a path that allows him/her to reach all the bombs.
+
+\item [Brainman] \citep{game:brainman} Has similar characteristics as the other \textit{Sokoban}-like games, but also has a focus on collecting gems to increase the players score.
+\item [Chip's Challenge] \citep{game:chipschallenge} \textit{Chip's Challenge} is again a \textit{Sokoban}-like puzzle game, but with an large amount of features compared to the other games, like water where either boxes can be used to make a bride across, or the player can swim across if he has a specific item (a swimsuit).
+\item [The Citadel] \citep{game:thecitadel} An additional game closely related to \textit{Sokoban}. This game features boxes which can be moved in a line, i.e. if the player pushed a box of this type, all boxes behind it will additionally be pushed.
+\item [(Real) Sokoban] \citep{game:sokoban} The original push-boxes games. 
+\item [Modality] \citep{game:modality} \textit{Sokoban}-like game with a twist: Each level is divided into white- and black tiles, and the avatar can only move between the two colours by going through the grey tiles on the playing field.
+%\item [Painter] Very simple game, with a very limited skill ceiling. The player must make every tile in levels have the same colour, which is achieved by moving the avatar in a path across each tiles, causing each to switch colour.
+\item [Zen Puzzle] \citep{game:zenpuzzle} The player must ``paint'' every tile in an area by moving the avatar across them. After a tile has been painted it becomes solid and impossible for the avatar to move through, making the player have to find a path through the area to reach all tiles.
 \end{description}
 
 
+
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------------%
 
 \chapter{Designed games results}
 \label{app_designedresults}
@@ -2094,7 +2099,7 @@ Each game was played through ten times by each controller.
 
 
 
-\subsubsection*{Astroblast}
+\subsubsection*{Astrosmash}
 
 \csvreader[tabular=lrrrrr,
     table head=\toprule \textit{\textbf{controller}}
