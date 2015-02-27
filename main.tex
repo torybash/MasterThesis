@@ -1410,21 +1410,21 @@ The resulting generated games are then discussed in detail.
 The tests of the previous chapter indicates that the relationship between general game playing controllers performance could potentially be used to determine the quality of games. 
 To make it possible to use the performance relationships, while not overfitting the parameters to the small set of ``good'' data points (13 human-designed games), it is necessary to find the most important and selective statistical values from playthrough results for use in a fitness function, while trying to exclude statistics that do not signify game quality.
 
-As mentioned in Section \ref{sec_discussionofinitialtest} the \textit{score} and \textit{win-rate} seems to have the most distinct distributions for the different type of games, with human-designed games all having a signficant difference between e.g. the Explorer- and Random controller, making them interesting to use for an evaluation function.
-However, the \textit{action entropy} might also be appropriate to use, but the difference in the statistical distributions are much smaller for these values.
+As mentioned in Section \ref{sec_task1discussion} the score and win-rate seems to have the most distinct distributions for the different type of games, with human-designed games all having a significant difference between e.g. the Explorer- and Random controller, making them interesting to use for an evaluation function.
+The \textit{action entropy} might also be appropriate to use, but the difference in the statistical distributions are much smaller for these values.
 
-Limiting fitness features to score, win-rate and action-entropy, there is still an enormous amount of possible ways to calculate features-values for the fitness function.
-For instance, I could have a feature for the difference in average score between every single controller but it would result in $\binom{7}{2}=21$ features for a single statistic.
-Also, I could use a series of different values simply to compare the score: \textit{minimum}- and \textit{maximum} score, \textit{standard deviation} of score, \textit{median}, \textit{quartiles} or any form of normalised score, and of course I could  use combined values for the features, e.g. the \textit{score} increase per \textit{clock tick}.
+Limiting fitness features to score and win-rate, there is still an enormous amount of possible ways to calculate features-values for the fitness function.
+For instance, I could have a feature for the difference in average score between every single controller but it would result in $\binom{6}{2}=15$ features for a single statistic.
+Also, I could use a series of different values simply to compare the score: \textit{minimum}- and \textit{maximum} score, \textit{standard deviation} of score, \textit{median}, \textit{quartiles} or any form of normalised score, and of course I could  use combined values for the features, e.g. the score increase per clock tick.
 
-Additionally it is not straightforward to calculate a feature even with if I decide to compare e.g. \textit{score} or \textit{clock ticks} between Explorer and Random:
-I could use a simple relative difference formula (e.g. $f=\lvert\frac{a-b}{max(a,b)}\rvert$), and use the result as a feature, but it might make more sense to hand-craft each feature to a specific goal, for instance for the \textit{action entropy} it seems (from the data of the last chapter) designed games cause the intelligent controllers to have a similar value as the Random controller, while the same is not true for the randomly generated games -- in the generated games the intelligent controllers often find a simple solution requiring similar actions.
-A feature could therefore be made to have a value of 1 if the entropies are the close (and going toward 0/-1 when random has a higher entropy), while not rewarding the game for having the intelligent controllers \textit{action entropy} be higher than Random (which the data do not show as a relationship in designed games).
+Additionally it is not straightforward to calculate a feature even after deciding the controllers and value to compare (e.g. score or clock ticks between Explorer and Random).
+I could use a simple relative difference formula (e.g. $f=\lvert\frac{a-b}{max(a,b)}\rvert$), and use the result as a feature, but it might make more sense to hand-craft each feature to a specific goal, for instance for the action entropy it seems (from the data of the last chapter) designed games cause the intelligent controllers to have a similar value as the Random controller, while the same is not true for the randomly generated games -- in the generated games the intelligent controllers often find a simple solution requiring similar actions.
+A feature could therefore be made to have a value of 1 if the entropies are the close (and going toward 0/-1 when random has a higher entropy), while not rewarding the game for having the intelligent controllers action entropy be higher than Random (which the data do not show as a relationship in designed games).
 
 Also, how each fitness feature adds to the complete fitness function is not straightforward.
-One could use a simple sum of each chosen feature, maybe with a weight constant attached signifying how much each feature adds the overall value ($f = w_1a_1+...+w_na_n$), but the approach can have the outcome of some features overruling others, unless best possible know weights are know (which they typically are not).
+One could use a simple sum of each chosen feature, maybe with a weight constant attached signifying how much each feature adds the overall value ($f = w_1a_1+...+w_na_n$), but the approach can have the outcome of some features overruling others.
 
-In the following I will try to shed light on which features are the most interesting, by both analysing the data in more detail, and by evolving games using the features and analysing the evolved games.
+In the following I will try to shed light on which features are the most interesting, by both analysing the data in more detail, and by evolving games using the features.
 
 
 
@@ -1433,18 +1433,19 @@ In the following I will try to shed light on which features are the most interes
 %This section describes the process in which the initial fitness features were selected (i.e. before starting to evolve games using the fitness function).
 Since the relationships between controllers acting intelligent, and acting random or doing nothing, seems to be a possible indication of game quality, an analysis of the relationship between different controllers using varying values was performed.
 As indicated in the previous section, choosing how to evaluate game for the fitness function almost certainly have an element of  subjectivity. 
-To make an as informed decision as possible I ran a series of test described below, using different features, automatically choosing different set of features, evolving weights for the features, and examining the results using data mining principles.
+To make an as informed decision as possible I ran a series of test described below, using different features, evolving weights for the features, and examine the results.
 
 In the following I repeatedly to use a \textit{relative difference}-function ($f=\lvert\frac{a-b}{max(a,b)}\rvert$) to compare statistical values  between controllers performance results, retrieved from playthroughs.
-Additionally I chose to simply construct the fitness function be a sum of the individual features.
+Additionally I chose to simply construct the fitness function as a sum of the individual features.
 
-Also, the assumption that the games from the generated- and mutated set simply are of a low quality (discussed in Section \ref{sec_discussionofinitialtest}), is used throughout the following analysis.
+Also, the assumption that the games from the generated- and mutated set simply are of a low quality (discussed in Section \ref{sec_task1discussion}), is used throughout the following analysis.
 
 \subsubsection*{Analysis of possible relationship features}
-As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices, to adopt as fitness features.
+As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices to adopt as fitness features.
 Also, the there seems to be a consistent difference in the values between the intelligent controllers (especially Explorer and DeepSearch) and the less intelligent ones: The OneStep, Random and Do Nothing-controllers.
 
-To measure the strength of different possible choices from I performed a small test, counting how often a specific intelligent controller has a higher value than a simple one, and calculating the average relative difference between the two. The results can be seen in Figure \ref{table:simplefeatureanalysis}.
+To measure the strength of different possible choices I performed a small test, counting how often a specific intelligent controller has a higher value than a simple one, and calculating the average relative difference between the pair. 
+The results can be seen in Figure \ref{table:simplefeatureanalysis}.
 
 
 \begin{figure}[!ht]
@@ -1472,11 +1473,11 @@ Also the designed games do not have a clear relationship profile for the clock t
 
 
 \subsubsection*{Analysis of feature sets}
-From the above analysis, a selection of interesting feature values are available, and of these I continuously tested the results of  selecting different sets of features (between 2-20) of relative difference values between pairs of controllers.
+From the analysis of features, a selection of interesting values are available, and of these I continuously tested the results of  selecting different sets of features (between 2-20) of relative difference values between pairs of controllers.
 
 From the varying sets of feature selections, I first of all calculated and compared the resulting fitness (by summing the features) of games from both the designed- and generated set, noticing how each game was scored -- while examining the data from high-fitness generated-, and low-fitness designed games further.
 
-I continuously tried evolving a set of weights for individual features, to balance the contribution from each type of values using a CMA-ES algorithm \footnote{https://www.lri.fr/~hansen/cmaes\_inmatlab.html}.
+I continuously tried evolving a set of weights for individual features, to balance the contribution from each type of values using a CMA-ES algorithm\footnote{https://www.lri.fr/~hansen/cmaes\_inmatlab.html}.
 For this task another problem arise however: Creating a fitness function to score a chosen set of weights.
 Several different approaches were tried for this task, but all relying on the assumption that all the games from the randomly generated set of Chapter \ref{ch_task2} were of a low quality.
 Using the assumption, the fitness was increased if the set of weights caused the overall fitness of the designed games to be larger than for the randomly generated set (from Chapter \ref{ch_task1}).
@@ -1494,7 +1495,7 @@ The chosen features were:
 \end{description}
 
 Where the total fitness of a game was given by the sum of the two values.
-Using these features, 12 of the designed games has a ``perfect score'' of 1, while the game DigDug only score 0.5 since the DeepSearch controller was never able to win.
+Using these features, 12 of the designed games has a ``perfect score'' of 1, while the game DigDug only score 0.5 (since the DeepSearch controller was never able to win).
 30 of the mutated games has a score of 0.95 or higher (23 has perfect score), while only 4 of the generated games has a fitness above 0.5 (however these are all perfect scores of 1).
 
 I tested many of the games from the mutated set of games, but they can in general be described as a twist on the original games, but with some game-breaking element (for instance the avatar suddenly becomes able to walk through wall, dirt or water), and because of the sheer amount of games with high fitness they become difficult to analyse thoroughly (too see if any of them actually contains interesting game design).
@@ -1503,7 +1504,7 @@ The four randomly generated games additionally were not much fun to test, and in
 Of the games, \texttt{gen_game44} probably contains the most interesting game design (see Figure \ref{fig:gengame44}).
 The player avatar can only move left and right, but also place ground sprites. 
 There is a ``door'' sprite falling down slowly from above, and the goal is simply to place a ground sprite below the door.
-The ``crate''- and ``gem'' sprites has no effect in the game.
+The crate- and gem sprites has no effect in the game.
 
 \begin{figure}[!ht]
 \centering
@@ -1520,13 +1521,13 @@ The ``crate''- and ``gem'' sprites has no effect in the game.
 \section{Further selection of features}
 \label{sec_task2furtherfeatures}
 
-After examining the resulting fitness values from generated VGDL games, and increasingly starting to evolve games using the fitness function (described in the next section), it became clear that I would need to introduce more fitness features, especially using non-relative values (i.e. instead of comparing controllers' results, using for instance averaged results across the controllers or only use results from a single controller).
+After examining the resulting fitness values from generated VGDL games, and increasingly starting to evolve games using the fitness function (described in the next section), it became clear that I would need to introduce more fitness features, especially using non-relative values -- i.e. instead of comparing controllers' results, using for instance averaged results across the controllers or only use results from a single controller.
 
-The first insight was (which was also discussed in Chapter \ref{ch_task1}) that games where the intelligent controllers can win too quick -- I decided on 50 clock ticks -- should have a reduced fitness.
+The first insight was (also discussed in Chapter \ref{ch_task1}) that games where the intelligent controllers can win too quick -- I decided on 50 clock ticks -- should have a reduced fitness.
 A correlated problem is that the intelligent controllers often has a low \textit{action entropy} in these games, but this is seemingly directly related to the fact that they can win with only a few precise actions.
 
 The second insight was that the the intelligent controllers is often able to both win AND lose in many of the designed games (controllers standard deviation of win-rate above zero), while this happens rarely in the generated games. 
-Although this is not true for all of the designed games, it gives a indication of the difficulty of a game which seems to otherwise be missing.
+Although this is not true for all of the designed games, it is able to give an indication of the difficulty of a game which seems to otherwise be missing.
 
 As a result, the fitness function used to evolve games had the following form: \\
 
@@ -1535,14 +1536,14 @@ $fitness = \frac{relDiff(\text{average score}) + relDiff(\text{average wins}) + 
 Where [can win in 50 ticks] returns -1 if a  controller is able to win in less than 50 clock ticks, and otherwise gives 1, and [can win and lose] similarly returns either a 1 or -1 if the standard deviation of win-rate is above 0 (1 if true).
 The resulting fitness is a numerical value between -1 and 1.
 
-In addition a game is automatically given a fitness of -11, if it does not fulfil the criteria used in accepting games in Chapter \ref{task1}: 
+In addition a game is automatically given a fitness of -1, if it does not fulfil the criteria used in accepting games in Chapter \ref{ch_task1}: 
 That the controllers are not disqualified, that the score and wins is not always the same, and that the controllers do not all finish in less than 50 clock ticks.
 
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \section{Evolution of games: Setup}
 \label{sec_task2evolvingGames}
-A process for generating evolving new VGDL games were built using the fitness function found in the previous section.
+A process for generating and evolving new VGDL games were built using the fitness function found in the previous section.
 Two different approaches were again used to create new game description:
 1) Evolving from an existing, human-designed game description, using human-designed levels, and 2) evolving from randomly generated games, using randomly generated levels.
 
@@ -1550,7 +1551,7 @@ In both approaches a simple evolution strategy (ES) approach, using mutation- an
 For each generation a population of game descriptions are tested using the two controllers DeepSearch and DoNothing, and a fitness is calculated for each game, with the lowest fitness games being removed from the population.
 As in the previous chapter, only the interaction rules (of the \texttt{InteractionSet}) were evolved over each generation.
 
-Because of CPU scheduling issues \footnote{The problem is mostly that it just takes a lot of time for intelligent controllers to play through each game. Each controller is allowed up to 50 ms per tick, and so even with a maximum of 800 ticks, playing through a game 6 times can take up to $50ms \cdot 800 \cdot  6 = 240s$. With a population size of 50 over 15 generation, a single game can in the worst case take up to 50 hours to evolve.} the populations size was limited to 50, with 25 members always surviving each generation, with a limit of 15 generations.
+Because of CPU scheduling issues\footnote{The problem is mostly that it just takes a lot of time for intelligent controllers to play through each game. Each controller is allowed up to 50 ms per tick, and so even with a maximum of 800 ticks, playing through a game 6 times can take up to $50ms \cdot 800 \cdot  6 = 240s$. With a population size of 50 over 15 generation, a single game can in the worst case take up to 50 hours to evolve.} the populations size was limited to 50, with 25 members always surviving each generation, with a limit of 15 generations.
 Additionally the maximum amount of clock ticks for playthroughs was limited to 800.
 
 The evolution process was stopped when the highest fitness stopped increasing over 10 generation, when the best games fitness were above 0.98 (an almost perfect score), or when the 20 generations allowed were over.
@@ -1562,25 +1563,23 @@ The evolution process was stopped when the highest fitness stopped increasing ov
 An additional process was used to evolve games from a randomly generated game (using the generation process of Section \ref{sec_task1genApproach}), which also requires a level generated for the description, to allow playing it.
 Since the evolution process itself is only focused on changing the interaction rules, it should be certain that the \texttt{SpriteSet}, \texttt{TerminationSet} and the level description (and \texttt{LevelMapping} are well-formed, so the evolution strategy is actually able to find games of high fitness.
 
-Therefore a process was built to first continuously generating a new game- and level description, playing through it with the controllers, and then checking for 1) that the fitness is above -1 (which simply means that the minimum criteria for a game has been fulfilled), and 2) that intelligent controller was actually able to win.
-From the results of Section \ref{sec_task2results} I know that DeepSearch has win-rate of 11\% in the set of randomly generated games, however, where 334 games has already been removed for not fulfilling the minimum criteria, and so we can expect that at least $\frac{66}{400}\cdot 11\% = 1.8\%$, or every 55th game description, will be fulfil the criteria and be interesting start to evolved games from.
+Therefore a process was built to first continuously generate a new game- and level descriptions, playing through them with the controllers, and then checking for 1) that the fitness is above -1 (which simply means that the minimum criteria for a game has been fulfilled), and 2) that intelligent controller was actually able to win.
+From the results of Section \ref{sec_task1inittestresults} I know that DeepSearch has a average win chance of 11\% in the set of randomly generated games, however, where 334 games has already been removed for not fulfilling the minimum criteria, and so we can expect that at least $\frac{66}{400}\cdot 11\% = 1.8\%$, or every 55th game description, will be fulfil the criteria and be selected to evolve from.
 
 
-\subsubsection*{Evolution process}
-
-The figure below shows the process which was used in both evolution approaches.
-
-
-HERE SHOULD BE A PICTURE OF THE EVOLUTION PROCESS
-
-
-Generate game --> if not player runs out of time --> if not any sprites out of bounds --> get results --> if no disq --> if no low time wins --> if no all squares equal
+%\subsubsection*{Evolution process}
+%
+%The figure below shows the process which was used in both evolution approaches.
+%
+%HERE SHOULD BE A PICTURE OF THE EVOLUTION PROCESS
+%
+%Generate game --> if not player runs out of time --> if not any sprites out of bounds --> get results --> if no disq --> if no low time wins --> if no all squares equal
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
 \section{Evolution of games: Results}
 \label{sec_task2evolvingGames}
-A series of XX games were generated and evolved over XX days, XX by evolving from the human-designed game Balderdash, and XX by evolving games from a randomly generated game- and level description.
+A series of XX games were generated and evolved over XX days, XX by evolving from the human-designed game Boulderdash, and XX by evolving games from a randomly generated game- and level description.
 Of these games XX mutated-, and XX randomly generated games has a ``perfect'' fitness of 1, making them the most interesting to examine further.
 
 
@@ -1619,8 +1618,8 @@ BasicGame
 \label{fig:evolved_vgdlgame}
 \end{figure}
 
-Additionally each game can only be played using level files. 
-A level file is written using the \texttt{LevelMapping} characters, where each character defines a tile of the game, and spaces defines empty tiles.
+%Additionally each game can only be played using level files. 
+%A level file is written using the \texttt{LevelMapping} characters, where each character defines a tile of the game, and spaces defines empty tiles.
 
 \begin{figure}[!ht]
 \centering
@@ -1643,7 +1642,7 @@ wwwwwwwwwwwwwwwwwwwwwwww
 \end{figure}
 
 
-HERE GOES A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION
+%HERE GOES A GRAPH OF HOW FITNESS INCREASES OVER TIME IN EVOLUTION
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
