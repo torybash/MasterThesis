@@ -1,0 +1,41 @@
+InteractionSet
+	dirt avatar > killSprite									
+	dirt sword  > killSprite
+	diamond avatar > collectResource
+	diamond avatar > killSprite scoreChange=2
+	moving wall > stepBack
+	moving boulder > stepBack
+	avatar boulder > killIfFromAbove scoreChange=-1
+	avatar butterfly > killSprite scoreChange=-1
+	avatar crab > killSprite scoreChange=-1
+	boulder dirt > stepBack
+	boulder wall > stepBack
+	boulder diamond > stepBack
+	boulder boulder > stepBack
+	enemy dirt > stepBack
+	enemy diamond > stepBack
+	crab butterfly > killSprite
+	butterfly crab > transformTo stype=diamond scoreChange=1
+	exitdoor avatar > killIfOtherHasMore resource=diamond limit=9
+	
+	
+InteractionSet
+	dirt avatar > killSprite
+	dirt sword > killSprite
+	boulder avatar > attractGaze
+	dirt diamond > killIfFromAbove
+	moving wall > stepBack
+	moving boulder > stepBack
+	avatar boulder > killIfFromAbove scoreChange=-1
+	butterfly dirt > killIfHasMore limit=15 resource=diamond
+	avatar crab > killSprite scoreChange=-1
+	boulder dirt > stepBack
+	butterfly avatar > killIfFromAbove
+	sword crab > cloneSprite
+	boulder boulder > stepBack
+	avatar EOS > killIfHasLess limit=13 resource=diamond
+	diamond dirt > transformTo stype=diamond
+	crab butterfly > killSprite
+	diamond avatar > collectResource
+	exitdoor avatar > killIfOtherHasMore limit=9 resource=diamond
+	butterfly boulder > killSprite

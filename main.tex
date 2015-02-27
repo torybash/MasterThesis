@@ -1384,10 +1384,13 @@ I will carefully use this assumption to construct an evaluation function for gam
 Besides the above, a few re-occurring problems was found in the generated games.
 
 \begin{itemize}
-\item Sprites often completely leave the level playing field.
+\item Sprites often completely leave the level playing field. 
+For instance because they are of the \texttt{Missile}- or \texttt{Fleeing} (which tries to move away from a specified sprite each frame) sprite classes.
+\item The game can only be won in the first few (<50) frames. 
+Because sprites disappear before that (for instance  because the sprite is \
+\item There is too much purposeless and arbitrary going on: 
+Often some sprites can not be interacted with at all, and just wander around on the screen, or they can only be interacted by certain non-avatar sprites.
 \item Several of the sprites- and/or rules are never used.
-\item The game can only be won in the first few (<50) frames.
-\item Too much random stuff going on: Many of the sprites can not be interacted with, or can only be interacted by certain NPCs.
 \end{itemize}
 
 
@@ -1566,6 +1569,8 @@ Since the evolution process itself is only focused on changing the interaction r
 Therefore a process was built to first continuously generate a new game- and level descriptions, playing through them with the controllers, and then checking for 1) that the fitness is above -1 (which simply means that the minimum criteria for a game has been fulfilled), and 2) that intelligent controller was actually able to win.
 From the results of Section \ref{sec_task1inittestresults} I know that DeepSearch has a average win chance of 11\% in the set of randomly generated games, however, where 334 games has already been removed for not fulfilling the minimum criteria, and so we can expect that at least $\frac{66}{400}\cdot 11\% = 1.8\%$, or every 55th game description, will be fulfil the criteria and be selected to evolve from.
 
+As mentioned in the discussion of the results of Chapter \ref{ch_task1} the previous randomly generated games had a problem of sprites leaving the playing field.
+To counter this an interaction rule was made for each sprite in the generated descriptions, making sprites take a step back if trying to move out of the level.
 
 %\subsubsection*{Evolution process}
 %
@@ -1579,43 +1584,46 @@ From the results of Section \ref{sec_task1inittestresults} I know that DeepSearc
 %------------------------------------------------------------------------------------------------------------------------------%
 \section{Evolution of games: Results}
 \label{sec_task2evolvingGames}
-A series of XX games were generated and evolved over XX days, XX by evolving from the human-designed game Boulderdash, and XX by evolving games from a randomly generated game- and level description.
-Of these games XX mutated-, and XX randomly generated games has a ``perfect'' fitness of 1, making them the most interesting to examine further.
+Because of the ability of the evolution strategy to return early if the fitness increased over 0.98, a large amount of game description were generated, especially when generating game by mutating the game Boulderdash, were a ``perfect'' fitness games (fitness of 1) were often found in the first generation -- which however caused them to only have a small number of differences from the original game description of Balderdash.
+A series of 54 games were generated and evolved over 4 days, 45 by evolving from the human-designed game Boulderdash, and 9 by evolving games from a randomly generated game- and level description.
+Of these games 40 mutated-, and 4 randomly generated games has a ``perfect'' fitness of 1, making them the most interesting to examine further.
 
+Playing through an array of the Boulderdash mutations I noticed that the games still had many of the problems first discussed in Chapter \ref{ch_task1} when examining mutated games:
+The mutation often cause certain important game rules of the originals to be broken -- suddenly the player can walk through walls- or boulders, gems does not disappear after they have increased the players score, or enemies can no longer harm the player.
+With that being said, some of the games certainly contain some interesting aspects.
+In \texttt{boulderdash_mut9} (see Figure \ref{fig:evolved_boulderdash} for changes in the games' rules), which is also one of the better games\footnote{Gems do no disappear when collected, making the player able to win very quickly (one just has to stand still on gem for a second, and then head for the exit), but at the same time enemies can walk through ground making the game has some sense of challenge and difficulty -- compared to the other generated games.}, the avatar has gained an ability to push boulders making them glide across the level with the ability to kill certain enemies.
+However, the enemies that can be killed by the boulders no longer harm the avatar, and so the new ability does not cause much change to the actual game.
 
+I played through all of the 4 games of ``perfect'' fitness evolved from randomly generated descriptions.
 
 
 
 \begin{figure}[!ht]
 \centering
 \begin{vgdldesc}[linewidth=14cm]
-BasicGame
-	SpriteSet
-		city  > Immovable color=GREEN img=city
-		explosion > Flicker limit=5 img=explosion
-		movable >
-			avatar  > ShootAvatar stype=explosion
-			incoming >
-				incoming_slow  > Chaser stype=city color=ORANGE speed=0.1
-				incoming_fast  > Chaser stype=city color=YELLOW speed=0.3
-
-	LevelMapping
-		c > city
-		m > incoming_slow
-		f > incoming_fast
-		
 	InteractionSet
-		movable wall  > stepBack
-		incoming city > killSprite
-		city incoming > killSprite scoreChange=-1
-		incoming explosion > killSprite scoreChange=2
-
-	TerminationSet
-		SpriteCounter stype=city   win=False
-		SpriteCounter stype=incoming win=True
+		dirt avatar > killSprite
+		dirt sword > killSprite
+		boulder avatar > attractGaze
+		dirt diamond > killIfFromAbove
+		moving wall > stepBack
+		moving boulder > stepBack
+		avatar boulder > killIfFromAbove scoreChange=-1
+		butterfly dirt > killIfHasMore limit=15 resource=diamond
+		avatar crab > killSprite scoreChange=-1
+		boulder dirt > stepBack
+		butterfly avatar > killIfFromAbove
+		sword crab > cloneSprite
+		boulder boulder > stepBack
+		avatar EOS > killIfHasLess limit=13 resource=diamond
+		diamond dirt > transformTo stype=diamond
+		crab butterfly > killSprite
+		diamond avatar > collectResource
+		exitdoor avatar > killIfOtherHasMore limit=9 resource=diamond
+		butterfly boulder > killSprite
 \end{vgdldesc}
-\caption{Example of VGDL description - a simple implementation of the game Missile Command}
-\label{fig:evolved_vgdlgame}
+\caption{The \texttt{InteractionSet} of a generated game description, created by mutating the description of Boulderdash.}
+\label{fig:evolved_boulderdash}
 \end{figure}
 
 %Additionally each game can only be played using level files. 
