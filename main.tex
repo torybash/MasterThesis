@@ -181,7 +181,8 @@ The research and framework is separated into two parts, divided by different gam
 First an analysis of 2-dimensional action-arcade games, with the goal of producing a generator focusing on evolving a set of game-rules, using the performance of general game-playing algorithms in generated games.
 And second, an examination of 2-dimensional turn-based puzzle games-, and especially the levels of puzzle games, with the ambition of being able to not only generate simple sets of game-rules, but also to generate non-trivial puzzles (levels) for the games.
 
-The results of this thesis show that automatically generating game design is indeed very promising, with several interesting complete Sokoban-like puzzle games generated, but indicating that action games is in general a more difficult terrain for generating rules- and mechanics enjoyable for humans.
+The results of this thesis show that automatically generating game design is indeed very promising, with several interesting game designs generated -- but also many bad ones. 
+It seems a human designer is still needed to assess which generated game designs actually work.
 
 
 \end{abstract}
@@ -331,16 +332,16 @@ nodes = {align = center}
 									 \begin{enumerate} \itemsep0pt
 									\item New VGDL games
 									\item New VGDL controllers
-									\item VGDL implementation focused on puzzle games
+									\item New, simplified VGDL implementation
 									\end{enumerate}
 									};
 \node[chapterparts]      (task1) [below=of task1h, shift = (up:1.2cm)]	
 									 {\quad\\
 									By examining the set of human-designed games a process is created to randomly generate complete games- and levels, either by mutating the existing games or generating from scracth. Result from playing through both human-designed- and generated games, using an array of general game playing algorithms are then presented and discussed. Sections:											 													\begin{enumerate}\itemsep0pt
 									\item Generating prcess
-									\item Initial test: Setup
-									\item Initial test: Resutls
-									\item Discussion
+									\item Playthrough test: Setup
+									\item Playthrough test: Results
+									\item Discussion of results
 									\end{enumerate}
 									};
 \node[chapterparts]      (task2)[below=of task2h, shift = (up:1.2cm)]	
@@ -348,31 +349,30 @@ nodes = {align = center}
 									 Focuses on using the results of the analysis to create a set of fitness features to analyse different generated games, allowing a genetic program to evolve well-designed games, by creating and evolving VGDL game descriptions.
 The resulting generated games are then discussed in detail. Sections:
 									 \begin{enumerate}\itemsep0pt
-									\item Fitness function: Intro
-									\item Fitness function: Selection
-									\item Evoltion of games: Setup
-									\item Evoltion of games: Results
-									\item Discussion
+									\item Fitness function
+									\item Performance relationship analysis
+									\item Further selection of features
+									\item Evolution of games: Setup
+									\item Evolution of games: Results
+									\item Discussion of results
 									\end{enumerate}
 									};
 \node[chapterparts]      (task3)[below=of task3h, shift = (up:1.2cm)]	
 									 {\quad\\
 									 A shorter analysis on puzzles. Sections:
 									 \begin{enumerate}\itemsep0pt
-									\item Puzzle analysis: Intro
-									\item Data from designed games
-									\item Evoltion of levels: Setup
-									\item Evoltion of levels: Results
-									\item Evoltion of game/level pair: Setup
-									\item Evoltion of game/level pair: Results
-									\item Discussion
+									\item Puzzle analysis intro
+									\item General puzzle game generation
+									\item Levels for designed games
+									\item Generating puzzle games: Setup and results
+									\item Discussion of results
 									\end{enumerate}
 									};
 \node[chapterparts]      (conclusion)[below=of conclusionh, shift = (up:1.2cm)]	
 									 {\quad\\
-									 Discusses the results and tries to find a conlcusion on the research goals. Sections:											 													\begin{enumerate}\itemsep0pt
-									\item Discussion of game generators
-									\item Conclusion
+									 Discusses the results and seeks to reach a conclusion on the research goals. Sections:											 													\begin{enumerate}\itemsep0pt
+									\item Conclusion on my work
+									\item Future work
 									\end{enumerate}};
 \node[largebox]			(backgroundbox)[above=of theoryh, shift = (down:4.8cm), shift = (right:3.4cm), minimum height = 4.8cm, minimum width = 13cm, label={[anchor=north]above:Background}]{};
 \node[largebox]			(actionbox)[above=of task1h, shift = (down:6.2cm), shift = (right:3.4cm), minimum height = 6.0cm, minimum width = 13cm, label={[anchor=north]above:Action-arcade game generation}]{};
@@ -1512,7 +1512,7 @@ The crate- and gem sprites has no effect in the game.
 \begin{figure}[!ht]
 \centering
 \includegraphics[scale=0.24]{gengame44.png}
-\caption{Screenshot of a generated VGDL game (\texttt{gen_game44}) with a fitness score of 1}
+\caption{Screenshot of a generated VGDL game (\texttt{gen_game44}), where the DeepSearch algorithm plays consistently better than DoNothing}
 \label{fig:gengame44}
 \end{figure}
 
@@ -1586,17 +1586,13 @@ To counter this an interaction rule was made for each sprite in the generated de
 \label{sec_task2evolvingGames}
 Because of the ability of the evolution strategy to return early if the fitness increased over 0.98, a large amount of game description were generated, especially when generating game by mutating the game Boulderdash, were a ``perfect'' fitness games (fitness of 1) were often found in the first generation -- which however caused them to only have a small number of differences from the original game description of Balderdash.
 A series of 54 games were generated and evolved over 4 days, 45 by evolving from the human-designed game Boulderdash, and 9 by evolving games from a randomly generated game- and level description.
-Of these games 40 mutated-, and 4 randomly generated games has a ``perfect'' fitness of 1, making them the most interesting to examine further.
+Of these games 40 mutated-, and 6 randomly generated games had a perfect, or near-perfect fitness of >0.98, making them the most interesting to examine further.
 
 Playing through an array of the Boulderdash mutations I noticed that the games still had many of the problems first discussed in Chapter \ref{ch_task1} when examining mutated games:
 The mutation often cause certain important game rules of the originals to be broken -- suddenly the player can walk through walls- or boulders, gems does not disappear after they have increased the players score, or enemies can no longer harm the player.
 With that being said, some of the games certainly contain some interesting aspects.
-In \texttt{boulderdash_mut9} (see Figure \ref{fig:evolved_boulderdash} for changes in the games' rules), which is also one of the better games\footnote{Gems do no disappear when collected, making the player able to win very quickly (one just has to stand still on gem for a second, and then head for the exit), but at the same time enemies can walk through ground making the game has some sense of challenge and difficulty -- compared to the other generated games.}, the avatar has gained an ability to push boulders making them glide across the level with the ability to kill certain enemies.
+In \texttt{boulderdash_mut09} (see Figure \ref{fig:evolved_boulderdash} for changes in the games' rules), which is also one of the better games\footnote{Gems do no disappear when collected, making the player able to win very quickly (one just has to stand still on gem for a second, and then head for the exit), but at the same time enemies can walk through ground making the game has some sense of challenge and difficulty -- compared to the other generated games.}, the avatar has gained an ability to push boulders making them glide across the level with the ability to kill certain enemies.
 However, the enemies that can be killed by the boulders no longer harm the avatar, and so the new ability does not cause much change to the actual game.
-
-I played through all of the 4 games of ``perfect'' fitness evolved from randomly generated descriptions.
-
-
 
 \begin{figure}[!ht]
 \centering
@@ -1648,27 +1644,80 @@ InteractionSet
 \label{fig:evolved_boulderdash}
 \end{figure}
 
-%Additionally each game can only be played using level files. 
-%A level file is written using the \texttt{LevelMapping} characters, where each character defines a tile of the game, and spaces defines empty tiles.
+I played through all of the 6 games of ``perfect'' fitness evolved from randomly generated descriptions, which in general has a more unique design that the Boulderdash-evolved descriptions.
+The outcome of several of the games are partly- or completely random, no matter what the player does the results are the same: 
+This is likely a product of using a rather small statistical sample when playing through each game (6 playthroughs for each controller).
+The games are overall quite simple, but several of them contain some interesting game design for human players -- some which seemingly has appeared by accident:
+
+In the evolved game  \texttt{evol_game01} (see Figure \ref{fig:evolved_random_game_desc} (description) and Figure \ref{fig:evolved_random_game_screenshot} (screenshot)) the goal is to kill a block of dirt that whizzes around the level, trying to flee from the avatar.
+However, true to the action-arcade genre of the game, the player can additionally increase his/her score by moving the avatar to a laser-sprite (\texttt{gen2} in the description). 
+Only one laser-sprite can exist in the level -- because of its parameter \texttt{singleton=TRUE}, and the player can only increase his/her score by repeatedly going to each laser that is spawned.
+%Only one laser-sprite can exist in the level (because of is parameter \texttt{singleton=TRUE}), and the player can only increase his score by repeatedly going to each laser-sprite that is spawned.
+%However the game has an interesting feature: If the player picks up a laser in the same position of a previously picked up laser, the player loses all his points.
+The game \texttt{evol_game02} is rather simple, in that the goal is simply to kill the avatar, which can be achieved by walking to the ``cog'' sprite (at the top of the screen in Figure \ref{fig:evolved_random_game_screenshot2}.
+However the game is lost if the bat sprite (a \texttt{RandomNPC}) ever collides with the same object, making the outcome rather random.
+
+
+
+
 
 \begin{figure}[!ht]
 \centering
 \begin{vgdldesc}[linewidth=14cm]
-w    m  m   m  m  m m mw
-w                      w
-w                      w
-w                      w
-w                      w
-w                      w
-w           A          w
-w                      w
-w                      w
-w                      w
-w   c c c c c c c c    w
-wwwwwwwwwwwwwwwwwwwwwwww
+BasicGame
+	SpriteSet
+		avatar > MovingAvatar img=avatar
+		gen1 > Passive img=honey
+		gen2 > Resource limit=4 singleton=TRUE img=missile value=2
+		gen3 > Immovable img=pellet
+		gen4 > Bomber orientation=DOWN stype=gen5 img=frog prob=0.22090000000000004
+		gen5 > Spreader limit=33 stype=gen2 img=fire
+		gen6 > Fleeing stype=avatar img=dirt
+	InteractionSet
+		gen6 gen4 > attractGaze
+		avatar EOS > killSprite
+		gen5 EOS > wrapAround
+		gen1 gen3 > killIfHasLess limit=3 resource=gen2
+		gen2 avatar > transformTo stype=gen1 scoreChange=2
+		gen2 avatar > wallStop
+		gen2 avatar > changeResource resource=gen2 value=0 scoreChange=7
+		gen6 gen2 > killIfOtherHasMore limit=0 resource=gen2
+		avatar EOS > stepBack
+		gen1 EOS > stepBack
+		gen3 gen3 > stepBack
+		gen3 EOS > stepBack
+		gen1 gen1 > spawnIfHasMore limit=11 stype=gen6 resource=gen2 scoreChange=-2
+		gen5 EOS > stepBack
+		gen6 EOS > stepBack
+		gen2 gen5 > collectResource
+	LevelMapping
+		$ > gen1 
+		% > gen2 
+		& > gen3 
+		' > gen4 
+		( > gen5 
+		) > gen6 
+	TerminationSet
+		SpriteCounter limit=0 stype=gen6 win=TRUE 
+		SpriteCounter limit=0 stype=avatar win=FALSE 
 \end{vgdldesc}
-\caption{Example of VGDL level description - a level for the implementation of the game Missile Command}
-\label{fig:evolved_vgdlgame_level}
+\caption{The VGDL game description for the evolved game \texttt{evol_game01}}
+\label{fig:evolved_random_game_desc}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.24]{coolgame1.png}
+\caption{Screenshot of a evolved-from-random-generated VGDL game (\texttt{evol_game01}) with a fitness score of 1}
+\label{fig:evolved_random_game_screenshot}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.24]{coolgame2.png}
+\caption{Screenshot of a evolved-from-random-generated VGDL game (\texttt{evol_game02}) with a fitness score of $\approx$0.98}
+\label{fig:evolved_random_game_screenshot2}
 \end{figure}
 
 
@@ -1679,11 +1728,13 @@ wwwwwwwwwwwwwwwwwwwwwwww
 
 \section{Discussion of results}
 \label{sec_task2discussion}
-The resulting games are unfortunately pretty bad.
+Many of the games generated by in this chapter definitely have some interesting properties and features, but overall the VGDL game generation process was not able to create any complete games of a high enough quality to compare with other games of the genre.
+Additionally the generator was only able to find games with interesting qualities, and did not guarantee that each generated games were any good. 
+The generator was simply able to find sets of games in the space of VGDL game descriptions with a significantly higher chance of quality, than for completely randomly generated games. 
 
-It would be interesting to retrieve more data from playing through each game.
-For instance, by examining the proportion of sprites- and rules that have been in use in the game, the amount of sprites that has left the level field, or the amount of objects that have been killed or created.
-I have implemented functions for retrieving several values like these in the GVG-AI framework, but initial examination of the values did not show any clear form or profile, for the human-designed set of games\footnote{https://docs.google.com/spreadsheets/d/1HAuIdXBcv4MXTlerkSqz8tK-zXMypzzQAU8sRlt95TA/edit?usp=sharing}.
+To be able to increase the quality of the game generator one would almost definitely need to refine- and extend the fitness function, which could identify many more aspects of games- and playthroughs of games.
+For instance, one could examine how each controller increased its score across a playthrough, th proportion of sprites- and rules that have been in use in the game, the amount of sprites that has left the level field, or the amount of objects that have been killed or created.
+I have implemented functions for retrieving several more value (like these) in the GVG-AI framework, but initial examination of the values did not show any clear form or profile, for the human-designed set of games\footnote{https://docs.google.com/spreadsheets/d/1HAuIdXBcv4MXTlerkSqz8tK-zXMypzzQAU8sRlt95TA/edit?usp=sharing}.
 
 
 
@@ -1693,9 +1744,9 @@ I have implemented functions for retrieving several values like these in the GVG
 
 \chapter{Puzzle generation}
 \label{ch_task3}
-In this chapter I will explore automatically generating VGDL puzzle games- and levels using.
+In this chapter I will explore the prospect of automatically generating VGDL puzzle games- and levels.
 First an array of human-designed puzzle games will be examined using a general puzzle solving algorithm.
-Then, using the results of from the testing quality games, a general level generator for puzzle games will be introduced, and the results of generating levels for designed games presented.
+Then, using the results of the algorithm, a general level generator for puzzle games will be introduced, and generated levels for designed games presented.
 At the end, a process for both generating a (puzzle) game description and evolving a level, will be shown and the results of the generator discussed.
 
 \section{Puzzle analysis introduction}
@@ -1818,8 +1869,8 @@ For the following tests of the generator, the evolutions strategy was run with a
 The general puzzle level generator was set to create levels for the five designed puzzle games analysed above.
 Because space of game states quickly become too large for the PuzzleSolver, all levels were generated using a level size of 8x8, with walls on all edges -- making the actual levels consist of only 6x6 tiles.
 
-Even with the tight restriction, several levels of high difficulty was created for the five games.
-Figure \ref{fig:lvlevolveprocess} show how the generated level for the game Bait increases in difficulty over the generations.
+Even with the tight restriction, the generator was able to create several levels of high difficulty for the games.
+Figure \ref{fig:lvlevolveprocess} show how a generated level for the game Bait increases in difficulty over generations.
 
 
 \begin{figure}[!ht]
@@ -1910,14 +1961,13 @@ To reach this goal, two different approaches was attempted :
 And 2) Generating game descriptions restricted to a subset of VGDL classes -- puzzle games.
 
 The main focus was on creating the descriptions of action-arcade games using the performance of general game playing algorithms to assess the games' quality.
-Using an evolution strategy a set of playable (action-arcade) VGDL games was generated, and
-A large problem in the process of evolving the action-arcade games used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game ten times takes the Explorer controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
+Using an evolutionary strategy a set of playable (action-arcade) VGDL games was generated, some using an existing human-designed game (Boulderdash) as basis, and some using randomly generated games- and levels.
 
+The process was able to generate several set of interesting game-rules, but at the same time several of the games created by the generator hardly contained any game-play, and in many games the outcome was largely based on luck.
+In general the generator is not able to instantly find the most interesting games in the space of VGDL games, but it is able to find a subset of more interesting game description, which human game designers can examine further to decide which games are actually ``good''.
+A problem in the process of evolving the action-arcade games used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game 6 times takes the DeepSearch controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
+At the same time using these, rather limited, parameters constraint the results the controllers can potentially retrieve. 
 A more clever approach might be to first probe the games with some more simple controllers, or decreasing the allowed time for intelligent controllers, allowing the games to be played through more quickly, and decide if the game is worth spending time on for a more precise analysis (using intelligent controllers).
-
-It might be interesting to analyse games using a wider array of controllers, or analysing by letting the same controller (or controllers) play with a different amount of time allowed per clock-tick, or even using controllers designed to ``play bad'' (trying to die, decrease score) could be interesting
-
-Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
 
 
 \section{Future work}
@@ -1927,6 +1977,12 @@ First reading, and understanding the rules (in pac-man: eat all the cheese, in b
 Then, using a learning-approach, playing through the game/level, not know much about possible interactions, but maybe assuming that colliding with moving sprites is dangerous (they could be enemies!).
 And then playing the game repeatedly to learn to play the game better.
 
+
+
+
+It might be interesting to analyse games using a wider array of controllers, or analysing by letting the same controller (or controllers) play with a different amount of time allowed per clock-tick, or even using controllers designed to ``play bad'' (trying to die, decrease score) could be interesting
+
+Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
