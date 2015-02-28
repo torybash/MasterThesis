@@ -696,7 +696,7 @@ As a results, certain sprites- and interaction classes are restricted to the act
 \chapter{Extending VGDL}
 \label{ch_extending}
 This chapter describes a series of extensions I constructed for the GVG-AI framework, making a more in-depth analysis possible.
-I created a series of VGDL games, AI controllers and a implemented a new, simplified framework to play through \textit{puzzle games} with less time and memory use.
+I created a series of VGDL games, AI controllers\footnote{My changes to GVG-AI framework can be seen on https://github.com/torybash/gvgai.} and a implemented a new, simplified framework to play through \textit{puzzle games} with less time and memory use\footnote{Source can be found here: https://github.com/torybash/FastVGDL.}.
 
 
 \section{Writing new VGDL games}
@@ -925,7 +925,7 @@ As can be see from the last test (Figure \ref{table:fastvgdlbrainman1}) the main
 \chapter{Analysis of randomly generated games}
 \label{ch_task1}
 This chapter describes the setup- and methodology used in generating new games (i.e. game descriptions).
-Additionally a play test of a set of both human-designed and generated games, using an array of general game playing algorithms, will be presented.
+Additionally a play test of a set of both human-designed and generated games, using an array of general game playing algorithms, will be presented\footnote{The source of the programs used in the analysis performed in this chapter (and the next) can be seen here: https://github.com/torybash/GameChanger.}.
 
 This chapter is only focused on \textit{action-arcade} games - analysis and generation of \textit{puzzle games} will be presented and discussed in Chapter \ref{ch_task3}.
 
@@ -1939,8 +1939,8 @@ The process worked by:
 \subsection{Results} 
 Over a period of about 10 days, the generator was able to generate a long series of VGDL puzzle game description, each with a 8x8 level to play through the game with.
 However of these, most had the solution to the levels be rather short, with many games requiring less than 20 actions to complete.
-Of the more difficult game-level pairs, two requiring 50 or more actions for the shortest solution, and eight pairs requiring more than 35 moves.
-The Figure \ref{fig:evol_puzzle_genlvls} shows the levels of the two of the more interesting game-level pairs (\texttt{evol_puzzle015} and \textit{evol_puzzle009}), and Figure \ref{fig:evol_puzzle_desc} the game description of the most difficult.
+Of the more difficult game-level pairs, two requiring 50 or more actions for the shortest solution, and twelve pairs requiring more than 20 moves.
+The Figure \ref{fig:evol_puzzle_genlvls} shows the levels of the two of the more interesting game-level pairs (\texttt{evol_puzzle015} and \texttt{evol_puzzle009}), and Figure \ref{fig:evol_puzzle_desc} the game description of the first of these.
 
 
 \begin{figure}[!ht]
@@ -2004,7 +2004,7 @@ The generated games all have a strong similarity to Soko-Ban however, which is l
 The fitness function used to evolve levels were chosen rather subjectively, and could almost definitely be improved, to be able to generate levels of a higher quality.
 It might be that better levels could be generated if the amount of clock ticks were the most focused, but because of time schedule issues I did not have time to explore the function further.
 
-The generator is able to generate levels for most designed VGDL games, and certain generated games, restricted to a subset of classes, that -- at least -- have non-trivial solutions which are not immediately obvious, even with the tight restrictions of the level size (6x6 playing field).
+The level generator is able to generate levels for most designed VGDL games, and certain generated games, restricted to a subset of classes, that -- at least -- have non-trivial solutions which are not immediately obvious, even with the tight restrictions of the level size (6x6 playing field).
 The drawback of the generator is that it is rather slow at generating even small levels, and has severe problems with larger level- and game space sizes.
 Also, it is not guaranteed to find the most interesting levels for the games -- human level designers would almost definitely be able to create harder and more enjoyable levels.
 
@@ -2134,7 +2134,7 @@ The games are all interpretations of existing games designed on different platfo
 \item [Brainman] \citep{game:brainman} Has similar characteristics as the other \textit{Soko-Ban}-like games, but also has a focus on collecting gems to increase the players score.
 \item [Chip's Challenge] \citep{game:chipschallenge} \textit{Chip's Challenge} is again a \textit{Soko-Ban}-like puzzle game, but with an large amount of features compared to the other games, like water where either boxes can be used to make a bride across, or the player can swim across if he has a specific item (a swimsuit).
 \item [The Citadel] \citep{game:thecitadel} An additional game closely related to \textit{Soko-Ban}. This game features boxes which can be moved in a line, i.e. if the player pushed a box of this type, all boxes behind it will additionally be pushed.
-\item [(Real) Soko-Ban] \citep{game:Soko-Ban} The original push-boxes games. 
+\item [(Real) Soko-Ban] \citep{game:sokoban} The original ``push-boxes'' game. 
 \item [Modality] \citep{game:modality} \textit{Soko-Ban}-like game with a twist: Each level is divided into white- and black tiles, and the avatar can only move between the two colours by going through the grey tiles on the playing field.
 %\item [Painter] Very simple game, with a very limited skill ceiling. The player must make every tile in levels have the same colour, which is achieved by moving the avatar in a path across each tiles, causing each to switch colour.
 \item [Zen Puzzle] \citep{game:zenpuzzle} The player must ``paint'' every tile in an area by moving the avatar across them. After a tile has been painted it becomes solid and impossible for the avatar to move through, making the player have to find a path through the area to reach all tiles.
