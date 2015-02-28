@@ -1,0 +1,34 @@
+I was inspired by the following:
+
+@techreport{TaylorParberry2011TRSokoban,
+  author = {Taylor, Joshua and Parberry, Ian},
+  title = {Procedural Generation of {S}okoban Levels},
+  institution = {Laboratory for Recreational Computing, Dept. of Computer Science \& Engineering,
+                 Univ.\ of North Texas},
+  number = {LARC--2011--01},
+  year = {2011},
+  month={February},
+ }
+https://larc.unt.edu/techreports/LARC-2011-01.pdf
+
+
+@INPROCEEDINGS{6932896,
+	author={Chong-u Lim and Harrell, D.F.},
+	booktitle={Computational Intelligence and Games (CIG), 2014 IEEE Conference on},
+	title={An approach to general videogame evaluation and automatic generation using a description language},
+	year={2014},
+	month={Aug},
+	pages={1-8}
+},
+doi={10.1109/CIG.2014.6932896},}
+http://groups.csail.mit.edu/icelab/sites/default/files/pdf/Lim2014approach.pdf
+
+
+
+@paper{AIIDE125472,
+	author = {David Williams-King and Jörg Denzinger and John Aycock and Ben Stephenson},
+	title = {The Gold Standard: Automatically Generating Puzzle Game Levels},
+	conference = {AAAI Conference on Artificial Intelligence and Interactive Digital Entertainment},
+	year = {2012},
+	url = {https://www.aaai.org/ocs/index.php/AIIDE/AIIDE12/paper/view/5472}
+}

@@ -32,6 +32,7 @@
 \usepackage{siunitx}
 \usepackage{datatool}
 \usepackage{booktabs}
+\usepackage{pdfpages}
 %\usepackage{xcolor}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
@@ -165,6 +166,45 @@ roundcorner=2pt
 % Frontpage
 \begin{document}
 
+
+
+
+\includepdf[pages={1}]{ituforside.pdf}
+
+%\begin{titlepage}
+%    \begin{center}
+%        \vspace*{1cm}
+%        
+%        \Huge
+%        \textbf{Thesis Title}
+%        
+%        \vspace{0.5cm}
+%        \LARGE
+%        Thesis Subtitle
+%        
+%        \vspace{1.5cm}
+%        
+%        \textbf{Author Name}
+%        
+%        \vfill
+%        
+%        A thesis presented for the degree of\\
+%        Doctor of Philosophy
+%        
+%        \vspace{0.8cm}
+%        
+%    %    \includegraphics[width=0.4\textwidth]{university}
+%        
+%        \Large
+%        Department Name\\
+%        University Name\\
+%        Country\\
+%        Date
+%        
+%    \end{center}
+%\end{titlepage}
+
+
 % diverse
 %\parindent=0pt % Ingen indrykning
 %\parskip=8pt plus 2pt minus 4pt
@@ -174,16 +214,16 @@ roundcorner=2pt
 % Abstract
 \begin{spacing}{1.2}
 \begin{abstract}
-In this thesis a framework for generating games- and levels in the video game description language VGDL is presented.
-The generator is able to automatically generate games, test the playability and quality using AI controllers, and score each game according to a series of evaluation criteria.
+In this thesis a framework for generating complete 2-dimensional games- and levels in the video game description language VGDL is presented.
+The generator is able to automatically generate games, test the playability and quality using general game playing algorithms, and score each game according to a series of evaluation criteria.
 
 The research and framework is separated into two parts, divided by different game genres: 
-First an analysis of 2-dimensional action-arcade games, with the goal of producing a generator focusing on evolving a set of game-rules, using the performance of general game-playing algorithms in generated games.
-And second, an examination of 2-dimensional turn-based puzzle games-, and especially the levels of puzzle games, with the ambition of being able to not only generate simple sets of game-rules, but also to generate non-trivial puzzles (levels) for the games.
+First an analysis of 2-dimensional action-arcade games, with the goal of generating complete games using the performance of general game-playing algorithms.
+Secondly, an examination of 2-dimensional turn-based puzzle games-, and especially the levels of puzzle games, with the ambition of being able to not only generate simple sets of game-rules, but also to generate non-trivial puzzles (levels) for the games.
 
-The results of this thesis show that automatically generating game design is indeed very promising, with several interesting game designs generated -- but also many bad ones. 
-It seems a human designer is still needed to assess which generated game designs actually work.
-
+The results of this thesis show that automatically generating game design is indeed very promising, with a few interesting complete games generated.
+The game generators constructed in this work only guarantee that generated games are playable by a certain set of parameters, and is not able to distinguish between ``not-too-bad'' and actual good games -- however they are definitely able to find games with a high proportion being of decent quality.
+In the results of this work, a human designer is still needed to assess generated games to figure out if they are actually fun or not.
 
 \end{abstract}
 \end{spacing}
@@ -257,12 +297,12 @@ The focus of the study was to use the performance of game playing algorithms in 
 
 The main approach used to generate interesting VGDL content was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to assess the quality of played games.
 A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was intensely used in choosing and weighing features used for the evolutionary strategy.
-The main approach was focused on a specific genre and type of games (\textit{arcade-action} games), which is the main focus of the VGDL language. 
+The main approach was focused on a specific genre and type of games (\textit{arcade-action games}), which is the main focus of the VGDL language. 
 %The general game-playing algorithms used are well-fitted to play the game genre, since they are excellent at quickly finding a decent action to take in the environment of the games -- where quick movements to avoid enemies, and increasing the player-score is in the focus.
 
-A second, smaller, part of this thesis was focused on games of the \textit{puzzle}-genre describable, in VGDL.
+A second, smaller, part of this thesis was focused on games of the puzzle-genre describable, in VGDL.
 This approach was mainly focused on generating interesting game levels, for simple generated VGDL descriptions, by using the results of a breadth-first search algorithm (which was able to find the shortest solution), with the goal of being able to assess the difficulty, and thereby the quality of a game-level pair.
-The VGDL puzzle games examined consist in general of a much smaller game-state space (i.e. the amount of possible arrangements of sprites and values), and so potentially are more well-suited for a in-depth analysis.
+The VGDL \textit{puzzle games} examined consist in general of a much smaller game-state space (i.e. the amount of possible arrangements of sprites and values), and so potentially are more well-suited for a in-depth analysis.
 
 
 \subsubsection*{Assumptions}
@@ -272,17 +312,17 @@ This is not always clear when actually playing the games in the framework used, 
 I additionally assume that completely randomly generated games, using randomly generated levels in the VGDL language (without sorting/searching using a fitness function) produce games with an extremely (almost negligible) low chance of being human-enjoyable.
 This assumption is mostly made from initial tests into game generation using the VGDL language.
 
-When analysing- and generating \textit{puzzle games} (see below) I make the assumption that the quality of a game- and level of the genre is directly related to the difficulty of the game -- that, at least, having a possibility of challenging levels or situation is deeply important for puzzle game.
+When analysing- and generating \textit{puzzle games} (see below) I make the assumption that the quality of a game- and level of the genre is directly related to the difficulty of the game -- that, at least, having a possibility of challenging levels or situation is deeply important for \textit{puzzle games}.
 
 \subsection{Definitions}
 This project was focused a games of two restricted genres and types -- these restrictions mostly stems from the framework used in the work, but allows a more focused analysis: 
 
-1) Single-player, 2-dimensional, top-down, action games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an ``action''-(shoot etc.) button.
+1) Single-player, 2-dimensional, top-down, action-arcade games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an ``action''-(shoot etc.) button.
 The games are all focused on increasing the players score, and often winning requires killing/destroying all of enemies on the screen.
 These games will be simply be referred to as \textit{action-arcade games}.
 
 And: 2) Single-player, 2-dimensional, top-down, turn-based puzzle games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an ``action''-(shoot etc.) button., and all events occur as a result of player actions (i.e. no NPC's or falling boulders, and no random events). 
-In the VGDL framework these type of games are simply a subset of the action-arcade genre, and only a subset of the VGDL classes- and functions defined in the GVG-AI framework (see Section \ref{sec_gvgaiframework}) are ``allowed''.
+In the VGDL framework these type of games are simply a subset of the action-arcade genre, with only a subset of the frameworks' classes- and functions (see Section \ref{sec_gvgaiframework}) ``allowed''.
 This type of games will be referred to as \textit{puzzle games} in the project.
 
 
@@ -684,10 +724,10 @@ Figure \ref{fig:gvgai_games_screenshots} show how some of the games are visually
 Using the VGDL implementation of the GVG-AI framework the games that can be described are rather restricted to certain genres- and types, without greatly extending the program.
 For instance, the lack of possibility to traverse different levels in the same play through make adventure games unattainable, and the restriction of only moving a single character with the keyboard (the avatar) makes great restriction in creating strategy games.
 
-The games examined- and generated in this thesis are of a type that makes them suitable for the framework: \textit{Action-arcade}- and \textit{puzzle} games. 
+The games examined- and generated in this thesis are of a type that makes them suitable for the framework: \textit{Action-arcade}- and \textit{puzzle games}. 
 
-In this thesis I make the simple distinction between the two types of games in the VGDL framework, that arcade games can contain elements (sprites) that move by themselves, whereas interactions only occur as a result of the avatar moving in puzzle games.
-As a results, certain sprites- and interaction classes are restricted to the action-arcade games (e.g. NPC- and Missile sprites), making the space of possible VGDL \textit{puzzle} games slightly smaller.
+In this thesis I make the simple distinction between the two types of games in the VGDL framework, that \textit{action-arcade games} are able to contain elements (sprites) that move by themselves, whereas interactions only occur as a result of the avatar moving in \textit{puzzle games}.
+As a results, certain sprites- and interaction classes are restricted to the \textit{action-arcade} games (e.g. NPC- and Missile sprites), making the space of possible VGDL \textit{puzzle games} slightly smaller.
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -704,7 +744,7 @@ I created a series of VGDL games, AI controllers\footnote{My changes to GVG-AI f
 \label{sec_writingnewvgdl}
 To increase the size of the set of designed games, to allow for a more precise analysis of what makes a good game, I created fourteen new game descriptions in VGDL. 
 
-Another important reason for creating new descriptions, was to introduce a series of \emph{puzzle games} to be analysed, since, as mentioned in Section \ref{ssec_vgdl} the example games from the GVG-AI competetion are almost all of the \textit{action-arcade} genre.
+Another important reason for creating new descriptions, was to introduce a series of \textit{puzzle games} to be analysed, since, as mentioned in Section \ref{ssec_vgdl} the example games from the GVG-AI competetion are almost all of the \textit{action-arcade} genre.
 
 
 \subsubsection*{Describing existing games in VGDL}
@@ -737,7 +777,7 @@ $
 
 
 \subsubsection*{Puzzle games}
-A set of puzzle games from several different platform, all featuring a single avatar, was found to be suitable to be described in VGDL. 
+A set of \textit{puzzle games} from several different platform, all featuring a single avatar, was found to be suitable to be described in VGDL. 
 The games can mostly be described as \textit{Soko-Ban}-clones with different spins on the gameplay.
 Some of the games have action- gameplay aspects, with enemies hindering the progression of the player, but as per the defintion of \textit{puzzle games} used in the thesis these parts were removed only leaving the puzzles of games.
 
@@ -762,7 +802,7 @@ $
 \section{Creating new VGDL controllers}
 \label{sec_creatingnewcontrollers}
 To be able to probe VGDL games in more detail, I created a series of new AI controllers with various approaches to finding the action to take.
-In total four new controllers was generated: Three to play the action-arcade style games, and one only focused on solving puzzle games.
+In total four new controllers was generated: Three to play the \textit{action-arcade} style games, and one only focused on solving \textit{puzzle games}.
 
 \subsubsection*{Action-arcade controllers}
 Three controllers of an increasing degree of cleverness was introduced: \textit{One-step} (simplest), \textit{Deep-search} and \textit{Explorer} (most complex), with different strategies used in simulating the forward model (accessible when running the GVG-AI framework).
@@ -827,13 +867,13 @@ The Explorer was proven to be of a decent quality by getting a 1st / 5th place i
 
 
 \subsubsection*{Puzzle controller}
-The general game playing algorithms from the GVG-AI competition- and the algorithms described above are not well-suited for playing \emph{puzzle games}, because the goal can often only be achieved by applying a specific series of actions in the genre, which the controllers are not very good at.
-To analyse an arbitrary puzzle game and be able to find the fastest solution, a breadth-first search algorithm was implemented, using a few methods to decrease the state-space by assumptions of the games.
+The general game playing algorithms from the GVG-AI competition- and the algorithms described above are not well-suited for playing \textit{puzzle games}, because the goal can often only be achieved by applying a specific series of actions in the genre, which the controllers are not very good at.
+To analyse an arbitrary \textit{puzzle} game and be able to find the fastest solution, a breadth-first search algorithm was implemented, using a few methods to decrease the state-space by assumptions of the games.
 
 \begin{description}
 \item[PuzzleSolver]
-The PuzzleSolver algorithm use the fact the puzzle games (using the definition of the introduction) only contain elements which can be moved or interacted with by the player-avatar, and contains no random elements, and so the initial state of a game in GVG-AI can be used to simulate all possible actions that eventually will lead to finding the solution of the games.
-Additionally the PuzzleSolver uses the face that most of the puzzle games contain wall-sprites which always push back the player, and so the controllers never try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game, and never simulating actions that lead to the avatar in a walls position.
+The PuzzleSolver algorithm use the fact the \textit{puzzle games} (using the definition of the introduction) only contain elements which can be moved or interacted with by the player-avatar, and contains no random elements, and so the initial state of a game in GVG-AI can be used to simulate all possible actions that eventually will lead to finding the solution of the games.
+Additionally the PuzzleSolver uses the face that most of the \textit{puzzle games} contain wall-sprites which always push back the player, and so the controllers never try to move into a wall -- this is achieved by storing the positions of every wall-sprite at the start of the game, and never simulating actions that lead to the avatar in a walls position.
 \end{description}
 
 Also, for each path the algorithm attempts, a signature of the game state is calculated and stored, constructed from the position and types of each (non-wall) sprite appearing in the given state. 
@@ -849,8 +889,8 @@ For the latter type of sprite a solution was implemented by ``skipping'' game st
 
 \section{SimpleVGDL}
 \label{sec_fastvgdl}
-Since the GVG-AI framework has some functions and properties which are not important for, especially, the \textit{puzzle games} analysed in this work, I created an implementation of a lighter version of VGDL, solely focused on analysing puzzle games in more detail.
-The implementation is basically a clone of the GVG-AI framework, but with several time- and memory consuming features removed, which in part was possible due to the puzzle games being relatively more simple (for instance, only movement from one tile to another is possible in SimpleVGDL, whereas sprites can move and collide in-between tiles in the GVG-AI framework).
+Since the GVG-AI framework has some functions and properties which are not important for, especially, the \textit{puzzle games} analysed in this work, I created an implementation of a lighter version of VGDL, solely focused on analysing \textit{puzzle games} in more detail.
+The implementation is basically a clone of the GVG-AI framework, but with several time- and memory consuming features removed, which in part was possible due to the \textit{puzzle games} being relatively more simple (for instance, only movement from one tile to another is possible in SimpleVGDL, whereas sprites can move and collide in-between tiles in the GVG-AI framework).
 
 In the SimpleVGDL framework the PuzzleSolver algorithm was additionally geared up with a two different approaches to memory handling: 1) Storing the actual game state for nodes in the search queue, and 2) only storing the game state signature and path, making it necessary to re-create the game state from the initial state of the game, whenever an element is polled from the queue.
 
@@ -933,7 +973,7 @@ As can be see from the last test (Figure \ref{table:fastvgdlbrainman1}) the main
 This chapter describes the setup- and methodology used in generating new games (i.e. game descriptions).
 Additionally a play test of a set of both human-designed and generated games, using an array of general game playing algorithms, will be presented\footnote{The source of the programs used in the analysis performed in this chapter (and the next) can be seen here: https://github.com/torybash/GameChanger.}.
 
-This chapter is only focused on \textit{action-arcade} games - analysis and generation of \textit{puzzle games} will be presented and discussed in Chapter \ref{ch_task3}.
+This chapter is only focused on \textit{action-arcade games} - analysis and generation of \textit{puzzle games} will be presented and discussed in Chapter \ref{ch_task3}.
 
 \subsubsection*{Selection of designed arcade-action games}
 A subset of the human-designed games mentioned in Section \ref{sec_gvgaiframework} and \ref{sec_writingnewvgdl} were selected for the following analyses games, and for creating new games by mutation.
@@ -1655,12 +1695,12 @@ The outcome of several of the games are partly- or completely random, no matter 
 This was likely a product of using a rather small statistical sample when playing through each game (6 playthroughs for each controller).
 The games are overall quite simple, but several of them contain some interesting game design for human players -- some which seemingly has appeared by accident:
 
-In the evolved game  \texttt{evol_game01} (see Figure \ref{fig:evolved_random_game_desc} (description) and Figure \ref{fig:evolved_random_game_screenshot} (screenshot)) the goal is to kill a block of dirt that whizzes around the level, trying to flee from the avatar.
+In the evolved game  \texttt{evol_game001} (see Figure \ref{fig:evolved_random_game_desc} (description) and Figure \ref{fig:evolved_random_game_screenshots} (screenshot)) the goal is to kill a block of dirt that whizzes around the level, trying to flee from the avatar.
 However, true to the action-arcade genre of the game, the player can additionally increase his/her score by moving the avatar to a laser-sprite (\texttt{gen2} in the description). 
 Only one laser-sprite can exist in the level -- because of its parameter \texttt{singleton=TRUE}, and the player can only increase his/her score by repeatedly going to each laser that is spawned.
 %Only one laser-sprite can exist in the level (because of is parameter \texttt{singleton=TRUE}), and the player can only increase his score by repeatedly going to each laser-sprite that is spawned.
 %However the game has an interesting feature: If the player picks up a laser in the same position of a previously picked up laser, the player loses all his points.
-The game \texttt{evol_game02} is rather simple, in that the goal is simply to kill the avatar, which can be achieved by walking to the ``cog'' sprite (at the top of the screen in Figure \ref{fig:evolved_random_game_screenshot2}.
+The game \texttt{evol_game002} is rather simple, in that the goal is simply to kill the avatar, which can be achieved by walking to the ``cog'' sprite (at the top of the screen in game to the right of Figure \ref{fig:evolved_random_game_screenshots}.
 However the game is lost if the bat sprite (a \texttt{RandomNPC}) ever collides with the same object, making the outcome rather random.
 
 
@@ -1707,23 +1747,21 @@ BasicGame
 		SpriteCounter limit=0 stype=gen6 win=TRUE 
 		SpriteCounter limit=0 stype=avatar win=FALSE 
 \end{vgdldesc}
-\caption{The VGDL game description for the evolved game \texttt{evol_game01}}
+\caption{The VGDL game description for the evolved game \texttt{evol_game001}}
 \label{fig:evolved_random_game_desc}
 \end{figure}
 
-\begin{figure}[!ht]
-\centering
-\includegraphics[scale=0.24]{coolgame1.png}
-\caption{Screenshot of a evolved-from-random-generated VGDL game (\texttt{evol_game01}) with a fitness score of 1}
-\label{fig:evolved_random_game_screenshot}
-\end{figure}
-
 
 \begin{figure}[!ht]
-\centering
-\includegraphics[scale=0.24]{coolgame2.png}
-\caption{Screenshot of a evolved-from-random-generated VGDL game (\texttt{evol_game02}) with a fitness score of $\approx$0.98}
-\label{fig:evolved_random_game_screenshot2}
+	\subfloat{
+      	\includegraphics[scale=0.24]{coolgame1.png}
+    	}
+	\hfill
+	\subfloat{
+      	\includegraphics[scale=0.24]{coolgame2.png}
+    	}\\
+    	\caption{Visual representation of two ``evolved-from-random-generated''  VGDL games: \texttt{evol_game001} (left), having a fitness score of 1, and \texttt{evol_game002} having a score of $\approx$0.98}
+	\label{fig:evolved_random_game_screenshots}
 \end{figure}
 
 
@@ -1750,27 +1788,27 @@ I have implemented functions for retrieving several more value (like these) in t
 
 \chapter{Puzzle generation}
 \label{ch_task3}
-In this chapter I will explore the prospect of automatically generating VGDL puzzle games- and levels.
-First an array of human-designed puzzle games will be examined using a general puzzle solving algorithm.
-Then, using the results of the algorithm, a general level generator for puzzle games will be introduced, and generated levels for designed games presented.
-At the end, a process for both generating a (puzzle) game description and evolving a level, will be shown and the results of the generator discussed.
+In this chapter I will explore the prospect of automatically generating VGDL \textit{puzzle games}- and levels.
+First an array of human-designed \textit{puzzle games} will be examined using a general puzzle solving algorithm.
+Then, using the results of the algorithm, a general level generator for \textit{puzzle games} will be introduced, and generated levels for designed games presented.
+At the end, a process for both generating a (\textit{puzzle}) game description and evolving a level, will be shown and the results of the generator discussed.
 
 \section{Puzzle analysis introduction}
 \label{sec_task3intro}
-To analyse and generate puzzle games more quickly, my implementation of VGDL: SimpleVGDL (Section \ref{sec_fastvgdl}), was used to test- and generate levels, instead of the GVG-AI framework.
+To analyse and generate \textit{puzzle games} more quickly, my implementation of VGDL: SimpleVGDL (Section \ref{sec_fastvgdl}), was used to test- and generate levels, instead of the GVG-AI framework.
 
 
 %\subsubsection*{Definition of games}
 %The games described in this section are games where the puzzles are the only game-play. There is no fast movement, or quick reaction time required to win. Additionally, because the games are described using the GVG-AI framework, the games focus around a player avatar which can only move up, down, left or right (also, in the games described below, all movement are from one game-tile to another).
 
 \subsubsection*{Games} 
-From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own additions (Section \ref{sec_writingnewvgdl}), there was a total of 9 puzzle games to use in the following analysis.
+From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own additions (Section \ref{sec_writingnewvgdl}), there was a total of 9 \textit{puzzle games} to use in the following analysis.
 
 However, several of the games were deemed unfit for a complete examination.
 Some, because the levels were too difficult for the a breadth first search algorithm to have a chance (Bolo Adventures and Chip's Challenge).
 Three other games were removed from a more technical reason: 
 The games Bombuzal and ZenPuzzle all has a continuous creation of \texttt{Flicker}-sprites, which (as mentioned in Section \ref{sec_creatingnewcontrollers})  halts the PuzzleSolver in its progress.
-Because of this, only the following five games were used as a base-line for ``good'' puzzle games: Bait, Brainman, The Citadel, Soko-Ban and Modality.
+Because of this, only the following five games were used as a base-line for ``good'' \textit{puzzle games}: Bait, Brainman, The Citadel, Soko-Ban and Modality.
 
 
 %\subsubsection*{Solving puzzle games} 
@@ -1788,7 +1826,7 @@ However as indicated from Section \ref{sec_fastvgdl} the controller can easily m
 
 \subsubsection*{Solving designed games}
 \label{sec_task3data}
-To analyse the six designed puzzle games mentioned above, the puzzle solving controller was set to play through all of the levels of the games, finding both the fastest possible solution, and all other possible routes.
+To analyse the six designed \textit{puzzle games} mentioned above, the puzzle solving controller was set to play through all of the levels of the games, finding both the fastest possible solution, and all other possible routes.
 In the following tests, the PuzzleSolver was allowed an hour of computation time to solve each game level.
 
 Figure \ref{table:designedpuzzleresults} show the results of playing through the games.
@@ -1808,7 +1846,7 @@ Figure \ref{table:designedpuzzleresults} show the results of playing through the
 {desingedpuzzedata.csv}{1=\Game, 2=\Level, 3=\Finished, 4=\SolLength, 5=\Time}%
 {\Game & \Level & \Finished & \SolLength & \Time}%
 
-\caption{Results from the five human-designed puzzle games examined}
+\caption{Results from the five human-designed \textit{puzzle games} examined}
 \label{table:designedpuzzleresults}
 \end{figure}
 
@@ -1819,13 +1857,13 @@ As can be seen, many of the levels were never completed, because the solutions w
 
 \section{General puzzle level generation} 
 \label{sec_task3evolvingLevelsSetup}
-Since the PuzzleSolver controller is able to complete an arbitrary level of a puzzle game, as long as the solution(s) are not too complex, it becomes interesting to use it to solve generated levels for games.
+Since the PuzzleSolver controller is able to complete an arbitrary level of a \textit{puzzle game}, as long as the solution(s) are not too complex, it becomes interesting to use it to solve generated levels for games.
 By using an approach similar to that used to generate general level descriptions, for randomly generated games in Section \ref{ssec_task1rndGen}, it became clear that the PuzzleSolver could be used to not only find out if randomly generated levels are any good, but use its results to evolve new and better levels.
 
 A setup for generating levels for a given game were constructed using an evolutionary strategy, utilising both mutation- and crossover operations on a population of levels.
 The overall goal for the generator was to create levels having a non-trivial and difficult solution.
 
-The input to the generator was the preferred size of the level, but also a more subjective element of choosing the textual character identifying ``wall'' and ``ground''-sprites which some of the puzzle-games utilises\footnote{In (Real) Soko-Ban every ``empty'' tile contains a ground sprite (signified by a dot ``.''), while most other sprites (e.g. boxes, the avatar) are spawned with ground sprite below them to make it possible to detect when a box is pushed of its target -- for other puzzle games the ground sprite was simply set to `` '' (empty space)}, to make generated levels for those games behave as intended.
+The input to the generator was the preferred size of the level, but also a more subjective element of choosing the textual character identifying ``wall'' and ``ground''-sprites which some of the \textit{puzzle games} utilises\footnote{In (Real) Soko-Ban every ``empty'' tile contains a ground sprite (signified by a dot ``.''), while most other sprites (e.g. boxes, the avatar) are spawned with ground sprite below them to make it possible to detect when a box is pushed of its target -- for other \textit{puzzle games} the ground sprite was simply set to `` '' (empty space)}, to make generated levels for those games behave as intended.
 
 Importantly, the fitness function for the evolution process was implemented by a simple comparisons of a series of results of PuzzleSolver playing the levels, by first sorting with the first value, the by the second, and so on. 
 The values used to compare results were, rather subjectively, chosen to be:
@@ -1872,7 +1910,7 @@ For the following tests of the generator, the evolutions strategy was run with a
 
 \section{Generating levels for designed games} 
 \label{sec_task3evolvingLevelsResults}
-The general puzzle level generator was set to create levels for the five designed puzzle games analysed above.
+The general puzzle level generator was set to create levels for the five designed \textit{puzzle games} analysed above.
 Because space of game states quickly become too large for the PuzzleSolver, all levels were generated using a level size of 8x8, with walls on all edges -- making the actual levels consist of only 6x6 tiles.
 
 Even with the tight restriction, the generator was able to create several levels of high difficulty for the games.
@@ -1914,7 +1952,7 @@ Figure \ref{fig:designed_games_genlvls} shows a few generated levels for four of
 	\subfloat{
       		\includegraphics[scale=0.34]{modalitygenlvl.png}
     	}\\
-    	\caption{Generated levels for some of the designed puzzle games. From top left: \textit{Bait} (shortest solution is in 65 actions), \textit{The Citadel} (77 actions), \textit{(Real) Soko-Ban} (60 actions) and \textit{Modality} (88 actions).}
+    	\caption{Generated levels for some of the designed \textit{puzzle games}. From top left: \textit{Bait} (shortest solution is in 65 actions), \textit{The Citadel} (77 actions), \textit{(Real) Soko-Ban} (60 actions) and \textit{Modality} (88 actions).}
 	\label{fig:designed_games_genlvls}
 \end{figure}
 
@@ -1924,7 +1962,7 @@ Figure \ref{fig:designed_games_genlvls} shows a few generated levels for four of
 \label{sec_task3evolvingGames}
 After showing that the general level generator was able to create levels of a certain difficulty, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}), to create both a set of game rules- and the levels, for a game.
 
-As mentioned in Section \ref{ssec:aicontrollersandtesting} puzzle games allow a smaller set of sprite classes, and interaction-rules defined in their VGDL description\footnote{Sprites like \texttt{RandomNPC}, and interaction-rules like \texttt{reverseDirection} (changing direction is only interesting for constant moving sprites like \texttt{Missile}s) can not be used in the definition of puzzle games used.}, making the overall space of possible games smaller.
+As mentioned in Section \ref{ssec:aicontrollersandtesting} \textit{puzzle games} allow a smaller set of sprite classes, and interaction-rules defined in their VGDL description\footnote{Sprites like \texttt{RandomNPC}, and interaction-rules like \texttt{reverseDirection} (changing direction is only interesting for constant moving sprites like \texttt{Missile}s) can not be used in the definition of puzzle games used.}, making the overall space of possible games smaller.
 
 However, even with the smaller space of games, it is not at all certain that a randomly generated game description would contain a interesting combination of rules and sprites, making it an viable subject for generating a difficult level.
 
@@ -1933,17 +1971,17 @@ To increase the chance of retrieving well-formed game description I decided to i
 The process worked by:
 
 \begin{enumerate}
-\item Generate a simple game description, using the small set of allowed classes, with a small number of sprites (2-3 + the avatar)
-\item Generate 50 randomly generated levels for the game, and let the PuzzleSolver play through them all.
-\item If the most difficult level from step 2 requires at least 2 actions AND 1 non-avatar sprite has been moved in the solution, go to next step, otherwise generate a new game description (step 1).
-\item Start evolving a level for the game
+\item Generating a simple game description, using the small set of allowed classes for \textit{puzzle games}, with a small number of sprites (2-3 + the avatar)
+\item Generating 50 randomly generated levels for the game, and letting the PuzzleSolver play through them all.
+\item If the most difficult level from step 2 requires at least 2 actions AND 1 non-avatar sprite has been moved in the solution, the evolution was started (next step), otherwise a new game description is generated (step 1).
+\item Start evolving a level for the game accepted game description.
 \end{enumerate}
 
 %To limit the time spend evolving each level the PuzzleSolver was set to have a limit of 80000 visited nodes (paths) in its memory, before giving up and going to the next level.
 
 
 \subsection{Results} 
-Over a period of about 10 days, the generator was able to generate a long series of VGDL puzzle game description, each with a 8x8 level to play through the game with.
+Over a period of about 10 days, the generator was able to generate a long series of VGDL \textit{puzzle game} description, each with a 8x8 level to play through the game with.
 However of these, most had the solution to the levels be rather short, with many games requiring less than 20 actions to complete.
 Of the more difficult game-level pairs, two requiring 50 or more actions for the shortest solution, and twelve pairs requiring more than 20 moves.
 The Figure \ref{fig:evol_puzzle_genlvls} shows the levels of the two of the more interesting game-level pairs (\texttt{evol_puzzle015} and \texttt{evol_puzzle009}), and Figure \ref{fig:evol_puzzle_desc} the game description of the first of these.
@@ -1990,7 +2028,7 @@ BasicGame
 	TerminationSet
 		MultiSpriteCounter limit=0 stype1=gen1 stype2=null win=TRUE 
 \end{vgdldesc}
-\caption{The game description of the generated puzzle game \texttt{evol_puzzle015}}
+\caption{The game description of the generated \textit{puzzle game} \texttt{evol_puzzle015}}
 \label{fig:evol_puzzle_desc}
 \end{figure}
 
@@ -2015,8 +2053,8 @@ The drawback of the generator is that it is rather slow at generating even small
 Also, it is not guaranteed to find the most interesting levels for the games -- human level designers would almost definitely be able to create harder and more enjoyable levels.
 
 However, the most interesting aspect of the level generator is the process of generating both a complete game- and level description.
-As mentioned, the tight restrictions of my definition of VGDL puzzle games, and the process the evolution strategy use (requiring that a sprite has been moved), causes the actual games- and levels generated to have strong similarities.
-Several of puzzle games generated definitely contain interesting features, but if any of the games can be considered of a high quality enough to be enjoyable for human players is a question left unanswered.
+As mentioned, the tight restrictions of my definition of VGDL \textit{puzzle games}, and the process the evolution strategy use (requiring that a sprite has been moved), causes the actual games- and levels generated to have strong similarities.
+Several of the \textit{puzzle games} generated definitely contain interesting features, but if any of the games can be considered of a high quality enough to be enjoyable for human players is a question left unanswered.
 
 
 
@@ -2032,33 +2070,43 @@ Several of puzzle games generated definitely contain interesting features, but i
 \section{My work}
 The goal of this project was to create a process for creating games and levels in the game description language VGDL of a ``as-high-possible'' quality.
 To reach this goal, two different approaches was attempted:
-1) Focusing on a general descriptions allowed of the VGDL language,  
+1) Generating the VGDL game descriptions of \textit{action-arcade games} by using the performance of general game playing algorithms to assess the games' quality.
+Using an evolutionary strategy a set of playable VGDL games of varying quality was generated, some using an existing human-designed game (Boulderdash) as basis, and some using randomly generated games- and levels.
+And 2) Generating VGDL descriptions for \textit{puzzle games}, using the performance of a breadth-first search algorithm to assess the difficulty, and thereby the quality of a game.
+With the generation of quality game levels focused higher than the game rules themselves, by first performing a simple search for a game description, and then using an evolutionary strategy to create interesting levels. 
 %1) Generating general game description -- \textit{action-arcade} games, using all the possible classes and functions of VGDL.
 %And 2) Generating game descriptions restricted to a subset of VGDL classes -- \textit{puzzle games}.
 
-The main focus was on creating the VGDL game descriptions of \textit{action-arcade} games by using the performance of general game playing algorithms to assess the games' quality.
-Using an evolutionary strategy a set of playable VGDL games of varying quality was generated, some using an existing human-designed game (Boulderdash) as basis, and some using randomly generated games- and levels.
+Both processes was able to generate several set of interesting game-rules, but at the same time an array of games generated contains severely trivial game design, or contains game rules largely based on luck.
+In general the generators are not able to pin-point interesting games in the space of VGDL games -- instead they are able to find a subset of more interesting game description, which human game designers can examine further to decide which games are actually ``good''.
 
-The process was able to generate several set of interesting game-rules, but at the same time several of the games created by the generator contained severely trivial game design, and in many games the outcome was largely based on luck.
-In general the generator is not able to instantly find the most interesting games in the space of VGDL games, -- instead it is able to find a subset of more interesting game description, which human game designers can examine further to decide which games are actually ``good''.
-A problem in the process of evolving the action-arcade games used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game 6 times takes the DeepSearch controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
-At the same time using these, rather limited, parameters constraint the results the controllers can potentially retrieve. 
-A more clever approach might be to first probe the games with some more simple controllers, or decreasing the allowed time for intelligent controllers, allowing the games to be played through more quickly, and decide if the game is worth spending time on for a more precise analysis (using intelligent controllers).
+\subsubsection{Limitations}
+A problem in the process of evolving the \textit{action-arcade games} used in this project, is that intelligent general game playing algorithms spend a large amount of time playing the through each game, since it needs time to decide on an action on every frame  -- even with the rather short time frames allowed in the tests and programs used in the thesis (50 ms per frame, 800/2000 frames per playthrough) it can take several days simply to play through all of the games generated- and mutated during the evolutionary strategy algorithm.
+
+When generating \textit{puzzle games} the game rules created are rather simple in the process used, since the focus is on generating levels.
+Since the level generator is dependant on playing through each single level with a rather slow, but general, algorithm, this game generation process also takes a large amount of time to create interesting content.
+
+
 
 
 \section{Future work}
+As mentioned above, the processes used to generate complete games were rather restricted by their time usage.
+A more clever approach might be to first probe each game-, or level, with more simple controllers, allowing the games to be played through quickly, and decide if the game is worth spending time on for a more precise analysis -- using ``intelligent'' controllers.
+This approach could potentially be implemented in a multi-layered fashion (i.e. more than two layers).
 
-Maybe one could make an algorithm to play a game in a more similar fashion as humans:
-First reading, and understanding the rules (in pac-man: eat all the cheese, in boulderdash: get to the exit after getting X gems).
-Then, using a learning-approach, playing through the game/level, not know much about possible interactions, but maybe assuming that colliding with moving sprites is dangerous (they could be enemies!).
-And then playing the game repeatedly to learn to play the game better.
+Additionally the fitness functions, examining results of game playing algorithms, used to evolve games- and levels, could almost certainly be improved.
+Besides the improving the weights and structure the functions used, a large amount of additional data could be retrieved from playing through each game, making a more precise analysis possible.
 
 
+Also, the general game playing algorithms might not be the best representative for a human-player.
+It might make more sense to use game playing algorithms which play in a more human-like fashion, for instance by:
+First reading, and understanding the rules (in Pac-Man: eat all the cheese, in Boulderdash: get to the exit after getting X gems).
+Then, using a learning-approach, playing through the game/level, learning about possible interactions along the way (but maybe assuming that colliding with moving sprites is dangerous (they could be enemies!)).
 
+%, or even using controllers designed to ``play bad'' (trying to die, decrease score) could be interesting
 
-It might be interesting to analyse games using a wider array of controllers, or analysing by letting the same controller (or controllers) play with a different amount of time allowed per clock-tick, or even using controllers designed to ``play bad'' (trying to die, decrease score) could be interesting
-
-Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
+% might also be interesting to analyse games using an even wider array of controllers, or using controllers with a range of different time allowed per frame.
+%Also, it could be interesting to retrieve more extrinsic data from playing through a game (e.g. the proportion of interaction-rules that was triggered).
 
 %------------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------------%
