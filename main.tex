@@ -251,17 +251,18 @@ A fitness function for generating complete games therefore needs to incorporate 
 
 \section{Research Objectives}
 \label{sec_researchobj}
-The main objectives of this study was to construct a generation process able to create simple games and levels using the game description language VGDL, with the goal of making games as enjoyable for human players as possible.
-The focus of the study was to create fitness functions able to differentiate between games (and levels) of different quality, to be able to search through, and importantly, evolve, a set of generated games, and thereby create interesting content.
+The main objectives of this study was to construct a generation process able to create simple 2-dimensional graphical games- and levels describable in the language VGDL, with the goal of making games as enjoyable for human players as possible.
 
-The main approach used to create the fitness function was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to construct individual fitness features.
-A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was intensely used in choosing and weighing features of the algorithms' performance profiles.
-This approach was focused on a specific genre and type of games (\textit{arcade-action games}), which is the main focus of the framework used (the GVG-AI framework). 
-The general game-playing algorithms used are well-fitted to play the game genre, since they are excellent at quickly finding a decent action to take in the environment of the games -- where quick movements to avoid enemies, and increasing the player-score is in the focus.
+The focus of the study was to use the performance of game playing algorithms in human-designed and generated games, examining profiles and distributions signifying quality, and use the results in evolutionary strategies, enabling the generation of interesting VGDL game descriptions.
 
-The second part of this thesis is focused on games of the \textit{puzzle}-genre described in VGDL.
-This approach is mainly focused on generating new game levels for either existing human designed-, or for generated VGDL games, by using the results of a breadth-first search algorithm (which is able to find the shortest solution), with the goal of being able to judge the difficulty, and thereby the quality of a game-level pair.
-The VGDL puzzle games examined consist in general of a much smaller game-state space (i.e. the amount of possible arrangements of sprites and values), and so potentially are more well-suited for a more in-depth analysis.
+The main approach used to generate interesting VGDL content was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to assess the quality of played games.
+A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was intensely used in choosing and weighing features used for the evolutionary strategy.
+The main approach was focused on a specific genre and type of games (\textit{arcade-action} games), which is the main focus of the VGDL language. 
+%The general game-playing algorithms used are well-fitted to play the game genre, since they are excellent at quickly finding a decent action to take in the environment of the games -- where quick movements to avoid enemies, and increasing the player-score is in the focus.
+
+A second, smaller, part of this thesis was focused on games of the \textit{puzzle}-genre describable, in VGDL.
+This approach was mainly focused on generating interesting game levels, for simple generated VGDL descriptions, by using the results of a breadth-first search algorithm (which was able to find the shortest solution), with the goal of being able to assess the difficulty, and thereby the quality of a game-level pair.
+The VGDL puzzle games examined consist in general of a much smaller game-state space (i.e. the amount of possible arrangements of sprites and values), and so potentially are more well-suited for a in-depth analysis.
 
 
 \subsubsection*{Assumptions}
@@ -274,7 +275,7 @@ This assumption is mostly made from initial tests into game generation using the
 When analysing- and generating \textit{puzzle games} (see below) I make the assumption that the quality of a game- and level of the genre is directly related to the difficulty of the game -- that, at least, having a possibility of challenging levels or situation is deeply important for puzzle game.
 
 \subsection{Definitions}
-This project is focused a games of two restricted genres and types -- these restrictions mostly stems from the framework used in the work, but allows a more focused analysis: 
+This project was focused a games of two restricted genres and types -- these restrictions mostly stems from the framework used in the work, but allows a more focused analysis: 
 
 1) Single-player, 2-dimensional, top-down, action games, in which the player controls a single avatar which can (maximally) be moved in the four cardinal directions, possibly with an ``action''-(shoot etc.) button.
 The games are all focused on increasing the players score, and often winning requires killing/destroying all of enemies on the screen.
@@ -521,7 +522,7 @@ A VGDL description has four parts:
 
 \subsubsection*{SpriteSet}
 Defines which sprites can appear in the game. Each sprite must be designated by a class, in which a set of predefined actions exists. Also a set of parameters can (and sometimes, must) be fed to each sprite, configuring for instance the \texttt{speed} or how often the sprite takes an action -- using the \texttt{cooldown}-parameter -- and a set of parameters unique to the different sprite-classes.
-For instance, for the  class \texttt{Flicker}\footnote{\texttt{Flicker}s is a simple extension to the base sprite; the sprite is destroyed after a speecifed amount of time.} the lifetime can be adjusted, and the \texttt{Chaser} sprite class\footnote{\texttt{Chaser} sprites move towards a specified other sprite, every time it is allowed to move.} it is necessary to define which object to actually chase.
+For instance, for the  class \texttt{Flicker}\footnote{\texttt{Flicker}s is a simple extension to the base sprite; the sprite is destroyed after a specified amount of time.} the lifetime can be adjusted, and the \texttt{Chaser} sprite class\footnote{\texttt{Chaser} sprites move towards a specified other sprite, every time it is allowed to move.} it is necessary to define which object to actually chase.
 Another interesting sprite types is the \texttt{Resource}-class, which, in combination with interaction-rules, can be ``collected'' by other sprites and several effects can occur (again defined in the interaction-rules), like ``if avatar has collected more than 10 coins, he/she is killed when touching wall sprites''.
 Sprites can additionally be designed in a tree structure, where multiple sprites have the same parent sprite, making descriptions for interaction- and termination rules (described below) less verbose. 
 
@@ -670,7 +671,7 @@ Figure \ref{fig:gvgai_games_screenshots} show how some of the games are visually
 	\subfloat{
       		\includegraphics[width=\textwidth]{frogs.png}
     	}\\
-    	\caption{The visual representation of a few of the VGDL example games which are interpretations of commercial games. From top-left: \textit{Seaquest}, \emph{Zelda}, \emph{Portals}, \emph{Boulderdash} and \textit{Frogs} (\textit{Frogger}).}
+    	\caption{The visual representation of a few of the VGDL games from the GVG-AI framework. From top-left: \textit{Seaquest}, \emph{Zelda}, \emph{Portals}, \emph{Boulderdash} and \textit{Frogger}}
 	\label{fig:gvgai_games_screenshots}
 \end{figure}
 
@@ -681,12 +682,12 @@ Figure \ref{fig:gvgai_games_screenshots} show how some of the games are visually
 \subsubsection*{Game genres of VGDL and the GVG-AI framework}
 \label{ssec_gamegenres}
 Using the VGDL implementation of the GVG-AI framework the games that can be described are rather restricted to certain genres- and types, without greatly extending the program.
-For instance, the lack of possibility to traverse different levels in the same play through make \textit{adventure} games unattainable, and the restriction of only moving a single character with the keyboard (the avatar) makes great restriction in creating \textit{strategy} games.
+For instance, the lack of possibility to traverse different levels in the same play through make adventure games unattainable, and the restriction of only moving a single character with the keyboard (the avatar) makes great restriction in creating strategy games.
 
-The games examined- and generated in this thesis are of a type that makes them suitable for the framework: Action-arcade- and puzzle games. 
+The games examined- and generated in this thesis are of a type that makes them suitable for the framework: \textit{Action-arcade}- and \textit{puzzle} games. 
 
-As mentioned in the introduction,  I make the simple distinction between the two types of games in the VGDL framework, that arcade games can contain elements (sprites) that move by themselves, whereas interactions only occur as a result of the avatar moving in puzzle games.
-As a results, certain sprites- and interaction classes are restricted to the action-arcade games (e.g. NPC- and Missile sprites), making the space of possible VGDL \textit{puzzle games} slightly smaller.
+In this thesis I make the simple distinction between the two types of games in the VGDL framework, that arcade games can contain elements (sprites) that move by themselves, whereas interactions only occur as a result of the avatar moving in puzzle games.
+As a results, certain sprites- and interaction classes are restricted to the action-arcade games (e.g. NPC- and Missile sprites), making the space of possible VGDL \textit{puzzle} games slightly smaller.
 
 
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -785,20 +786,25 @@ value[action] = value(newGameState) \\
 \item[DeepSearch]
 This controller starts out in a similar fashion as the One-step, by expanding using all possible actions by copying the initial game-state.
 These game-states are then simulated further upon by advancing each game state a single time, with a partly\footnote{A key part of success of the algorithm is that it, after the initial expansion, never tries to advance in a opposite movement direction to the initial.} random action, without copying the state (which is a rather costly procedure).
-This expansion is continued until the controller runs out of time, and a value for each action is calculated by considering the score and win/lose-value for each state that can be achieved from each of the initial states. \\
+This expansion is continued until the controller runs out of time, and a value for each action is calculated by considering the score and win/lose-value for each state that can be achieved from each of the initial states. 
+Also, the controller occasionally inputs the initial game state to be simulated from again, when other simulations have failed or have searched to a certain depth. 
 
 \begin{algorithm}[H]
 queue $\gets$ initial gameState \\
 \While{has time left}{
 	gameState = queue.poll() \\
-	\eIf{gameState == initial gameState}{
+	\eIf{gameState == initialGameState}{
 		\For{action : PossibleActions}{
 			queue $\gets$ gameState.copy().advance(action)
 		}
 	}{
-		gameState.advance(random action) \\
+		queue $\gets$ gameState.advance(random, but not opposite to first-, action) \\
 		d $\gets$ depth of search //amount actions performed \\
 		value[action] $+=$ value(newGameState) $* \text{PossibleActions.length}^{\text{d}}$
+		
+		\If{(conditions for new initial gameState met)}{
+			queue $\gets$ initial gameState
+		}
 	}
 }
 \Return action leading to highest value, or random action if values are equal
@@ -815,7 +821,7 @@ If the values of the \textit{score}-array happen to be too similar, the boringne
 
 The controller also addresses a common element of the VGDL example games, randomness. The controller gains an advantage in many of the games by simulating the results of actions repeatedly, before deciding the best action.
 
-The Explorer was proven to be of a decent quality by getting a 1st / 5th place in the GVG-AI's competition between controllers \footnote{The controller (nicknamed \textit{thorbjrn_other}) has at the time of writing (28/02-2015) a 1st place in the training set of the competition (first 10 games of the GVG-AI framework), and 5th in the validation set (the second 10 games): http://gvgai.net/gvg_rankings.php?rg=1}.
+The Explorer was proven to be of a decent quality by getting a 1st / 5th place in the GVG-AI's competition between controllers \footnote{The controller, nicknamed \textit{thorbjrn_other}, has at the time of writing (28/02-2015) a 1st place, in the training set of the competition (first 10 games of the GVG-AI framework), and 5th in the validation set (the second 10 games): http://gvgai.net/gvg_rankings.php?rg=1}.
 \end{description}
 
 
@@ -932,7 +938,7 @@ This chapter is only focused on \textit{action-arcade} games - analysis and gene
 \subsubsection*{Selection of designed arcade-action games}
 A subset of the human-designed games mentioned in Section \ref{sec_gvgaiframework} and \ref{sec_writingnewvgdl} were selected for the following analyses games, and for creating new games by mutation.
 
-After my addition of VGDL game descriptions to GVG-AI framework there is a total 33 human designed games which could potentially be used as a base-line for quality in games. 
+After my addition of VGDL game descriptions to GVG-AI framework there was a total 33 human designed games which could potentially be used as a base-line for quality in games. 
 However, using the definitions from the introduction, only 23 of the games are of the \textit{arcade-action} genre explored in this section, which the general game playing algorithms play decently.
 Additionally, as mentioned in Section \ref{ssec_vgdl} several of the example games from the GVG-AI competition are original creations by the completion organisers, which cannot equally be assumed to be human-enjoyable.
 
@@ -1143,7 +1149,7 @@ The entropy of actions performed for each playthrough, and averages across playt
 
 \section{Playthrough of generated games: Results}
 \label{sec_task1inittestresults}
-Using the setup described above averages of all play-throughs for each controller, is presented and the results compared with each other.
+Using the setup described above, a playthrough test was performed for an array of both designed- and generated games, and a set of statistics calculated for each controller.
 
 In the results below, a series of data from the generated set of games were removed due to being either too difficult to analyse, or for having certain values which I assess could not possibly result in a quality game.
 Namely I remove games by three different considerations: 
@@ -1156,8 +1162,8 @@ The six controllers were first of all set to play through each of the human-desi
 Below the averages across all the games from the designed set can be seen (Figure \ref{table:designed}). 
 Averages across each single game can be seen in Appendix \ref{app_designedresults}, 
 
-The distributions show that there is a large difference between the results of the more intelligent algorithms and that of the intended ´´intended-to-be-bad'' controllers, with both a higher win-rate and a significantly higher average score. 
-Surprisingly, the DeepSearch algorithm is has a significant lead over the other algorithms, in spite of its simple approach to selecting actions.
+The distributions show that there is a large difference between the results of the more intelligent algorithms and that of the intended ``intended-to-be-bad'' controllers, with both a higher win-rate and a significantly higher average score. 
+Surprisingly, the DeepSearch algorithm has a significant lead over the other algorithms -- in spite of its simple approach to selecting actions -- making it a suitable candidate for ``good play''.
 
 The \textit{clock-ticks} and \textit{action entropy} does not show a similar clear relationship between the more- and less intelligent algorithms, for the collection of all games. 
 Examining the results from each game it is noticeable that the profiles for these values (\textit{clock-ticks} and \textit{entropy}) are very different from game to game.
@@ -1189,7 +1195,7 @@ After removing games by the requirements mentioned above I was left with a total
 The results of playing through these games with the controllers can be seen in Figure~\ref{table:mutated}. 
 The scores have higher means and standard deviations, indicating outliers in the data. 
 The ordering of the \emph{normalised score mean} and \textit{win-rate}, however, shows a similar pattern as for the example games, but with the DoNothing controller scoring points and even winning games.
-In general the extreme values of norm. score and win-rate is smaller than for the designed set of games.
+In general the extreme values of normalised score and win-rate is smaller compared to the results from the designed set of games.
 
 %all mutations average -- amount of games: 90 -- playthroughs: 10
 \begin{figure}[!ht]
@@ -1356,7 +1362,7 @@ However it should be noted here that some games from both the mutated- and gener
 \end{figure}
 
 
-\section{Discussion of initial test results}
+\section{Discussion of playthrough test results}
 \label{sec_task1discussion}
 The results display some interesting patterns. 
 Especially the win-rates suggest a relationship between intelligent controllers' success and better game design; for better designed games, the relative performance of different types of algorithms differ more. 
@@ -1387,9 +1393,9 @@ Besides the above, a few re-occurring problems was found in the generated games.
 \item Sprites often completely leave the level playing field. 
 For instance because they are of the \texttt{Missile}- or \texttt{Fleeing} (which tries to move away from a specified sprite each frame) sprite classes.
 \item The game can only be won in the first few (<50) frames. 
-Because sprites disappear before that (for instance  because the sprite is \
-\item There is too much purposeless and arbitrary going on: 
-Often some sprites can not be interacted with at all, and just wander around on the screen, or they can only be interacted by certain non-avatar sprites.
+For instance  because the avatar has to collide with a sprite that only has a limited lifetime (a \texttt{Flicker} sprite).
+\item The outcome of the game is too random: 
+Often some sprites can not be interacted with at all, and just wander around on the screen, or they can only be interacted by certain non-avatar sprites, and often these sprites decide whether the player wins or not (or increases his/her score).
 \item Several of the sprites- and/or rules are never used.
 \end{itemize}
 
@@ -1403,7 +1409,7 @@ Often some sprites can not be interacted with at all, and just wander around on 
 \chapter{Evaluation and evolution of games}
 \label{ch_task2}
 
-The initial tests of the previous chapter shows that there is reason to explore the relationship of AI's perfomance profiles to analyze a given VGDL game, and give some indications of interesting statistical values to analyse.
+The initial tests of the previous chapter shows that there was reason to explore the relationship of AI's perfomance profiles to analyze a given VGDL game, and give some indications of interesting statistical values to analyse.
 
 This chapter focuses on, using the results of the previous chapter, creating a fitness function to analyse different generated games, allowing a evolutionary algorithm to evolve well-designed games, by creating and evolving VGDL game descriptions.
 The resulting generated games are then discussed in detail.
@@ -1441,7 +1447,7 @@ To make an as informed decision as possible I ran a series of test described bel
 In the following I repeatedly to use a \textit{relative difference}-function ($f=\lvert\frac{a-b}{max(a,b)}\rvert$) to compare statistical values  between controllers performance results, retrieved from playthroughs.
 Additionally I chose to simply construct the fitness function as a sum of the individual features.
 
-Also, the assumption that the games from the generated- and mutated set simply are of a low quality (discussed in Section \ref{sec_task1discussion}), is used throughout the following analysis.
+Also, the assumption that the games from the generated- and mutated set simply are of a low quality (discussed in Section \ref{sec_task1discussion}), was used throughout the following analysis.
 
 \subsubsection*{Analysis of possible relationship features}
 As mentioned in the previous sections, the relationship of score and win-rate between controllers seems to be obvious choices to adopt as fitness features.
@@ -1527,9 +1533,9 @@ The crate- and gem sprites has no effect in the game.
 After examining the resulting fitness values from generated VGDL games, and increasingly starting to evolve games using the fitness function (described in the next section), it became clear that I would need to introduce more fitness features, especially using non-relative values -- i.e. instead of comparing controllers' results, using for instance averaged results across the controllers or only use results from a single controller.
 
 The first insight was (also discussed in Chapter \ref{ch_task1}) that games where the intelligent controllers can win too quick -- I decided on 50 clock ticks -- should have a reduced fitness.
-A correlated problem is that the intelligent controllers often has a low \textit{action entropy} in these games, but this is seemingly directly related to the fact that they can win with only a few precise actions.
+A correlated problem was that the intelligent controllers often has a low \textit{action entropy} in these games, but this is seemingly directly related to the fact that they can win with only a few precise actions.
 
-The second insight was that the the intelligent controllers is often able to both win AND lose in many of the designed games (controllers standard deviation of win-rate above zero), while this happens rarely in the generated games. 
+The second insight was that the the intelligent controllers was often able to both win AND lose in many of the designed games (controllers standard deviation of win-rate above zero), while this happens rarely in the generated games. 
 Although this is not true for all of the designed games, it is able to give an indication of the difficulty of a game which seems to otherwise be missing.
 
 As a result, the fitness function used to evolve games had the following form: \\
@@ -1539,7 +1545,7 @@ $fitness = \frac{relDiff(\text{average score}) + relDiff(\text{average wins}) + 
 Where [can win in 50 ticks] returns -1 if a  controller is able to win in less than 50 clock ticks, and otherwise gives 1, and [can win and lose] similarly returns either a 1 or -1 if the standard deviation of win-rate is above 0 (1 if true).
 The resulting fitness is a numerical value between -1 and 1.
 
-In addition a game is automatically given a fitness of -1, if it does not fulfil the criteria used in accepting games in Chapter \ref{ch_task1}: 
+In addition a game was automatically given a fitness of -1, if it does not fulfil the criteria used in accepting games in Chapter \ref{ch_task1}: 
 That the controllers are not disqualified, that the score and wins is not always the same, and that the controllers do not all finish in less than 50 clock ticks.
 
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -1646,7 +1652,7 @@ InteractionSet
 
 I played through all of the 6 games of ``perfect'' fitness evolved from randomly generated descriptions, which in general has a more unique design that the Boulderdash-evolved descriptions.
 The outcome of several of the games are partly- or completely random, no matter what the player does the results are the same: 
-This is likely a product of using a rather small statistical sample when playing through each game (6 playthroughs for each controller).
+This was likely a product of using a rather small statistical sample when playing through each game (6 playthroughs for each controller).
 The games are overall quite simple, but several of them contain some interesting game design for human players -- some which seemingly has appeared by accident:
 
 In the evolved game  \texttt{evol_game01} (see Figure \ref{fig:evolved_random_game_desc} (description) and Figure \ref{fig:evolved_random_game_screenshot} (screenshot)) the goal is to kill a block of dirt that whizzes around the level, trying to flee from the avatar.
@@ -1758,7 +1764,7 @@ To analyse and generate puzzle games more quickly, my implementation of VGDL: Si
 %The games described in this section are games where the puzzles are the only game-play. There is no fast movement, or quick reaction time required to win. Additionally, because the games are described using the GVG-AI framework, the games focus around a player avatar which can only move up, down, left or right (also, in the games described below, all movement are from one game-tile to another).
 
 \subsubsection*{Games} 
-From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own additions (Section \ref{sec_writingnewvgdl}), there is a total of 10 puzzle games to use in the following analysis.
+From the GVG-AI framework (Section \ref{sec_gvgaiframework}) and my own additions (Section \ref{sec_writingnewvgdl}), there was a total of 9 puzzle games to use in the following analysis.
 
 However, several of the games were deemed unfit for a complete examination.
 Some, because the levels were too difficult for the a breadth first search algorithm to have a chance (Bolo Adventures and Chip's Challenge).
@@ -1825,7 +1831,7 @@ Importantly, the fitness function for the evolution process was implemented by a
 The values used to compare results were, rather subjectively, chosen to be:
 
 \begin{enumerate}
-\item The number of actions required for the shortest solution. This element is focused to fulfil the goal of generating as difficult levels as possible.
+\item The number of actions required for the shortest solution. This element was focused to fulfil the goal of generating as difficult levels as possible.
 \item The amount of times a non-player sprite has been moved throughout the solution.
 \item The number of times sprites has interacted with another throughout the solution.
 \item The time used in finding the solution.
@@ -1916,7 +1922,7 @@ Figure \ref{fig:designed_games_genlvls} shows a few generated levels for four of
 
 \section{Puzzle game generation} 
 \label{sec_task3evolvingGames}
-After showing that the general level generator is able to create levels of a certain difficulty, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}), to create both a set of game rules- and the levels, for a game.
+After showing that the general level generator was able to create levels of a certain difficulty, it becomes interesting to see if it can be used in combination with a game description generator (as introduced in Chapter \ref{ch_task1}), to create both a set of game rules- and the levels, for a game.
 
 As mentioned in Section \ref{ssec:aicontrollersandtesting} puzzle games allow a smaller set of sprite classes, and interaction-rules defined in their VGDL description\footnote{Sprites like \texttt{RandomNPC}, and interaction-rules like \texttt{reverseDirection} (changing direction is only interesting for constant moving sprites like \texttt{Missile}s) can not be used in the definition of puzzle games used.}, making the overall space of possible games smaller.
 
@@ -2008,13 +2014,9 @@ The level generator is able to generate levels for most designed VGDL games, and
 The drawback of the generator is that it is rather slow at generating even small levels, and has severe problems with larger level- and game space sizes.
 Also, it is not guaranteed to find the most interesting levels for the games -- human level designers would almost definitely be able to create harder and more enjoyable levels.
 
-Probably the most interesting aspect of the level generator is however the process of generating both a complete game- and level description.
+However, the most interesting aspect of the level generator is the process of generating both a complete game- and level description.
 As mentioned, the tight restrictions of my definition of VGDL puzzle games, and the process the evolution strategy use (requiring that a sprite has been moved), causes the actual games- and levels generated to have strong similarities.
 Several of puzzle games generated definitely contain interesting features, but if any of the games can be considered of a high quality enough to be enjoyable for human players is a question left unanswered.
-
-
-
-
 
 
 
@@ -2029,15 +2031,16 @@ Several of puzzle games generated definitely contain interesting features, but i
 
 \section{My work}
 The goal of this project was to create a process for creating games and levels in the game description language VGDL of a ``as-high-possible'' quality.
-To reach this goal, two different approaches was attempted : 
-1) Generating general game description -- action-arcade games, using all the possible classes and functions of VGDL.
-And 2) Generating game descriptions restricted to a subset of VGDL classes -- puzzle games.
+To reach this goal, two different approaches was attempted:
+1) Focusing on a general descriptions allowed of the VGDL language,  
+%1) Generating general game description -- \textit{action-arcade} games, using all the possible classes and functions of VGDL.
+%And 2) Generating game descriptions restricted to a subset of VGDL classes -- \textit{puzzle games}.
 
-The main focus was on creating the descriptions of action-arcade games using the performance of general game playing algorithms to assess the games' quality.
-Using an evolutionary strategy a set of playable (action-arcade) VGDL games was generated, some using an existing human-designed game (Boulderdash) as basis, and some using randomly generated games- and levels.
+The main focus was on creating the VGDL game descriptions of \textit{action-arcade} games by using the performance of general game playing algorithms to assess the games' quality.
+Using an evolutionary strategy a set of playable VGDL games of varying quality was generated, some using an existing human-designed game (Boulderdash) as basis, and some using randomly generated games- and levels.
 
-The process was able to generate several set of interesting game-rules, but at the same time several of the games created by the generator hardly contained any game-play, and in many games the outcome was largely based on luck.
-In general the generator is not able to instantly find the most interesting games in the space of VGDL games, but it is able to find a subset of more interesting game description, which human game designers can examine further to decide which games are actually ``good''.
+The process was able to generate several set of interesting game-rules, but at the same time several of the games created by the generator contained severely trivial game design, and in many games the outcome was largely based on luck.
+In general the generator is not able to instantly find the most interesting games in the space of VGDL games, -- instead it is able to find a subset of more interesting game description, which human game designers can examine further to decide which games are actually ``good''.
 A problem in the process of evolving the action-arcade games used in this project, is that intelligent AI controllers are used which spend a lot of time in playing the through each game -- just playing through a single game 6 times takes the DeepSearch controller up to 2000 ticks * 40 ms * 10 = 800 seconds.
 At the same time using these, rather limited, parameters constraint the results the controllers can potentially retrieve. 
 A more clever approach might be to first probe the games with some more simple controllers, or decreasing the allowed time for intelligent controllers, allowing the games to be played through more quickly, and decide if the game is worth spending time on for a more precise analysis (using intelligent controllers).
