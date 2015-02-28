@@ -432,7 +432,7 @@ In search-based generation a \textit{fitness function} is used to score generate
 %Super Mario would be way less interesting if enemies and platforms were spread randomly across each level, which would almost certainly result in the game being ether too easy or too difficult.
 %Several scientific projects have focused on the topic of level-generation with an array of different approaches, some requiring player-input, or simply a helper for human level-designer.
 
-%In addition to the other game genres mentioned above, a lot of work has been done in generating levels for puzzle games (ie. Sokoban and Cut The Rope).
+%In addition to the other game genres mentioned above, a lot of work has been done in generating levels for puzzle games (ie. Soko-Ban and Cut The Rope).
 %Most of the work is focused on generating levels for single game, where some attempt to create general level generation procedures.
 
 
@@ -648,7 +648,7 @@ The framework additionally contains 20 human-designed games, which partly consis
 The interpretations of existing games all have different stages of simplifications to them, causing several of the games' features to be missing -- for instance, the player cannot push boulders in the VGDL version of Boulderdash and they do not ``roll'' as in the original, and the ghosts in Pacman behave in a much more simplified fashion than in the original.
 A short summary of each of the example games can be seen in Appendix \ref{app_gvgaigames}
 
-The games are -- except for the game \emph{Sokoban} -- of the \textit{action-arcade} genre (defined in the introduction), in that the player controls a single avatar which must be moved quickly around in a 2D-setting to win, and to get a high score.
+The games are -- except for the game \emph{Soko-Ban} -- of the \textit{action-arcade} genre (defined in the introduction), in that the player controls a single avatar which must be moved quickly around in a 2D-setting to win, and to get a high score.
 Figure \ref{fig:vgdlgame} shows the VGDL description of the game \emph{Frogger}, and \ref{fig:vgdlgame_level} a level description from the same game.
 Figure \ref{fig:gvgai_games_screenshots} show how some of the games are visually represented when playing in the GVG-AI framework.
 
@@ -737,12 +737,12 @@ $
 
 \subsubsection*{Puzzle games}
 A set of puzzle games from several different platform, all featuring a single avatar, was found to be suitable to be described in VGDL. 
-The games can mostly be described as \textit{Sokoban}-clones with different spins on the gameplay.
+The games can mostly be described as \textit{Soko-Ban}-clones with different spins on the gameplay.
 Some of the games have action- gameplay aspects, with enemies hindering the progression of the player, but as per the defintion of \textit{puzzle games} used in the thesis these parts were removed only leaving the puzzles of games.
 
 However, even with the removal of enemies, a few of the interpreted games contain elements which are not strictly in line with the definition of VGDL \textit{puzzle games}, for instance some of games feature gliding boxes or rolling boulders (implemented using the \texttt{Missile} sprite class), which can cause effects to happen many frames after the avatar has acted.
 
-The games interpreted were \textit{Sokoban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge} and \textit{Modality}.
+The games interpreted were \textit{Soko-Ban}, \textit{Bait}, \textit{Bombuzal}, \textit{Bolo Adventures}, \textit{Zen Puzzle}, \textit{The Citadel}, \textit{Brainman}, \textit{Chip's Challenge} and \textit{Modality}.
 A summary of the games can be seen in Appendix \ref{app_thesisgames}.
 
 \begin{figure}[!ht]
@@ -862,8 +862,8 @@ Below I present the results of a small test of running a increasingly difficult 
     ]%
 {fastvgdlsokoban3.csv}{1=\Framwork, 2=\Time, 3=\Space}%
 {\Framwork & \Time & \Space}%
-\caption{Results from playing through the game \textit{(Real) Sokoban}, level 4 (of 5) using the puzzle solver controller}
-\label{table:fastvgdlsokoban3}
+\caption{Results from playing through the game \textit{(Real) Soko-Ban}, level 4 (of 5) using the puzzle solver controller}
+\label{table:fastvgdlSoko-Ban3}
 \end{figure}
 
  \begin{figure}[!ht]
@@ -878,7 +878,7 @@ Below I present the results of a small test of running a increasingly difficult 
     ]%
 {fastvgdlsokoban1.csv}{1=\Framwork, 2=\Time, 3=\Space}%
 {\Framwork & \Time & \Space}%
-\caption{Results from playing through the game \textit{(Real) Sokoban}, level 2 (of 5) using the puzzle solver controller}\label{table:fastvgdlsokoban1}
+\caption{Results from playing through the game \textit{(Real) Soko-Ban}, level 2 (of 5) using the puzzle solver controller}\label{table:fastvgdlSoko-Ban1}
 \end{figure}
 
  \begin{figure}[!ht]
@@ -941,7 +941,7 @@ With these limitation, thirteen interpretations of existing games are left and u
 Besides the additions and changes to the GVG-AI framework to make new games possible, a slight change was done to remove the possibility of players scoring lower than 0, which is the norm in the original games mentioned -- and also makes comparing scores across controllers more straightforward.
 
 %        games = new String[]{"aliens", "boulderdash", "butterflies", "chase", "frogs",
-%                "missilecommand", "portals", "sokoban", "survivezombies", "zelda",
+%                "missilecommand", "portals", "Soko-Ban", "survivezombies", "zelda",
 %                "camelRace", "digdug", "firestorms", "infection", "firecaster",
 %                "overload", "pacman", "seaquest", "whackamole", "eggomania"};
 
@@ -1652,7 +1652,7 @@ The games are overall quite simple, but several of them contain some interesting
 In the evolved game  \texttt{evol_game01} (see Figure \ref{fig:evolved_random_game_desc} (description) and Figure \ref{fig:evolved_random_game_screenshot} (screenshot)) the goal is to kill a block of dirt that whizzes around the level, trying to flee from the avatar.
 However, true to the action-arcade genre of the game, the player can additionally increase his/her score by moving the avatar to a laser-sprite (\texttt{gen2} in the description). 
 Only one laser-sprite can exist in the level -- because of its parameter \texttt{singleton=TRUE}, and the player can only increase his/her score by repeatedly going to each laser that is spawned.
-%Only one laser-sprite can exist in the level (because of is parameter \texttt{singleton=TRUE}), and the player can only increase his score by repeatedly going to each laser-sprite that is spawned.
+%Only one laser-sprite can exist in the level (because of is parameter \texttt{singleton=TRUE}), and the player can only increase his score by repeatedly going to each laser-sprite that is spawned.
 %However the game has an interesting feature: If the player picks up a laser in the same position of a previously picked up laser, the player loses all his points.
 The game \texttt{evol_game02} is rather simple, in that the goal is simply to kill the avatar, which can be achieved by walking to the ``cog'' sprite (at the top of the screen in Figure \ref{fig:evolved_random_game_screenshot2}.
 However the game is lost if the bat sprite (a \texttt{RandomNPC}) ever collides with the same object, making the outcome rather random.
@@ -1764,7 +1764,7 @@ However, several of the games were deemed unfit for a complete examination.
 Some, because the levels were too difficult for the a breadth first search algorithm to have a chance (Bolo Adventures and Chip's Challenge).
 Three other games were removed from a more technical reason: 
 The games Bombuzal and ZenPuzzle all has a continuous creation of \texttt{Flicker}-sprites, which (as mentioned in Section \ref{sec_creatingnewcontrollers})  halts the PuzzleSolver in its progress.
-Because of this, only the following five games were used as a base-line for ``good'' puzzle games: Bait, Brainman, The Citadel, Sokoban and Modality.
+Because of this, only the following five games were used as a base-line for ``good'' puzzle games: Bait, Brainman, The Citadel, Soko-Ban and Modality.
 
 
 %\subsubsection*{Solving puzzle games} 
@@ -1819,7 +1819,7 @@ By using an approach similar to that used to generate general level descriptions
 A setup for generating levels for a given game were constructed using an evolutionary strategy, utilising both mutation- and crossover operations on a population of levels.
 The overall goal for the generator was to create levels having a non-trivial and difficult solution.
 
-The input to the generator was the preferred size of the level, but also a more subjective element of choosing the textual character identifying ``wall'' and ``ground''-sprites which some of the puzzle-games utilises\footnote{In (Real) Sokoban every ``empty'' tile contains a ground sprite (signified by a dot ``.''), while most other sprites (e.g. boxes, the avatar) are spawned with ground sprite below them to make it possible to detect when a box is pushed of its target -- for other puzzle games the ground sprite was simply set to `` '' (empty space)}, to make generated levels for those games behave as intended.
+The input to the generator was the preferred size of the level, but also a more subjective element of choosing the textual character identifying ``wall'' and ``ground''-sprites which some of the puzzle-games utilises\footnote{In (Real) Soko-Ban every ``empty'' tile contains a ground sprite (signified by a dot ``.''), while most other sprites (e.g. boxes, the avatar) are spawned with ground sprite below them to make it possible to detect when a box is pushed of its target -- for other puzzle games the ground sprite was simply set to `` '' (empty space)}, to make generated levels for those games behave as intended.
 
 Importantly, the fitness function for the evolution process was implemented by a simple comparisons of a series of results of PuzzleSolver playing the levels, by first sorting with the first value, the by the second, and so on. 
 The values used to compare results were, rather subjectively, chosen to be:
@@ -1891,7 +1891,26 @@ wwwwwwww    wwwwwwww    wwwwwwww
 \end{figure}
 
 
-Figure XXXXXX shows the data retrieved from the best (i.e. longest solution) level generated for different games after a successful evolution.
+Figure \ref{fig:designed_games_genlvls} shows a few generated levels for four of the games, retrieved from the best (i.e. longest solution) level in each evolution process.
+
+
+\begin{figure}[!ht]
+	\subfloat{
+      	\includegraphics[scale=0.34]{baitgenlvl.png}
+    	}
+	\hfill
+	\subfloat{
+      	\includegraphics[scale=0.34]{thecitadelgenlvl.png}
+    	}\\
+	\subfloat{
+		\includegraphics[scale=0.34]{sokobangenlvl.png}
+	}\hfill
+	\subfloat{
+      		\includegraphics[scale=0.34]{modalitygenlvl.png}
+    	}\\
+    	\caption{Generated levels for some of the designed puzzle games. From top left: \textit{Bait} (shortest solution is in 65 actions), \textit{The Citadel} (77 actions), \textit{(Real) Soko-Ban} (60 actions) and \textit{Modality} (88 actions).}
+	\label{fig:designed_games_genlvls}
+\end{figure}
 
 
 
@@ -1918,26 +1937,80 @@ The process worked by:
 
 
 \subsection{Results} 
-Over a period of about 10 days, the generator was able to generate XXX VGDL puzzle game description, each with a 8x8 level to play through the game with.
-Of these games, XX requires more than 90 actions for the shortest solution, and XX requires more than 50.
+Over a period of about 10 days, the generator was able to generate a long series of VGDL puzzle game description, each with a 8x8 level to play through the game with.
+However of these, most had the solution to the levels be rather short, with many games requiring less than 20 actions to complete.
+Of the more difficult game-level pairs, two requiring 50 or more actions for the shortest solution, and eight pairs requiring more than 35 moves.
+The Figure \ref{fig:evol_puzzle_genlvls} shows the levels of the two of the more interesting game-level pairs (\texttt{evol_puzzle015} and \textit{evol_puzzle009}), and Figure \ref{fig:evol_puzzle_desc} the game description of the most difficult.
 
-From the set of the most difficult set of game-level pairs, several non-trivial game-designs has emerged.
-For instance, in 
-EXAMPLEEEES.  
 
-The generated games all have a strong similarity to Sokoban however, mostly because of the requirement of moving non-avatar sprites, and could be in general be described as Sokoban- clones or imitations.
+\begin{figure}[!ht]
+	\subfloat{
+      	\includegraphics[scale=0.55]{evolpuzzle2.png}
+    	}
+	\hfill
+	\subfloat{
+      	\includegraphics[scale=0.55]{evolpuzzle1.png}
+    	}\\
+    	\caption{Visual representation of the two generated puzzle game-level pair, \texttt{evol_puzzle015} requiring 85 actions (left) and \texttt{evol_puzzle009} requiring 24 (right) actions for the shortest solution.}
+	\label{fig:evol_puzzle_genlvls}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+\centering
+\begin{vgdldesc}[linewidth=14cm]
+BasicGame
+	SpriteSet
+		avatar > OrientedAvatar img=avatar
+		gen1 > Passive img=bee
+		gen2 > Portal stype=gen1 img=fire
+		gen3 > Immovable img=honey
+	InteractionSet
+		gen3 gen3 > stepBack
+		gen1 gen2 > killSprite
+		gen3 gen2 > undoAll scoreChange=6
+		gen2 EOS > stepBack
+		gen1 avatar > bounceForward
+		gen2 gen1 > bounceForward scoreChange=-1
+		avatar wall > stepBack
+		gen1 wall > stepBack
+		gen2 wall > stepBack
+		gen3 wall > stepBack
+	LevelMapping
+		$ > gen1 
+		% > gen2 
+		& > gen3 
+	TerminationSet
+		MultiSpriteCounter limit=0 stype1=gen1 stype2=null win=TRUE 
+\end{vgdldesc}
+\caption{The game description of the generated puzzle game \texttt{evol_puzzle015}}
+\label{fig:evol_puzzle_desc}
+\end{figure}
+
+
+From the set of the more difficult pairs of game-levels, several non-trivial game-designs has emerged.
+For instance, in the most difficult game (\texttt{evol_puzzle015}) the goal is to destroy all the bees, which can by achieved by pushing them into the fire sprites.
+However the fire sprites are pushed back when bees are pushed into them, and so bees can only be destroyed if the fire is up against a wall.
+Additionally the player has to think of when to kill the bees, since they are what allows the player to interact with the level and push fire sprites to fitting locations.
+Several of the games are otherwise quite similar to \textit{Soko-Ban}, but with different twists.
+For instance, the generator has features like: 
+Boxes (i.e. the object(s) that can be pushed in the game) can be destroyed by the player if pushing them into a wall, boxes that can be destroyed by pushing them into each other, or a game where new boxes are created when pushed to their goal (\texttt{evol_puzzle009}).
+
+The generated games all have a strong similarity to Soko-Ban however, which is likely because of the requirement of the solution to require moving non-avatar sprites, and the games could be in general be described as Soko-Ban- clones or imitations.
 
 \section{Discussion of results} 
 \label{sec_task3discussion}
 The fitness function used to evolve levels were chosen rather subjectively, and could almost definitely be improved, to be able to generate levels of a higher quality.
 It might be that better levels could be generated if the amount of clock ticks were the most focused, but because of time schedule issues I did not have time to explore the function further.
 
-The generator is able to generate levels for any designed VGDL games, and certain generated games, restricted to a subset of classes, that -- at least -- have non-trivial solutions which are not immediately obvious, even with the tight restrictions of the level size (6x6 playing field).
+The generator is able to generate levels for most designed VGDL games, and certain generated games, restricted to a subset of classes, that -- at least -- have non-trivial solutions which are not immediately obvious, even with the tight restrictions of the level size (6x6 playing field).
 The drawback of the generator is that it is rather slow at generating even small levels, and has severe problems with larger level- and game space sizes.
 Also, it is not guaranteed to find the most interesting levels for the games -- human level designers would almost definitely be able to create harder and more enjoyable levels.
 
 Probably the most interesting aspect of the level generator is however the process of generating both a complete game- and level description.
-As mentioned, the tight restrictions of my defintion of VGDL puzzle games, and the process the evolution strategy use (requiring that a sprite has been moved), causes the actual games- and levels generated to have strong similarities.
+As mentioned, the tight restrictions of my definition of VGDL puzzle games, and the process the evolution strategy use (requiring that a sprite has been moved), causes the actual games- and levels generated to have strong similarities.
+Several of puzzle games generated definitely contain interesting features, but if any of the games can be considered of a high quality enough to be enjoyable for human players is a question left unanswered.
 
 
 
@@ -2028,7 +2101,7 @@ Below is a short summary of each of VGDL games from the GVG-AI framework, discus
 \item [Whackamole] VGDL implementation of the classic arcade game \emph{Whac-a-Mole}. Must collect moles that appear from holes, and avoid a cat that mimics the moles.
 \item [Zelda] VGDL interpretation of \emph{Legend of Zelda}. Objective is to find a key in a maze and leave the level. Player also has a sword to defend himself against enemies.
 \item [Camelrace] Player needs to get to endpoint to win.
-\item [Sokoban] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
+\item [Soko-Ban] The objective is to move the boxes to holes, until all boxes disappear or the time runs out.
 \end{description}
 
 %------------------------------------------------------------------------------------------------------------------------------%
@@ -2054,15 +2127,15 @@ The games are all interpretations of existing games designed on different platfo
 \section{Puzzle games}
 
 \begin{description}
-\item [Bait] \citep{game:bait} \textit{Bait} is a game with similar mechanics to \textit{Sokoban} but otherwise unique game play. In each level the player must push boxes to get across the playing field, to reach a button, and afterwards head for the exit,.
-\item [Bolo Adventures] \citep{game:boloadventures} Another game closely related to \textit{Sokoban}, but with several unique features like lasers and rolling boulders. The levels of the game are in general extremely difficult.
+\item [Bait] \citep{game:bait} \textit{Bait} is a game with similar mechanics to \textit{Soko-Ban} but otherwise unique game play. In each level the player must push boxes to get across the playing field, to reach a button, and afterwards head for the exit,.
+\item [Bolo Adventures] \citep{game:boloadventures} Another game closely related to \textit{Soko-Ban}, but with several unique features like lasers and rolling boulders. The levels of the game are in general extremely difficult.
 \item [Bombuzal] \citep{game:bombuzal} The goal is to blow up all the bombs, which are spread wide across each level. When a bomb is exploded it erodes nearby tiles, or even other bombs, forcing the player to find a path that allows him/her to reach all the bombs.
 
-\item [Brainman] \citep{game:brainman} Has similar characteristics as the other \textit{Sokoban}-like games, but also has a focus on collecting gems to increase the players score.
-\item [Chip's Challenge] \citep{game:chipschallenge} \textit{Chip's Challenge} is again a \textit{Sokoban}-like puzzle game, but with an large amount of features compared to the other games, like water where either boxes can be used to make a bride across, or the player can swim across if he has a specific item (a swimsuit).
-\item [The Citadel] \citep{game:thecitadel} An additional game closely related to \textit{Sokoban}. This game features boxes which can be moved in a line, i.e. if the player pushed a box of this type, all boxes behind it will additionally be pushed.
-\item [(Real) Sokoban] \citep{game:sokoban} The original push-boxes games. 
-\item [Modality] \citep{game:modality} \textit{Sokoban}-like game with a twist: Each level is divided into white- and black tiles, and the avatar can only move between the two colours by going through the grey tiles on the playing field.
+\item [Brainman] \citep{game:brainman} Has similar characteristics as the other \textit{Soko-Ban}-like games, but also has a focus on collecting gems to increase the players score.
+\item [Chip's Challenge] \citep{game:chipschallenge} \textit{Chip's Challenge} is again a \textit{Soko-Ban}-like puzzle game, but with an large amount of features compared to the other games, like water where either boxes can be used to make a bride across, or the player can swim across if he has a specific item (a swimsuit).
+\item [The Citadel] \citep{game:thecitadel} An additional game closely related to \textit{Soko-Ban}. This game features boxes which can be moved in a line, i.e. if the player pushed a box of this type, all boxes behind it will additionally be pushed.
+\item [(Real) Soko-Ban] \citep{game:Soko-Ban} The original push-boxes games. 
+\item [Modality] \citep{game:modality} \textit{Soko-Ban}-like game with a twist: Each level is divided into white- and black tiles, and the avatar can only move between the two colours by going through the grey tiles on the playing field.
 %\item [Painter] Very simple game, with a very limited skill ceiling. The player must make every tile in levels have the same colour, which is achieved by moving the avatar in a path across each tiles, causing each to switch colour.
 \item [Zen Puzzle] \citep{game:zenpuzzle} The player must ``paint'' every tile in an area by moving the avatar across them. After a tile has been painted it becomes solid and impossible for the avatar to move through, making the player have to find a path through the area to reach all tiles.
 \end{description}
