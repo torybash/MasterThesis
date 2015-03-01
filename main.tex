@@ -258,23 +258,23 @@ Procedural generation of game content (levels, textures, items, quests, audio, c
 Automatically generating content allow game developers to provide more content, with more differentiation, from a limited supply of assets, most often by helping to produce levels, maps or dungeons for their games. 
 PCG is often used to maintain a challenge for the player by presenting an unpredictable and renewed game experience on re-playing the games in which it is used.
 
-Rogue \citep{game:rogue} is one of the earliest examples of a game using procedurally generated levels (dungeons) as a main part of the game design.
-The space-trading game Elite \citep{game:elite} used PCG to both save disk space, and to generate a large array of planets and galaxies, each with a different set of unique properties generated for every play through. 
+Rogue~\citep{game:rogue} is one of the earliest examples of a game using procedurally generated levels (dungeons) as a main part of the game design.
+The space-trading game Elite~\citep{game:elite} used PCG to both save disk space, and to generate a large array of planets and galaxies, each with a different set of unique properties generated for every play through. 
 
-Since then several highly successful games, from genres including platform-, first person shooter- (FPS) and strategy games, have used PCG to generate levels-, maps and worlds, as either used in their main game mode (e.g. Spelunky \citep{game:spelunky}, Minecraft \citep{game:minecraft}), or as an extra feature, making the games have additional re-playability (e.g. Civilazation II(-V) \citep{game:civilizationii}, Heroes of Might and Magic III \citep{game:homm3}).
-PCG has additionally been used to create a wider array of weapons and items, especially in role-playing games (RPGS) where ``looting'' (finding new gear) is a main part of the game design (e.g. Borderlands-series \citep{game:borderlandsseries}, Diablo-series \citep{game:diabloseries}, Dark Age of Camelot \citep{game:darkage}).
-Several game-developers and companies has additionally used PCG in the generation of other types of game-content, or at different stages, including complete worlds, environments and stories (e.g. Dwarf Fortress \citep{game:dwarffortress}), and graphics and audio (e.g. RoboBlitz \citep{game:roboblitz}, .kkrieger \citep{game:kkrieger}).
+Since then several highly successful games, from genres including platform-, first person shooter- (FPS) and strategy games, have used PCG to generate levels-, maps and worlds, as either used in their main game mode (e.g. Spelunky~\citep{game:spelunky}, Minecraft~\citep{game:minecraft}), or as an extra feature, making the games have additional re-playability (e.g. Civilazation II(-V)~\citep{game:civilizationii}, Heroes of Might and Magic III~\citep{game:homm3}).
+PCG has additionally been used to create a wider array of weapons and items, especially in role-playing games (RPGS) where ``looting'' (finding new gear) is a main part of the game design (e.g. Borderlands-series~\citep{game:borderlandsseries}, Diablo-series~\citep{game:diabloseries}, Dark Age of Camelot~\citep{game:darkage}).
+Several game-developers and companies has additionally used PCG in the generation of other types of game-content, or at different stages, including complete worlds, environments and stories (e.g. Dwarf Fortress~\citep{game:dwarffortress}), and graphics and audio (e.g. RoboBlitz~\citep{game:roboblitz}, .kkrieger~\citep{game:kkrieger}).
 
-Also, a large amount of research has been conducted on the topic of PCG (greatly detailed by \citet{shaker2015procedural}), where several other methods and goals at creating content have been attempted, including using player-experience to generate content \citep{5740836}, 
+Also, a large amount of research has been conducted on the topic of PCG (greatly detailed by~\citet{shaker2015procedural}), where several other methods and goals at creating content have been attempted, including using player-experience to generate content~\citep{5740836}, 
 and even the generation of rules- and mechanics themselves (see below).
 
-%, or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
+%, or event to create graphical or audio assets (RoboBlitz~\citeyearpar{game:RoboBlitz}, .kkrieger~\citeyearpar{game:kkrieger}).
 
 
-%Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold \citeyearpar{game:sevencities}, Civilazation II(-V) \citeyearpar{game:civilizationii}, Minecraft \citeyearpar{game:minecraft}, Spelunky \citeyearpar{game:spelunky}, Lux \citeyearpar{game:lux} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus! \citeyearpar{game:rescurefractalus}, Farcry 2 \citeyearpar{game:farcry}.
-%PCG has also been used to create a wider array of weapons and items (Borderlands-series \citeyearpar{game:borderlandsseries}, Diablo-series \citeyearpar{game:diabloseries}, Torchlight-series \citeyearpar{game:diabloseries}, Dark Age of Camelot \citeyearpar{game:darkage}), or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
+%Several highly popular games has since used procedural level generators, some as a main part of their game-play (The Seven Cities of Gold~\citeyearpar{game:sevencities}, Civilazation II(-V)~\citeyearpar{game:civilizationii}, Minecraft~\citeyearpar{game:minecraft}, Spelunky~\citeyearpar{game:spelunky}, Lux~\citeyearpar{game:lux} and many others), while other has used PCG tools to create finished levels (Rescue on Fractalus!~\citeyearpar{game:rescurefractalus}, Farcry 2~\citeyearpar{game:farcry}.
+%PCG has also been used to create a wider array of weapons and items (Borderlands-series~\citeyearpar{game:borderlandsseries}, Diablo-series~\citeyearpar{game:diabloseries}, Torchlight-series~\citeyearpar{game:diabloseries}, Dark Age of Camelot~\citeyearpar{game:darkage}), or event to create graphical or audio assets (RoboBlitz~\citeyearpar{game:RoboBlitz}, .kkrieger~\citeyearpar{game:kkrieger}).
 
-%Lux \citep{game:lux}, 
+%Lux~\citep{game:lux}, 
 
 \section{Introduction to game generation}
 \label{sec_introtogamegen}
@@ -290,24 +290,42 @@ However there are many bad games that fulfil such criteria, so intuitively it se
 
 A fitness function for generating complete games therefore needs to incorporate a capacity to automatically play the games it is evaluating, giving each game a score dependant on certain values from the results of playthroughs.
 
-A certain amount of research has been focused on the topic of rule- and mechanic generation in games \citep{pcgbook:ch6}.
-The methods have mainly been focusing on some specific game genres- or frameworks, for instance by generating complete board games (\citep{pell1992metagame},\citep{browne2008automated}), card games (\citep{font2013towards}), or generating simple 2-dimensional graphics games (\citep{togelius2008experiment}, \citep{smith2010variations}).
+A certain amount of research has been focused on the topic of rule- and mechanic generation in games~\citep{pcgbook:ch6}.
+The methods have mainly been focusing on some specific game genres- or frameworks, for instance by generating complete board games (\citep{pell1992metagame},\citep{browne2008automated}), card games (\citep{font2013towards}), or generating simple 2-dimensional graphics games (\citep{togelius2008experiment},~\citep{smith2010variations}).
 
 
 \section{Research Objectives}
 \label{sec_researchobj}
 The main objectives of this study was to construct a generation process able to create simple 2-dimensional graphical games- and levels describable in the language VGDL, with the goal of making games as enjoyable for human players as possible.
 
-The focus of the study was to use the performance of game playing algorithms in human-designed and generated games, examining profiles and distributions signifying quality, and use the results in evolutionary strategies, enabling the generation of interesting VGDL game descriptions.
+To reach this goal two different methods were attempted each with particular research questions.
+For both methods, a series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games''.
+The baseline games was routinely used in choosing and weighing features of data used for evolutionary strategies, to increase the quality of generated content.
 
-The main approach used to generate interesting VGDL content was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to assess the quality of played games.
-A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was intensely used in choosing and weighing features used for the evolutionary strategy.
-The main approach was focused on a specific genre and type of games (\textit{arcade-action games}), which is the main focus of the VGDL language. 
+In the first approach, focused on 2-dimensional arcade-action games, the goal was to examine if it was possible to use the results of general game playing, knowledge free (i.e. no access to the the rules of played games), algorithms playing through constructed VGDL descriptions, to asses the quality of games.
+
+Secondly, an approach focused on generating 2-dimensional turn-based puzzle games- and levels (with a emphasise on levels) were attempted.
+The goal of this research was to examine if results of a breadth-first search algorithm, able to find the shortest solution in puzzles, could be used to assess the difficulty and quality of games- and levels.
+
+
+%The first approach focused on using the results of a series of general game playing, knowledge free, algorithms playing through constructed VGDL games- and levels, and using the collection of their performance profiles to asses the quality of the played games.
+%A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was routinely used in choosing and weighing features used for the evolutionary strategies.
+
+
+%For both methods, a series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was routinely used in choosing and weighing features used for the evolutionary strategies.
+
+%The main objectives of this study was to construct a generation process able to create simple 2-dimensional graphical games- and levels describable in the language VGDL, with the goal of making games as enjoyable for human players as possible.
+
+%The focus of the study was to use the performance of game playing algorithms in human-designed and generated games, examining profiles and distributions signifying quality, and use the results in evolutionary strategies, enabling the generation of interesting VGDL game descriptions.
+
+%The main approach used to generate interesting VGDL content was to use the results of a series of general game-playing (knowledge free) algorithms, and using the collection of their performance profiles to assess the quality of played games.
+%A series of human-designed games, assumed to be human-enjoyable, was used as a baseline for ``good games'' and was intensely used in choosing and weighing features used for the evolutionary strategy.
+%The main approach was focused on a specific genre and type of games (\textit{arcade-action games}), which is the main focus of the VGDL language. 
 %The general game-playing algorithms used are well-fitted to play the game genre, since they are excellent at quickly finding a decent action to take in the environment of the games -- where quick movements to avoid enemies, and increasing the player-score is in the focus.
 
-A second, smaller, part of this thesis was focused on games of the puzzle-genre describable, in VGDL.
-This approach was mainly focused on generating interesting game levels, for simple generated VGDL descriptions, by using the results of a breadth-first search algorithm (which was able to find the shortest solution), with the goal of being able to assess the difficulty, and thereby the quality of a game-level pair.
-The VGDL \textit{puzzle games} examined consist in general of a much smaller game-state space (i.e. the amount of possible arrangements of sprites and values), and so potentially are more well-suited for a in-depth analysis.
+%A second, smaller, part of this thesis was focused on games of the puzzle-genre describable, in VGDL.
+%This approach was mainly focused on generating interesting game levels, for simple generated VGDL descriptions, by using the results of a breadth-first search algorithm (which was able to find the shortest solution), with the goal of being able to assess the difficulty, and thereby the quality of a game-level pair.
+%The VGDL \textit{puzzle games} examined consist in general of a much smaller game-state space (i.e. the amount of possible arrangements of sprites and values), and so potentially are more well-suited for a in-depth analysis.
 
 
 \subsubsection*{Assumptions}
@@ -447,7 +465,7 @@ The resulting generated games are then discussed in detail. Sections:
 \end{tikzpicture}
 %\end{center}
 \caption{How to read this thesis}
-\label{fig:vgdlgame}
+\label{fig:howtoread}
 \end{figure}
 
 
@@ -467,7 +485,7 @@ Additionally the framework used for game- and level-generation, and testing is d
 The task of PCG is to create elements for specific parts of a game, for instance levels, weapons, environments, textures and sounds. 
 %\citet{hendrikx2013procedural} proposes a layered taxonomy to describe PCG of different depths in games, while performing a survey of different ways in which PCG has been implemented in commercial games, noticing that some layers has not been thoroughly explored.
 
-Several different approaches are used in PCG (both in commercial games and in research), however the ``search-based'' approach (explored by \citet{togelius11search}, \citet{pcgbook:ch2}) dominates the problem.
+Several different approaches are used in PCG (both in commercial games and in research), however the ``search-based'' approach (explored by~\citet{togelius11search},~\citet{pcgbook:ch2}) dominates the problem.
 In search-based generation a \textit{fitness function} is used to score generated content by their quality, making it possible to ensure a high quality of the generator, by either simply generating a large amount of content and choosing the best, or using an evolutionary strategy to evolve better content.
 
 
@@ -483,7 +501,7 @@ In search-based generation a \textit{fitness function} is used to score generate
 
 
 %\subsection{Other uses of PCG}
-%Other games have been published applying PCG in different ways. In \textit{Borderlands 2} \citeyearpar{game:borderlands} the player have access to an extreme amount of different weapons, designed by automatic generation.
+%Other games have been published applying PCG in different ways. In \textit{Borderlands 2}~\citeyearpar{game:borderlands} the player have access to an extreme amount of different weapons, designed by automatic generation.
 
 
 %\subsubsection*{Advantages and disadvantages using PCG}
@@ -508,23 +526,23 @@ In search-based generation a \textit{fitness function} is used to score generate
 \section{Game generation}
 \label{sec_gamegen}
 Generating complete games through algorithms is a problem that is being increasingly researched, but progress on the topic for last decade. Because the problem is in general quite large, a subset of the problem is usually handled: Only generating certain types of games-, or using different (restricted) frameworks. 
-Video games may consist of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citet{cook2014angelina,liapis2014creativity,nelson2007automated}.
+Video games may consist of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citep{cook2014angelina,liapis2014creativity,nelson2007automated}.
 
 In this project I look specifically at generating the game-play and -setting of games, i.e. defining a set of game-rules and -objects, and specifying the levels in which the game-play takes place.
-The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citet{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citet{togelius2008experiment,browne2008automated,font2013towards}. 
-In either case, rule generation can be seen as a particular kind of procedural content generation~\citet{pcgbook:ch6}.
+The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citep{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citep{togelius2008experiment,browne2008automated,font2013towards}. 
+In either case, rule generation can be seen as a particular kind of procedural content generation~\citep{pcgbook:ch6}.
 
 %The idea of generating complete games through algorithms is not itself new. The problem in full generality is quite large, so usually a subset of the general problem is tackled. Videogames may be comprised of a large number of tangible and intangible components, including rules, graphical assets, genre conventions, cultural context, controllers, character design, story and dialog, screen-based information displays, and so on~\citet{cook2014angelina,liapis2014creativity,nelson2007automated}.
 
 %In this paper I look specifically at generating game rules; and more specifically the rules of arcade-style games based on graphical movement and local interaction between game elements, represented in the game description language VGDL. The two main approaches that have been explored in generating game rules are reasoning through constraint solving~\citet{smith2010variations} or search through evolutionary computation or similar forms of stochastic optimisation~\citet{togelius2008experiment,browne2008automated,font2013towards}. In either case, rule generation can be seen as a particular kind of procedural content generation~\citet{pcgbook:ch6}.
 
 It is clear that generating a set of rules that makes for an interesting and fun game is a hard task. 
-The arguably most successful attempt so far, Browne's Ludi system, managed to produce a new board game of sufficient quality to be sold as a boxed product~\citet{browne2008automated}. 
+The arguably most successful attempt so far, Browne's Ludi system, managed to produce a new board game of sufficient quality to be sold as a boxed product~\citep{browne2008automated}. 
 However, it succeeded partly due to restricting its generation domain to only the rules of a rather tightly constrained space of board games. 
 A key stumbling block for search-based approaches to game generation is the fitness/evaluation function. 
 This function takes a complete game as input and outputs an estimate of its quality. Ludi uses a mixture of several measures based on automatic playthrough of games, including balance, drawishness and outcome uncertainy.
-These measures are well-chosen for two-player board games, but might not transfer that well to video games or single-player games, which have in a separate analysis been deemed to be good targets for game generation~\citet{togelius2014characteristics}. 
-Other researchers have attempted evaluation functions based on the learnability of the game by an algorithm~\citet{togelius2008experiment} or an earlier and more primitive version of the characteristic that is explored in this paper, performance profile of a set of algorithms~\citet{font2013towards}.
+These measures are well-chosen for two-player board games, but might not transfer that well to video games or single-player games, which have in a separate analysis been deemed to be good targets for game generation~\citep{togelius2014characteristics}. 
+Other researchers have attempted evaluation functions based on the learnability of the game by an algorithm~\citep{togelius2008experiment} or an earlier and more primitive version of the characteristic that is explored in this paper, performance profile of a set of algorithms~\citep{font2013towards}.
 
 A typical approach for generating complete games is searching in a space of possible games. This basically requires two things: That the ratio of enjoyable games in the set is not too low - otherwise those games might never be found. To increase this ratio a game description language (GDL) is often used (searching through all possible Java or C programs would lead to an enormous amount invalid games).
 Also, to search through a set of games it is necessary to be able to calculate a fitness value for each game, valuing how enjoyable the game is.
@@ -541,11 +559,11 @@ Also, to search through a set of games it is necessary to be able to calculate a
 
 \section{Framework: VGDL and the GVG-AI framework}
 \label{sec_gvgaiframework}
-Regardless of which approach to game generation is chosen, one needs a way to represent the games that are being created. %\footnote{See \citet{pcgbook:ch6} for a discussion of game-rule representation choices.} 
+Regardless of which approach to game generation is chosen, one needs a way to represent the games that are being created. %\footnote{See~\citet{pcgbook:ch6} for a discussion of game-rule representation choices.} 
 For a sufficiently general description of games, it stands to reason that the games are represented in a reasonably generic language, where every syntactically valid game description can be loaded into a specialised game engine and executed. 
-There have been several attempts to design such GDLs. One of the more well-known is the Stanford GDL \citep{love2008general}, which is used for the General Game Playing Competition~\citep{genesereth2005general}. The language is tailored to describing board games and similar discrete, turn-based games. 
+There have been several attempts to design such GDLs. One of the more well-known is the Stanford GDL~\citep{love2008general}, which is used for the General Game Playing Competition~\citep{genesereth2005general}. The language is tailored to describing board games and similar discrete, turn-based games. 
 However, it is arguably too verbose and low-level to support search-based game generation. 
-Another attempt at an VGDL is called PuzzleScript \citep{puzzlescript}, created by game designer Stephen Lavelle. 
+Another attempt at an VGDL is called PuzzleScript~\citep{puzzlescript}, created by game designer Stephen Lavelle. 
 The language -- as its name suggest -- is focused on (turn-based) puzzle games, but the engine allows for simple forms of animation and movement, for a more action-oriented game design. 
 The language is relatively high level compared to Stanford GDL, but at as result the complete space of  games is rather restricted.
 
@@ -776,7 +794,7 @@ A description of each of the games and their interpretations can be seen in Appe
 ${\vcenter{\hbox{\includegraphics[height=6cm]{origcentipede.png}}}} \vcenter{\hbox{\scalebox{2}{\Huge\pointer}}}
 \vcenter{\includegraphics[height=6cm]{vgdlcentipede.png}}
 $
-    	\caption{Interpretation of the classic arcade game \textit{Centipede} \citeyearpar{game:crackpots}}
+    	\caption{Interpretation of the classic arcade game \textit{Centipede}~\citeyearpar{game:crackpots}}
 \label{fig:centipedeTranslation}
 \end{figure}
 
@@ -796,7 +814,7 @@ ${\vcenter{\hbox{\includegraphics[height=4.8cm]{origboloadventures.png}}}} \vcen
 \vcenter{\includegraphics[height=4.8cm]{vgdlboloadventures.png}}
 $
     	\caption{Interpretation of both the game and part of a level, from the DOS game Bolo Adventures III}
-\label{fig:centipedeTranslation}
+\label{fig:boloadventuresTranslation}
 \end{figure}
 
 
@@ -1596,7 +1614,7 @@ That the controllers are not disqualified, that the score and wins is not always
 %------------------------------------------------------------------------------------------------------------------------------%
 
 \section{Evolution of games: Setup}
-\label{sec_task2evolvingGames}
+\label{sec_task2evolvingGamesSetup}
 A process for generating and evolving new VGDL games were built using the fitness function found in the previous section.
 Two different approaches were again used to create new game description:
 1) Evolving from an existing, human-designed game description, using human-designed levels, and 2) evolving from randomly generated games, using randomly generated levels.
@@ -1634,7 +1652,7 @@ To counter this an interaction rule was made for each sprite in the generated de
 
 %------------------------------------------------------------------------------------------------------------------------------%
 \section{Evolution of games: Results}
-\label{sec_task2evolvingGames}
+\label{sec_task2evolvingGamesResults}
 Because of the ability of the evolution strategy to return early if the fitness increased over 0.98, a large amount of game description were generated, especially when generating game by mutating the game Boulderdash, were a ``perfect'' fitness games (fitness of 1) were often found in the first generation -- which however caused them to only have a small number of differences from the original game description of Balderdash.
 A series of 54 games were generated and evolved over 4 days, 45 by evolving from the human-designed game Boulderdash, and 9 by evolving games from a randomly generated game- and level description.
 Of these games 40 mutated-, and 6 randomly generated games had a perfect, or near-perfect fitness of >0.98, making them the most interesting to examine further.
@@ -2173,27 +2191,27 @@ The games are all interpretations of existing games designed on different platfo
 \section{Action arcade games}
 
 \begin{description}
-\item [Astrosmash]  \citep{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
-\item [Centipede] \citep{game:centipede} A centipede is approaching from the top of the screen. The player controls an cannon at the bottom of the screen able to shoot the enemy, but hitting the centipede in everywhere but its ends causes it to split into two parts.
-\item [Crackpots] \citep{game:crackpots} Spiders are crawling up from the bottom of the screen, and the player must push flowerpots, which appear again a short while after being pushed, to stop and kill them. 
-\item [Solar Fox] \citep{game:solarfox} The player controls a spaceship which is constantly moving, and only the direction can be controlled. The goal is to collect all of the coins in each level, while evading the missiles of the enemies on the top- and bottom of the screen.
+\item [Astrosmash] ~\citep{game:astrosmash} The player controls a laser cannon at the bottom of the screen, with the goal of shooting down as many incoming meteors, bombs and other objects. Points are earned by destroying objects, but lost if the objects reach the ground.
+\item [Centipede]~\citep{game:centipede} A centipede is approaching from the top of the screen. The player controls an cannon at the bottom of the screen able to shoot the enemy, but hitting the centipede in everywhere but its ends causes it to split into two parts.
+\item [Crackpots]~\citep{game:crackpots} Spiders are crawling up from the bottom of the screen, and the player must push flowerpots, which appear again a short while after being pushed, to stop and kill them. 
+\item [Solar Fox]~\citep{game:solarfox} The player controls a spaceship which is constantly moving, and only the direction can be controlled. The goal is to collect all of the coins in each level, while evading the missiles of the enemies on the top- and bottom of the screen.
 \end{description}
 
 
 \section{Puzzle games}
 
 \begin{description}
-\item [Bait] \citep{game:bait} \textit{Bait} is a game with similar mechanics to \textit{Soko-Ban} but otherwise unique game play. In each level the player must push boxes to get across the playing field, to reach a button, and afterwards head for the exit,.
-\item [Bolo Adventures] \citep{game:boloadventures} Another game closely related to \textit{Soko-Ban}, but with several unique features like lasers and rolling boulders. The levels of the game are in general extremely difficult.
-\item [Bombuzal] \citep{game:bombuzal} The goal is to blow up all the bombs, which are spread wide across each level. When a bomb is exploded it erodes nearby tiles, or even other bombs, forcing the player to find a path that allows him/her to reach all the bombs.
+\item [Bait]~\citep{game:bait} \textit{Bait} is a game with similar mechanics to \textit{Soko-Ban} but otherwise unique game play. In each level the player must push boxes to get across the playing field, to reach a button, and afterwards head for the exit,.
+\item [Bolo Adventures]~\citep{game:boloadventures} Another game closely related to \textit{Soko-Ban}, but with several unique features like lasers and rolling boulders. The levels of the game are in general extremely difficult.
+\item [Bombuzal]~\citep{game:bombuzal} The goal is to blow up all the bombs, which are spread wide across each level. When a bomb is exploded it erodes nearby tiles, or even other bombs, forcing the player to find a path that allows him/her to reach all the bombs.
 
-\item [Brainman] \citep{game:brainman} Has similar characteristics as the other \textit{Soko-Ban}-like games, but also has a focus on collecting gems to increase the players score.
-\item [Chip's Challenge] \citep{game:chipschallenge} \textit{Chip's Challenge} is again a \textit{Soko-Ban}-like puzzle game, but with an large amount of features compared to the other games, like water where either boxes can be used to make a bride across, or the player can swim across if he has a specific item (a swimsuit).
-\item [The Citadel] \citep{game:thecitadel} An additional game closely related to \textit{Soko-Ban}. This game features boxes which can be moved in a line, i.e. if the player pushed a box of this type, all boxes behind it will additionally be pushed.
-\item [(Real) Soko-Ban] \citep{game:sokoban} The original ``push-boxes'' game. 
-\item [Modality] \citep{game:modality} \textit{Soko-Ban}-like game with a twist: Each level is divided into white- and black tiles, and the avatar can only move between the two colours by going through the grey tiles on the playing field.
+\item [Brainman]~\citep{game:brainman} Has similar characteristics as the other \textit{Soko-Ban}-like games, but also has a focus on collecting gems to increase the players score.
+\item [Chip's Challenge]~\citep{game:chipschallenge} \textit{Chip's Challenge} is again a \textit{Soko-Ban}-like puzzle game, but with an large amount of features compared to the other games, like water where either boxes can be used to make a bride across, or the player can swim across if he has a specific item (a swimsuit).
+\item [The Citadel]~\citep{game:thecitadel} An additional game closely related to \textit{Soko-Ban}. This game features boxes which can be moved in a line, i.e. if the player pushed a box of this type, all boxes behind it will additionally be pushed.
+\item [(Real) Soko-Ban]~\citep{game:sokoban} The original ``push-boxes'' game. 
+\item [Modality]~\citep{game:modality} \textit{Soko-Ban}-like game with a twist: Each level is divided into white- and black tiles, and the avatar can only move between the two colours by going through the grey tiles on the playing field.
 %\item [Painter] Very simple game, with a very limited skill ceiling. The player must make every tile in levels have the same colour, which is achieved by moving the avatar in a path across each tiles, causing each to switch colour.
-\item [Zen Puzzle] \citep{game:zenpuzzle} The player must ``paint'' every tile in an area by moving the avatar across them. After a tile has been painted it becomes solid and impossible for the avatar to move through, making the player have to find a path through the area to reach all tiles.
+\item [Zen Puzzle]~\citep{game:zenpuzzle} The player must ``paint'' every tile in an area by moving the avatar across them. After a tile has been painted it becomes solid and impossible for the avatar to move through, making the player have to find a path through the area to reach all tiles.
 \end{description}
 
 
