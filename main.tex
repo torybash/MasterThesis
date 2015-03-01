@@ -263,8 +263,10 @@ The space-trading game Elite \citep{game:elite} used PCG to both save disk space
 
 Since then several highly successful games, from genres including platform-, first person shooter- (FPS) and strategy games, have used PCG to generate levels-, maps and worlds, as either used in their main game mode (e.g. Spelunky \citep{game:spelunky}, Minecraft \citep{game:minecraft}), or as an extra feature, making the games have additional re-playability (e.g. Civilazation II(-V) \citep{game:civilizationii}, Heroes of Might and Magic III \citep{game:homm3}).
 PCG has additionally been used to create a wider array of weapons and items, especially in role-playing games (RPGS) where ``looting'' (finding new gear) is a main part of the game design (e.g. Borderlands-series \citep{game:borderlandsseries}, Diablo-series \citep{game:diabloseries}, Dark Age of Camelot \citep{game:darkage}).
+Several game-developers and companies has additionally used PCG in the generation of other types of game-content, or at different stages, including complete worlds, environments and stories (e.g. Dwarf Fortress \citep{game:dwarffortress}), and graphics and audio (e.g. RoboBlitz \citep{game:roboblitz}, .kkrieger \citep{game:kkrieger}).
 
-Several game-developers, companies and research groups has additionally used PCG in the generation of other types of game-content, or at different stages, including complete worlds, environments and stories (e.g. Dwarf Fortress \citep{game:dwarffortress}), and graphics and audio (e.g. RoboBlitz \citep{game:roboblitz}, .kkrieger \citep{game:kkrieger}).
+Also, a large amount of research has been conducted on the topic of PCG (greatly detailed by \citet{shaker2015procedural}), where several other methods and goals at creating content have been attempted, including using player-experience to generate content \citep{5740836}, 
+and even the generation of rules- and mechanics themselves (see below).
 
 %, or event to create graphical or audio assets (RoboBlitz \citeyearpar{game:RoboBlitz}, .kkrieger \citeyearpar{game:kkrieger}).
 
@@ -287,6 +289,9 @@ A fitness function could partly consist of inspecting the generated rules as exp
 However there are many bad games that fulfil such criteria, so intuitively it seems one need to actually play the games that are generated. 
 
 A fitness function for generating complete games therefore needs to incorporate a capacity to automatically play the games it is evaluating, giving each game a score dependant on certain values from the results of playthroughs.
+
+A certain amount of research has been focused on the topic of rule- and mechanic generation in games \citep{pcgbook:ch6}.
+The methods have mainly been focusing on some specific game genres- or frameworks, for instance by generating complete board games (\citep{pell1992metagame},\citep{browne2008automated}), card games (\citep{font2013towards}), or generating simple 2-dimensional graphics games (\citep{togelius2008experiment}, \citep{smith2010variations}).
 
 
 \section{Research Objectives}

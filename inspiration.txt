@@ -32,3 +32,9 @@ http://groups.csail.mit.edu/icelab/sites/default/files/pdf/Lim2014approach.pdf
 	year = {2012},
 	url = {https://www.aaai.org/ocs/index.php/AIIDE/AIIDE12/paper/view/5472}
 }
+
+
+
+Shaker, M., Shaker, N., Togelius, J.: Ropossum: An authoring tool for designing, optimiz-
+ing and solving cut the rope levels. In: Proceedings of the AAAI Conference on Artificial
+Intelligence and Interactive Digital Entertainment (AIIDE). AAAI Press (2013)
